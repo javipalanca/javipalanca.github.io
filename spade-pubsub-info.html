@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPADE PubSub Plugin Information</title>
+</head>
+<body>
+    <h1>SPADE PubSub Plugin</h1>
+    
+    <h2>Overview</h2>
+    <p>SPADE PubSub is a plugin that extends the SPADE (Smart Python Agent Development Environment) framework with publish-subscribe communication capabilities. It bridges agent-oriented architecture with publish-subscribe communication protocols, enabling more dynamic and flexible multi-agent system interactions.</p>
+    
+    <h2>Purpose and Design Philosophy</h2>
+    <p>The Publish-Subscribe pattern was integrated into multi-agent systems to address several key challenges:</p>
+    <ul>
+        <li><strong>Decoupled Communication:</strong> Agents can communicate without direct knowledge of each other, promoting loose coupling and system flexibility</li>
+        <li><strong>Scalable Information Distribution:</strong> Efficient broadcasting of information to multiple interested agents simultaneously</li>
+        <li><strong>Event-Driven Architecture:</strong> Enables reactive behavior where agents respond to published events and notifications</li>
+        <li><strong>Dynamic System Configuration:</strong> Agents can join or leave communication channels at runtime without affecting other system components</li>
+    </ul>
+    
+    <h2>Key Features and Capabilities</h2>
+    <h3>Node Management</h3>
+    <ul>
+        <li>Create, delete, and purge PubSub nodes</li>
+        <li>Subscribe and unsubscribe from specific nodes</li>
+        <li>Flexible topic-based communication channels</li>
+    </ul>
+    
+    <h3>Communication Operations</h3>
+    <ul>
+        <li>Publish items to nodes for distribution</li>
+        <li>Retrieve and retract published items</li>
+        <li>Send notifications without publishing persistent items</li>
+        <li>Message filtering and routing capabilities</li>
+    </ul>
+    
+    <h3>Event Handling</h3>
+    <ul>
+        <li>Register custom event callbacks for agent responses</li>
+        <li>Support for asynchronous message processing</li>
+        <li>Event-driven agent interactions</li>
+    </ul>
+    
+    <h2>Technical Specifications</h2>
+    <ul>
+        <li><strong>Protocol Implementation:</strong> XMPP Publish-Subscribe Extension (XEP-0060)</li>
+        <li><strong>Framework Integration:</strong> Plugin architecture for SPADE framework</li>
+        <li><strong>Programming Language:</strong> Python</li>
+        <li><strong>Current Version:</strong> 0.1.3 (Released: 2021-06-29)</li>
+        <li><strong>License:</strong> MIT License</li>
+        <li><strong>Architecture:</strong> Agent-oriented interface for PubSub interactions</li>
+    </ul>
+    
+    <h2>Applications and Use Cases</h2>
+    <h3>Multi-Agent System Communication</h3>
+    <ul>
+        <li>Distributed sensor networks where agents share environmental data</li>
+        <li>Smart city systems with multiple autonomous components</li>
+        <li>Industrial automation with coordinated robotic agents</li>
+    </ul>
+    
+    <h3>Event-Driven Scenarios</h3>
+    <ul>
+        <li>Real-time monitoring systems with alert mechanisms</li>
+        <li>Collaborative decision-making systems</li>
+        <li>Dynamic resource allocation in distributed systems</li>
+    </ul>
+    
+    <h3>Information Distribution</h3>
+    <ul>
+        <li>News and update broadcasting in agent networks</li>
+        <li>Configuration changes propagation</li>
+        <li>Status reporting and system health monitoring</li>
+    </ul>
+    
+    <h2>Installation and Requirements</h2>
+    <p>The plugin can be installed from:</p>
+    <ul>
+        <li>Stable release via package managers</li>
+        <li>Source code installation from GitHub repository</li>
+    </ul>
+    
+    <h3>Dependencies</h3>
+    <ul>
+        <li>SPADE framework (Smart Python Agent Development Environment)</li>
+        <li>Python environment</li>
+        <li>XMPP server support for PubSub operations</li>
+    </ul>
+    
+    <h2>Real-World Applications</h2>
+    <p>SPADE PubSub would be particularly useful in scenarios requiring:</p>
+    <ul>
+        <li><strong>IoT Systems:</strong> Device coordination and data sharing in Internet of Things deployments</li>
+        <li><strong>Distributed Computing:</strong> Task coordination and result sharing across computational nodes</li>
+        <li><strong>Smart Grids:</strong> Energy management systems with multiple autonomous agents</li>
+        <li><strong>Financial Systems:</strong> Real-time market data distribution and trading agent coordination</li>
+        <li><strong>Healthcare Systems:</strong> Patient monitoring networks with multiple sensing and analysis agents</li>
+        <li><strong>Transportation:</strong> Vehicle-to-vehicle communication and traffic management systems</li>
+    </ul>
+    
+    <h2>Development and Support</h2>
+    <ul>
+        <li><strong>Development Lead:</strong> Javi Palanca</li>
+        <li><strong>Project Type:</strong> Open-source</li>
+        <li><strong>Template:</strong> Created using Cookiecutter</li>
+        <li><strong>Community:</strong> Contributing guidelines available</li>
+    </ul>
+    
+    <h2>Resources and Links</h2>
+    <ul>
+        <li><strong>GitHub Repository:</strong> <a href="https://github.com/javipalanca/spade_pubsub">https://github.com/javipalanca/spade_pubsub</a></li>
+        <li><strong>Documentation:</strong> <a href="https://spade-pubsub.readthedocs.io">https://spade-pubsub.readthedocs.io</a></li>
+        <li><strong>SPADE Framework:</strong> Part of the broader SPADE ecosystem for agent development</li>
+    </ul>
+    
+    <h2>Summary</h2>
+    <p>SPADE PubSub represents a crucial bridge between traditional publish-subscribe messaging patterns and modern multi-agent system architectures. By implementing XMPP PubSub standards within the SPADE framework, it enables developers to create more flexible, scalable, and maintainable distributed agent systems. The plugin's focus on decoupled communication and event-driven interactions makes it particularly valuable for complex distributed systems where agents need to coordinate without tight coupling.</p>
+</body>
+</html>
