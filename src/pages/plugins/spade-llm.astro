@@ -1,0 +1,712 @@
+---
+import SimplePluginLayout from '../../layouts/SimplePluginLayout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<SimplePluginLayout 
+    title="SpadeLLM - AI-Powered Intelligent Agents"
+    description="Transform your SPADE agents into intelligent AI assistants with Large Language Model integration."
+    featured={true}
+>
+    <Navbar />
+    
+    <section class="plugin-header featured">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <div class="mb-3">
+                        <span class="featured-badge">
+                            <i class="bi bi-star-fill"></i>
+                            Featured Plugin
+                        </span>
+                    </div>
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="bi bi-brain me-3"></i>
+                        SpadeLLM
+                    </h1>
+                    <p class="lead mb-4">
+                        Transform your SPADE agents into intelligent AI assistants with multi-provider LLM integration, advanced memory management, and enterprise-grade security
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="https://github.com/sosanzma/spade_llm" class="btn btn-primary">
+                            <i class="bi bi-github me-2"></i>View on GitHub
+                        </a>
+                        <a href="https://sosanzma.github.io/spade_llm/" class="btn btn-outline-light">
+                            <i class="bi bi-book me-2"></i>Documentation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="plugin-content">
+        <div class="container">
+            
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-1">
+                        <h2 class="mb-4">What is SpadeLLM?</h2>
+                        <p class="lead">
+                            SpadeLLM is a production-ready extension for SPADE that integrates Large Language Models into multi-agent systems, 
+                            enabling intelligent communication, reasoning, and decision-making capabilities across distributed agent networks.
+                        </p>
+                        <p>
+                            Built with enterprise requirements in mind, SpadeLLM supports multiple LLM providers (OpenAI, Ollama, vLLM), 
+                            advanced memory management, human-in-the-loop workflows, and comprehensive guardrails for safe AI deployment. 
+                            Compatible with Python 3.10-3.12 and SPADE 3.3.0+.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-2">
+                        <h2 class="text-center mb-5">Advanced LLM Integration Features</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up stagger-1">
+                                    <div class="feature-icon featured">
+                                        <i class="bi bi-cpu-fill"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Multi-Provider Architecture</h4>
+                                        <p>Seamlessly integrate with OpenAI GPT-4, Ollama local models, vLLM high-performance serving, and LM Studio. Switch providers dynamically or use multiple models simultaneously for different agent roles.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up stagger-2">
+                                    <div class="feature-icon featured">
+                                        <i class="bi bi-tools"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Async Function Calling</h4>
+                                        <p>Agents can execute custom tools and functions asynchronously with JSON schema validation. Supports LangChain tool integration and custom tool creation for seamless system interaction.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up stagger-3">
+                                    <div class="feature-icon featured">
+                                        <i class="bi bi-database"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Dual Memory System</h4>
+                                        <p>Agent-based memory for shared knowledge across the system and thread-level memory for isolated conversation contexts. Smart context window management with configurable size limits and automatic cleanup.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up stagger-4">
+                                    <div class="feature-icon featured">
+                                        <i class="bi bi-person-check"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Human-in-the-Loop</h4>
+                                        <p>Web-based interface for expert consultation and oversight. Configurable timeout mechanisms for human intervention in critical decisions, ensuring responsible AI deployment.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-3">
+                        <h2 class="text-center mb-5">Real-World AI Agent Applications</h2>
+                        
+                        <div class="use-case-item slide-in-left stagger-1">
+                            <h4>Intelligent Multi-Agent Workflows</h4>
+                            <p>Deploy coordinated agent networks where LLM-powered agents communicate, negotiate, and collaborate on complex tasks. Each agent can reason about their role, share context, and adapt behavior based on system-wide objectives.</p>
+                        </div>
+                        
+                        <div class="use-case-item slide-in-left stagger-2">
+                            <h4>Autonomous Customer Service Systems</h4>
+                            <p>Create sophisticated customer service networks with specialized agents for different domains. Agents can escalate to human experts, maintain conversation history, and apply guardrails to ensure appropriate responses.</p>
+                        </div>
+                        
+                        <div class="use-case-item slide-in-left stagger-3">
+                            <h4>Research and Knowledge Management</h4>
+                            <p>Build research agent networks that can process documents, synthesize information from multiple sources, and maintain persistent knowledge bases with agent-based and thread-level memory systems.</p>
+                        </div>
+                        
+                        <div class="use-case-item slide-in-left stagger-4">
+                            <h4>Local and Cloud Hybrid Deployments</h4>
+                            <p>Leverage Ollama for local model serving alongside cloud providers for sensitive data processing. Use vLLM for high-throughput scenarios while maintaining data sovereignty and cost control.</p>
+                        </div>
+                        
+                        <div class="use-case-item slide-in-left stagger-5">
+                            <h4>Enterprise AI Orchestration</h4>
+                            <p>Implement production-grade AI systems with comprehensive logging, monitoring, and safety controls. Agents can use custom tools, integrate with existing systems, and maintain audit trails for compliance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-4">
+                        <h2 class="mb-4">LLM Provider Architecture</h2>
+                        <p class="mb-4">Production-ready integration with leading AI providers and local serving frameworks:</p>
+                        <div class="row text-center">
+                            <div class="col-md-3 mb-3">
+                                <div class="provider-icon mx-auto mb-2 scale-in stagger-1">
+                                    <i class="bi bi-robot"></i>
+                                </div>
+                                <strong>OpenAI</strong>
+                                <small class="d-block text-muted">GPT-4o, GPT-4o-mini<br/>GPT-3.5-turbo</small>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="provider-icon mx-auto mb-2 scale-in stagger-2">
+                                    <i class="bi bi-hdd-stack"></i>
+                                </div>
+                                <strong>Ollama</strong>
+                                <small class="d-block text-muted">Llama 3.1, Mistral<br/>Local deployment</small>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="provider-icon mx-auto mb-2 scale-in stagger-3">
+                                    <i class="bi bi-lightning"></i>
+                                </div>
+                                <strong>vLLM</strong>
+                                <small class="d-block text-muted">High-throughput<br/>PagedAttention</small>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="provider-icon mx-auto mb-2 scale-in stagger-4">
+                                    <i class="bi bi-pc-display"></i>
+                                </div>
+                                <strong>LM Studio</strong>
+                                <small class="d-block text-muted">Local inference<br/>Custom models</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-4">
+                        <h2 class="text-center mb-5">Memory Management & Guardrails</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up stagger-1">
+                                    <div class="feature-icon featured">
+                                        <i class="bi bi-layers"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Agent-Based Memory</h4>
+                                        <p>Shared knowledge store across all agent instances. Perfect for maintaining global context, learned behaviors, and system-wide knowledge that persists across restarts and conversations.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up stagger-2">
+                                    <div class="feature-icon featured">
+                                        <i class="bi bi-chat-left-dots"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Thread-Level Memory</h4>
+                                        <p>Isolated conversation contexts for individual user sessions. Maintains conversation history, user preferences, and context-specific information without cross-contamination between threads.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up stagger-3">
+                                    <div class="feature-icon featured">
+                                        <i class="bi bi-shield-lock"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Content Guardrails</h4>
+                                        <p>Keyword-based filtering system for input and output validation. Configurable blocking policies prevent inappropriate content, protect sensitive information, and ensure compliance with content policies.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up stagger-4">
+                                    <div class="feature-icon featured">
+                                        <i class="bi bi-window-stack"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Context Window Management</h4>
+                                        <p>Smart and fixed window sizing with automatic cleanup. Optimizes token usage while maintaining conversation coherence. Configurable limits prevent context overflow and manage costs effectively.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-5">
+                        <h2 class="mb-4">Technical Architecture & Benefits</h2>
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Asynchronous Design:</strong> Built on SPADE's async architecture with non-blocking LLM calls and parallel tool execution
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Context Management:</strong> Smart and fixed window sizing with automatic context cleanup and conversation threading
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Memory Persistence:</strong> Agent-based memory for shared knowledge and thread-level memory for isolated conversations
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Safety Guardrails:</strong> Keyword-based content filtering, input/output validation, and configurable security policies
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Provider Flexibility:</strong> Dynamic provider switching with unified API across OpenAI, Ollama, vLLM, and LM Studio
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Tool Integration:</strong> JSON schema-validated tool calling with LangChain compatibility and custom function support
+                            </li>
+                        </ul>
+                        
+                        <div class="text-center mt-4">
+                            <div class="mt-4 p-4 rounded" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-left: 4px solid var(--primary-color);">
+                                <h5 class="mb-3">Quick Start Example</h5>
+                                <pre class="mb-3" style="background: #2d3748; color: #e2e8f0; padding: 1rem; border-radius: 8px; overflow-x: auto; text-align: left;"><code>from spade_llm import LLMAgent, LLMProvider
+
+async def main():
+    # Configure provider
+    provider = LLMProvider.create_openai(
+        api_key="your-api-key",
+        model="gpt-4o-mini"
+    )
+    
+    # Create intelligent agent
+    agent = LLMAgent(
+        jid="assistant@example.com",
+        password="password",
+        provider=provider,
+        system_prompt="You are a helpful assistant"
+    )
+    
+    await agent.start()</code></pre>
+                            </div>
+                            
+                            <h5 class="mt-4">Ready to build intelligent multi-agent systems?</h5>
+                            <div class="d-flex justify-content-center gap-3 flex-wrap mt-3">
+                                <a href="https://github.com/sosanzma/spade_llm" class="btn btn-primary">
+                                    <i class="bi bi-github me-2"></i>Get Started on GitHub
+                                </a>
+                                <a href="https://sosanzma.github.io/spade_llm/" class="btn btn-outline-primary">
+                                    <i class="bi bi-book me-2"></i>Technical Documentation
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <Footer />
+</SimplePluginLayout>
+
+<style>
+    /* Custom styling for SpadeLLM plugin page with main site theme */
+    .plugin-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .plugin-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="20" r="1.5" fill="rgba(255,255,255,0.08)"/><circle cx="20" cy="50" r="1" fill="rgba(255,255,255,0.06)"/></svg>') repeat;
+        opacity: 0.3;
+    }
+
+    .plugin-content {
+        background: linear-gradient(180deg, #f8fcff 0%, #ffffff 50%, #f0f9f7 100%) !important;
+    }
+
+    /* Enhanced feature items with main page theme */
+    .feature-item {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid transparent;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
+    }
+
+    .feature-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.02));
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        border-radius: 18px;
+    }
+
+    .feature-item:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(52, 152, 219, 0.15);
+        border-color: rgba(52, 152, 219, 0.3);
+    }
+
+    .feature-item:hover::before {
+        opacity: 1;
+    }
+
+    .feature-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 1.5rem;
+        margin-bottom: 1rem;
+        flex-shrink: 0;
+        font-size: 1.8rem;
+        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        position: relative;
+        transition: all 0.4s ease;
+    }
+
+    .feature-item:hover .feature-icon {
+        transform: rotate(5deg) scale(1.1);
+        box-shadow: 0 12px 30px rgba(52, 152, 219, 0.4);
+    }
+
+    .feature-icon::after {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 22px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .feature-item:hover .feature-icon::after {
+        opacity: 1;
+    }
+
+    /* Special styling for featured icons */
+    .feature-icon.featured {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+    }
+
+    .feature-item:hover .feature-icon.featured {
+        box-shadow: 0 12px 30px rgba(52, 152, 219, 0.4);
+    }
+
+    .feature-icon.featured::after {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    }
+
+    /* Provider icons styling */
+    .provider-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .provider-icon:hover {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+    }
+
+    /* Enhanced use case items */
+    .use-case-item {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border-left: 6px solid var(--primary-color);
+        border-radius: 0 15px 15px 0;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .use-case-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+        border-radius: 3px;
+    }
+
+    .use-case-item::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 0;
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.02));
+        transition: width 0.4s ease;
+    }
+
+    .use-case-item:hover {
+        transform: translateX(15px) scale(1.02);
+        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.15);
+    }
+
+    .use-case-item:hover::after {
+        width: 100%;
+    }
+
+    .use-case-item h4 {
+        color: #2c3e50;
+        position: relative;
+        z-index: 2;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .use-case-item p {
+        color: #5a6c7d;
+        position: relative;
+        z-index: 2;
+        line-height: 1.6;
+    }
+
+    /* Enhanced info cards */
+    .info-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid rgba(52, 152, 219, 0.1);
+        border-radius: 25px;
+        padding: 3rem;
+        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.08);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Code block styling */
+    .info-card pre {
+        margin: 0;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+
+    .info-card code {
+        font-family: inherit;
+    }
+
+    .info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 25px 25px 0 0;
+    }
+
+    .info-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(52, 152, 219, 0.12);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    /* Enhanced buttons */
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border: none;
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #2980b9, var(--secondary-color));
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(52, 152, 219, 0.4);
+    }
+
+    .btn-outline-primary {
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+    }
+
+    .btn-outline-light {
+        border: 2px solid rgba(255, 255, 255, 0.6);
+        color: white;
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-light:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Success icons with main theme */
+    .text-success {
+        color: var(--primary-color) !important;
+        font-size: 1.2rem;
+    }
+
+    /* Typography enhancements */
+    .plugin-content h2 {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .plugin-content h2::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 2px;
+    }
+
+    .feature-item h4 {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .feature-item p {
+        color: #5a6c7d;
+        line-height: 1.6;
+    }
+
+    /* Featured badge styling */
+    .featured-badge {
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.9), rgba(255, 165, 0, 0.9));
+        color: #2c3e50;
+        padding: 0.5rem 1.5rem;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        backdrop-filter: blur(10px);
+        animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+        from {
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        to {
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+        }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .feature-item {
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+
+        .provider-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 1.3rem;
+        }
+
+        .use-case-item {
+            padding: 2rem;
+        }
+
+        .info-card {
+            padding: 2rem;
+        }
+    }
+
+    /* Dark mode support */
+    :global(body.dark-mode) .feature-item {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    :global(body.dark-mode) .use-case-item {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+    }
+
+    :global(body.dark-mode) .info-card {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+    }
+
+    :global(body.dark-mode) .plugin-content {
+        background: linear-gradient(180deg, var(--dark-bg) 0%, #1a1a1a 50%, #0f1a21 100%) !important;
+    }
+
+    :global(body.dark-mode) .featured-badge {
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.8), rgba(255, 165, 0, 0.8));
+        color: var(--dark-text);
+    }
+</style>
