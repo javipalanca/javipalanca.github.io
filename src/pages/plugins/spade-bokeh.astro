@@ -1,0 +1,571 @@
+---
+import SimplePluginLayout from '../../layouts/SimplePluginLayout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<SimplePluginLayout 
+    title="SPADE Bokeh - Advanced Multi-Agent Visualization"
+    description="Enterprise-grade interactive data visualization and real-time dashboards for SPADE multi-agent systems using Bokeh's HTML5 rendering and streaming capabilities."
+>
+    <Navbar />
+    
+    <section class="plugin-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="bi bi-graph-up me-3"></i>
+                        SPADE Bokeh
+                    </h1>
+                    <p class="lead mb-4">
+                        Advanced web-based visualization platform for multi-agent systems with real-time data streaming, interactive dashboards, and enterprise-grade performance
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="https://github.com/javipalanca/spade_bokeh" class="btn btn-primary">
+                            <i class="bi bi-github me-2"></i>View on GitHub
+                        </a>
+                        <a href="https://spade-bokeh.readthedocs.io" class="btn btn-outline-light">
+                            <i class="bi bi-book me-2"></i>Documentation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="plugin-content">
+        <div class="container">
+            
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-1">
+                        <h2 class="mb-4">What is SPADE Bokeh?</h2>
+                        <p class="lead">
+                            SPADE Bokeh Server Plugin is a powerful integration that brings Bokeh's advanced web-based interactive visualization capabilities directly into your SPADE multi-agent systems. 
+                            This plugin leverages Bokeh's HTML5 Canvas and WebGL rendering to create high-performance, real-time visualizations that update dynamically as your agents operate.
+                        </p>
+                        <p>
+                            Built on Bokeh's server architecture, the plugin provides seamless integration with SPADE's web controller and Jinja2 template system. 
+                            It transforms your multi-agent systems into visually rich, interactive monitoring and analysis platforms where complex agent behaviors, 
+                            communication patterns, and system metrics are rendered as publication-quality charts accessible from any web browser.
+                        </p>
+                        <div class="technical-highlight mt-4 p-3" style="background: linear-gradient(135deg, #f8fcff 0%, #e3f2fd 100%); border-left: 4px solid var(--primary-color); border-radius: 8px;">
+                            <strong>Technical Foundation:</strong> Uses Bokeh's ColumnDataSource for efficient data streaming, 
+                            periodic callbacks for real-time updates, and BokehServerMixin for seamless SPADE integration.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-2">
+                        <h2 class="text-center mb-5">Advanced Bokeh Visualization Features</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="feature-item fade-in-up">
+                                <div class="feature-icon">
+                                    <i class="bi bi-graph-up-arrow"></i>
+                                </div>
+                                <div>
+                                    <h4>Real-Time Data Streaming</h4>
+                                    <p>Leverage Bokeh's ColumnDataSource and periodic callbacks for efficient real-time agent data visualization. Stream new data points without full plot redraws, supporting high-frequency agent updates with minimal performance impact.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-item fade-in-up">
+                                <div class="feature-icon">
+                                    <i class="bi bi-diagram-3-fill"></i>
+                                </div>
+                                <div>
+                                    <h4>Interactive Chart Library</h4>
+                                    <p>Access Bokeh's comprehensive plotting toolkit: scatter plots with customizable markers, multi-line time series, bar charts, histograms, box plots, contour plots, heatmaps, and specialized geographic visualizations for spatial agent data.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-item fade-in-up">
+                                <div class="feature-icon">
+                                    <i class="bi bi-speedometer2"></i>
+                                </div>
+                                <div>
+                                    <h4>Agent Monitoring Dashboards</h4>
+                                    <p>Build comprehensive multi-panel dashboards with interactive widgets (sliders, dropdowns, checkboxes) that trigger Python callbacks. Monitor agent states, performance metrics, message queues, and system health in real-time.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-item fade-in-up">
+                                <div class="feature-icon">
+                                    <i class="bi bi-globe"></i>
+                                </div>
+                                <div>
+                                    <h4>HTML5 Web Rendering</h4>
+                                    <p>Deploy browser-based visualizations using HTML5 Canvas and WebGL rendering. No client-side installation required - serve interactive dashboards through SPADE's web interface with automatic plot synchronization.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-3">
+                        <h2 class="text-center mb-5">Multi-Agent System Applications</h2>
+                    
+                    <div class="use-case-item slide-in-left">
+                        <h4>Distributed Sensor Networks & IoT</h4>
+                        <p>Create real-time geographic visualizations of sensor agent data with interactive maps, streaming time-series plots of environmental readings, and network topology diagrams showing agent communication patterns. Monitor device health, data quality, and coordination efficiency across large-scale distributed systems.</p>
+                    </div>
+                    
+                    <div class="use-case-item slide-in-left">
+                        <h4>Autonomous Vehicle Fleets</h4>
+                        <p>Visualize vehicle agent positions on interactive maps, track route optimization in real-time, monitor traffic coordination between autonomous agents, and analyze performance metrics like fuel efficiency, response times, and collaborative decision-making patterns.</p>
+                    </div>
+                    
+                    <div class="use-case-item slide-in-left">
+                        <h4>Financial Multi-Agent Trading</h4>
+                        <p>Build sophisticated trading dashboards with real-time market data visualization, agent portfolio performance tracking, risk analysis heatmaps, and interactive charts showing agent negotiation patterns, market sentiment analysis, and algorithmic trading strategy comparisons.</p>
+                    </div>
+                    
+                    <div class="use-case-item slide-in-left">
+                        <h4>Smart Grid & Energy Management</h4>
+                        <p>Monitor distributed energy agent systems with real-time power flow visualization, demand-supply balance charts, grid stability metrics, and interactive network diagrams showing energy trading between autonomous grid agents and renewable source coordination.</p>
+                    </div>
+                    
+                    <div class="use-case-item slide-in-left">
+                        <h4>Research & Complex Systems Analysis</h4>
+                        <p>Create publication-quality visualizations for multi-agent research with interactive parameter exploration, comparative analysis charts, agent behavior evolution over time, emergent system property visualization, and statistical analysis plots for academic presentations and papers.</p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-4">
+                        <h2 class="mb-4">Technical Architecture & Integration</h2>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h5><i class="bi bi-cpu me-2"></i>Performance Optimized</h5>
+                                <ul class="list-unstyled ms-3">
+                                    <li class="mb-2"><strong>Efficient Data Streaming:</strong> ColumnDataSource streams only new data points, not entire datasets</li>
+                                    <li class="mb-2"><strong>WebGL Acceleration:</strong> Hardware-accelerated rendering for large datasets and smooth interactions</li>
+                                    <li class="mb-2"><strong>Selective Updates:</strong> Only modified plot elements are re-rendered, maintaining 60fps performance</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5><i class="bi bi-code-slash me-2"></i>Developer Experience</h5>
+                                <ul class="list-unstyled ms-3">
+                                    <li class="mb-2"><strong>BokehServerMixin:</strong> Simple mixin class for seamless SPADE integration</li>
+                                    <li class="mb-2"><strong>Template Integration:</strong> Direct embedding in Jinja2 templates with <code>&#123;&#123; script | safe &#125;&#125;</code></li>
+                                    <li class="mb-2"><strong>Multiple Servers:</strong> Run independent Bokeh servers on different ports per agent</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="code-example mt-4 p-4" style="background: #f8f9fa; border-radius: 12px; border: 1px solid #e9ecef;">
+                            <h5 class="mb-3"><i class="bi bi-code me-2"></i>Quick Integration Example</h5>
+                            <pre style="background: #2d3748; color: #e2e8f0; padding: 1.5rem; border-radius: 8px; font-size: 0.9rem; overflow-x: auto;"><code>from spade_bokeh import BokehServerMixin
+from spade.agent import Agent
+from bokeh.plotting import figure
+from bokeh.models import ColumnDataSource
+
+class MyVisualizationAgent(BokehServerMixin, Agent):
+    async def setup(self):
+        # Start Bokeh server
+        self.bokeh_server.start()
+        
+        # Add real-time plot endpoint
+        self.bokeh_server.add_plot("/live_data", self.create_live_plot)
+        
+        # Start data streaming
+        self.add_behaviour(self.DataStreamBehaviour())
+    
+    def create_live_plot(self, doc):
+        # Create data source for streaming
+        source = ColumnDataSource(data=dict(x=[], y=[]))
+        
+        # Create interactive plot
+        plot = figure(title="Agent Performance", 
+                     x_axis_label="Time", y_axis_label="Value")
+        plot.line('x', 'y', source=source, line_width=2)
+        
+        # Add periodic callback for real-time updates
+        def update_data():
+            new_data = self.get_latest_metrics()
+            source.stream(new_data, rollover=1000)
+        
+        doc.add_periodic_callback(update_data, 100)  # Update every 100ms
+        doc.add_root(plot)</code></pre>
+                        </div>
+
+                        <h5 class="mt-4 mb-3">Why Choose SPADE Bokeh?</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Enterprise-Grade Scaling:</strong> Handle thousands of agents with efficient data streaming and WebGL rendering
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Rich Interaction Toolkit:</strong> Built-in zoom, pan, select, hover tools plus custom JavaScript callback support
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Cross-Platform Compatibility:</strong> HTML5/JavaScript rendering works across all modern browsers and devices
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Scientific Computing Integration:</strong> Native support for NumPy arrays, Pandas DataFrames, and SciPy data structures
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Extensible Widget System:</strong> Custom controls, parameter sliders, data selection tools, and real-time configuration panels
+                            </li>
+                        </ul>
+                        
+                        <div class="installation-info mt-4 p-3" style="background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%); border-radius: 8px; border-left: 4px solid #28a745;">
+                            <h6><i class="bi bi-download me-2"></i>Installation</h6>
+                            <code>pip install spade_bokeh</code>
+                            <p class="mb-0 mt-2 small">Requires Python 3.7+, SPADE framework, and Bokeh 2.0+</p>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <h5>Transform Your Multi-Agent Systems</h5>
+                            <div class="d-flex justify-content-center gap-3 flex-wrap mt-3">
+                                <a href="https://github.com/javipalanca/spade_bokeh" class="btn btn-primary">
+                                    <i class="bi bi-github me-2"></i>Explore on GitHub
+                                </a>
+                                <a href="https://spade-bokeh.readthedocs.io" class="btn btn-outline-primary">
+                                    <i class="bi bi-book me-2"></i>Technical Documentation
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <Footer />
+</SimplePluginLayout>
+
+<style>
+    /* Custom styling for SPADE Bokeh page with main site theme */
+    .plugin-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .plugin-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="20" r="1.5" fill="rgba(255,255,255,0.08)"/><circle cx="20" cy="50" r="1" fill="rgba(255,255,255,0.06)"/></svg>') repeat;
+        opacity: 0.3;
+    }
+
+    .plugin-content {
+        background: linear-gradient(180deg, #f8fcff 0%, #ffffff 50%, #f0f9f7 100%) !important;
+    }
+
+    /* Enhanced feature items with main page theme */
+    .feature-item {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid transparent;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
+    }
+
+    .feature-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.02));
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        border-radius: 18px;
+    }
+
+    .feature-item:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(52, 152, 219, 0.15);
+        border-color: rgba(52, 152, 219, 0.3);
+    }
+
+    .feature-item:hover::before {
+        opacity: 1;
+    }
+
+    .feature-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 1.5rem;
+        margin-bottom: 1rem;
+        flex-shrink: 0;
+        font-size: 1.8rem;
+        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        position: relative;
+        transition: all 0.4s ease;
+    }
+
+    .feature-item:hover .feature-icon {
+        transform: rotate(5deg) scale(1.1);
+        box-shadow: 0 12px 30px rgba(52, 152, 219, 0.4);
+    }
+
+    .feature-icon::after {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 22px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .feature-item:hover .feature-icon::after {
+        opacity: 1;
+    }
+
+    /* Enhanced use case items */
+    .use-case-item {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border-left: 6px solid var(--primary-color);
+        border-radius: 0 15px 15px 0;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .use-case-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+        border-radius: 3px;
+    }
+
+    .use-case-item::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 0;
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.02));
+        transition: width 0.4s ease;
+    }
+
+    .use-case-item:hover {
+        transform: translateX(15px) scale(1.02);
+        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.15);
+    }
+
+    .use-case-item:hover::after {
+        width: 100%;
+    }
+
+    .use-case-item h4 {
+        color: #2c3e50;
+        position: relative;
+        z-index: 2;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .use-case-item p {
+        color: #5a6c7d;
+        position: relative;
+        z-index: 2;
+        line-height: 1.6;
+    }
+
+    /* Enhanced info cards */
+    .info-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid rgba(52, 152, 219, 0.1);
+        border-radius: 25px;
+        padding: 3rem;
+        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.08);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 25px 25px 0 0;
+    }
+
+    .info-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(52, 152, 219, 0.12);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    /* Enhanced buttons */
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border: none;
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #2980b9, var(--secondary-color));
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(52, 152, 219, 0.4);
+    }
+
+    .btn-outline-primary {
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+    }
+
+    .btn-outline-light {
+        border: 2px solid rgba(255, 255, 255, 0.6);
+        color: white;
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-light:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Success icons with main theme */
+    .text-success {
+        color: var(--primary-color) !important;
+        font-size: 1.2rem;
+    }
+
+    /* Typography enhancements */
+    .plugin-content h2 {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .plugin-content h2::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 2px;
+    }
+
+    .feature-item h4 {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .feature-item p {
+        color: #5a6c7d;
+        line-height: 1.6;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .feature-item {
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+
+        .use-case-item {
+            padding: 2rem;
+        }
+
+        .info-card {
+            padding: 2rem;
+        }
+    }
+
+    /* Dark mode support */
+    :global(body.dark-mode) .feature-item {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    :global(body.dark-mode) .use-case-item {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+    }
+
+    :global(body.dark-mode) .info-card {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+    }
+
+    :global(body.dark-mode) .plugin-content {
+        background: linear-gradient(180deg, var(--dark-bg) 0%, #1a1a1a 50%, #0f1a21 100%) !important;
+    }
+</style>
