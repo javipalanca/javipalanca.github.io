@@ -7,7 +7,7 @@ const baseUrl = import.meta.env.BASE_URL;
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="scroll-progress-bar"></div>
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="#top">
+        <a class="navbar-brand d-flex align-items-center" href={`${baseUrl}`}>
             <img src={`${baseUrl}img/spade-agent-network-fixed.svg`} alt="SPADE Logo" height="40" class="me-2">
             <span class="fw-bold" style="color: var(--primary-color);">SPADE</span>
         </a>
@@ -17,33 +17,33 @@ const baseUrl = import.meta.env.BASE_URL;
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#features">Features</a>
+                    <a class="nav-link" href={`${baseUrl}#features`}>Features</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#examples">Examples</a>
+                    <a class="nav-link" href={`${baseUrl}#examples`}>Examples</a>
                 </li>                
                 <li class="nav-item">
-                    <a class="nav-link" href="#plugins">Plugins</a>
+                    <a class="nav-link" href={`${baseUrl}#plugins`}>Plugins</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#docs">Documentation</a>
+                    <a class="nav-link" href={`${baseUrl}#docs`}>Documentation</a>
                 </li>                
                 <li class="nav-item">
-                    <a class="nav-link" href="#usecases">Use Cases</a>
+                    <a class="nav-link" href={`${baseUrl}#usecases`}>Use Cases</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-link-ai" href="#spade-llm">
+                    <a class="nav-link nav-link-ai" href={`${baseUrl}#spade-llm`}>
                         <i class="bi bi-brain me-1"></i>SPADE-LLM
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#faq">FAQ</a>
+                    <a class="nav-link" href={`${baseUrl}#faq`}>FAQ</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#news">News</a>
+                    <a class="nav-link" href={`${baseUrl}#news`}>News</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#interactive-demo">Demo</a>
+                    <a class="nav-link" href={`${baseUrl}#interactive-demo`}>Demo</a>
                 </li>
                 <li class="nav-item">
                     <div class="ms-2">

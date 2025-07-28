@@ -7,6 +7,8 @@ export interface Props {
         icon: string;
         githubUrl: string;
         docsUrl: string;
+        pluginUrl: string;
+        featured?: boolean;
     }>;
 }
 
@@ -29,9 +31,12 @@ import PluginCard from './PluginCard.astro';
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body">
-                        <h5 class="card-title">More Coming Soon</h5>
-                        <p class="card-text">The SPADE ecosystem is constantly growing with new plugins and extensions.</p>
+                        <h5 class="card-title">Explore All Plugins</h5>
+                        <p class="card-text">Discover the complete SPADE plugin ecosystem with detailed documentation and examples.</p>
                         <div class="d-flex justify-content-between align-items-center">
+                            <a href="/plugins" class="btn btn-sm btn-primary">
+                                <i class="bi bi-collection me-1"></i>Browse All
+                            </a>
                             <a href="https://github.com/javipalanca/spade/discussions" class="btn btn-sm btn-outline-primary">Suggest Ideas</a>
                         </div>
                     </div>
