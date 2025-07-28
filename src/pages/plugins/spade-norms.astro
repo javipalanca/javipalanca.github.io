@@ -1,0 +1,636 @@
+---
+import SimplePluginLayout from '../../layouts/SimplePluginLayout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<SimplePluginLayout 
+    title="SPADE Norms - Agent Behavior Rules"
+    description="Set rules and regulations that govern how agents should behave in your system."
+>
+    <Navbar />
+    
+    <section class="plugin-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="bi bi-shield-check me-3"></i>
+                        SPADE Norms
+                    </h1>
+                    <p class="lead mb-4">
+                        A distributed normative framework for multi-agent systems with deontic logic-based constraint enforcement and pre-action validation
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="https://github.com/javipalanca/spade_norms" class="btn btn-primary">
+                            <i class="bi bi-github me-2"></i>View on GitHub
+                        </a>
+                        <a href="https://spade-norms.readthedocs.io" class="btn btn-outline-light">
+                            <i class="bi bi-book me-2"></i>Documentation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="plugin-content">
+        <div class="container">
+            
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-1">
+                        <h2 class="mb-4">What is SPADE Norms?</h2>
+                        <p class="lead">
+                            SPADE Norms is a distributed normative framework that extends the SPADE platform with comprehensive norm management capabilities based on deontic logic. 
+                            It enables the development of norm-aware agents that can reason about permissions, prohibitions, and obligations in real-time.
+                        </p>
+                        <p>
+                            The framework implements a <strong>normative backpack architecture</strong> where each agent receives a personal normative component containing organizational norms, private agent concerns, and a customizable normative reasoning engine. This decoupled approach allows agents to query normative implications before performing actions, receiving regulatory status (ALLOWED/FORBIDDEN) along with applicable norms and potential rewards/penalties.
+                        </p>
+                        <p>
+                            Built on formal deontic logic principles, SPADE Norms supports organizational structures with roles and domains, enabling efficient norm filtering and performance optimization in large-scale distributed multi-agent systems.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-2">
+                        <h2 class="text-center mb-5">Technical Architecture & Normative Capabilities</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="feature-item fade-in-up">
+                                <div class="feature-icon">
+                                    <i class="bi bi-check-circle"></i>
+                                </div>
+                                <div>
+                                    <h4>Deontic Logic Framework</h4>
+                                    <p>Implements formal deontic logic with Permission and Prohibition norm types. Norms are represented as tuples ⟨id,type,condition,action,role,penalty,reward,domain,inviol,issuer⟩ with customizable activation conditions and constraint enforcement mechanisms.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-item fade-in-up">
+                                <div class="feature-icon">
+                                    <i class="bi bi-cpu"></i>
+                                </div>
+                                <div>
+                                    <h4>Normative Backpack Architecture</h4>
+                                    <p>Each agent receives a personal normative component containing predefined organizational norms, private agent concerns, regulated actions, and a configurable Normative Reasoning Engine for autonomous constraint evaluation.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-item fade-in-up">
+                                <div class="feature-icon">
+                                    <i class="bi bi-eye"></i>
+                                </div>
+                                <div>
+                                    <h4>Pre-Action Validation System</h4>
+                                    <p>Real-time normative reasoning process that evaluates action requests against organizational and private norms, returning regulatory status (ALLOWED/FORBIDDEN) with applicable norms and total rewards/penalties calculation.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-item fade-in-up">
+                                <div class="feature-icon">
+                                    <i class="bi bi-diagram-3"></i>
+                                </div>
+                                <div>
+                                    <h4>Organizational Structure Support</h4>
+                                    <p>Multi-organization support with role-based norm filtering and domain-specific constraint enforcement. Agents can participate in multiple organizations with hierarchical norm inheritance and performance-optimized norm clustering.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-item fade-in-up">
+                                <div class="feature-icon">
+                                    <i class="bi bi-shield-exclamation"></i>
+                                </div>
+                                <div>
+                                    <h4>Violation Detection & Sanctions</h4>
+                                    <p>Automated violation detection with configurable sanction and reward systems. Supports both inviolable norms (preventing execution) and violable norms (with post-action penalties) for flexible compliance enforcement.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-item fade-in-up">
+                                <div class="feature-icon">
+                                    <i class="bi bi-gear"></i>
+                                </div>
+                                <div>
+                                    <h4>Customizable Reasoning Engine</h4>
+                                    <p>Extensible normative reasoning engine with easy override capabilities for domain-specific constraint logic. Supports custom norm condition functions and violation response mechanisms tailored to specific application requirements.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-3">
+                        <h2 class="text-center mb-5">Norm Definition & Implementation Framework</h2>
+                        
+                        <div class="info-card mb-4">
+                            <h4 class="mb-3">Formal Norm Representation</h4>
+                            <p class="mb-3">SPADE Norms represents each norm as a comprehensive tuple structure:</p>
+                            <div class="code-block mb-3">
+                                <code>⟨id, type, condition, action, role, penalty, reward, domain, inviolable, issuer⟩</code>
+                            </div>
+                            <ul class="list-unstyled mb-3">
+                                <li><strong>id:</strong> Unique norm identifier for tracking and reference</li>
+                                <li><strong>type:</strong> Deontic type (Permission or Prohibition)</li>
+                                <li><strong>condition:</strong> Activation condition for norm applicability</li>
+                                <li><strong>action:</strong> Regulated action or behavior pattern</li>
+                                <li><strong>role:</strong> Target agent roles affected by the norm</li>
+                                <li><strong>penalty/reward:</strong> Numerical consequences for compliance/violation</li>
+                                <li><strong>domain:</strong> Application domain for performance optimization</li>
+                                <li><strong>inviolable:</strong> Whether norm prevents action execution</li>
+                                <li><strong>issuer:</strong> Authority or organization defining the norm</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-card mb-4">
+                            <h4 class="mb-3">Normative Reasoning Process</h4>
+                            <p class="mb-3">The framework implements a sophisticated multi-step reasoning process:</p>
+                            <ol class="mb-3">
+                                <li><strong>Action Request:</strong> Agent queries normative implications before execution</li>
+                                <li><strong>Norm Filtering:</strong> System filters applicable norms by domain and role</li>
+                                <li><strong>Condition Evaluation:</strong> Activation conditions are assessed against current context</li>
+                                <li><strong>Constraint Analysis:</strong> Permission/prohibition logic determines action validity</li>
+                                <li><strong>Penalty Calculation:</strong> Total rewards and penalties are computed</li>
+                                <li><strong>Response Generation:</strong> Regulatory status (ALLOWED/FORBIDDEN) with detailed justification</li>
+                            </ol>
+                        </div>
+
+                        <div class="info-card">
+                            <h4 class="mb-3">Technical Implementation Features</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6><i class="bi bi-gear me-2"></i>Customizable Engine Override</h6>
+                                    <p class="small">Extend base normative reasoning engine with domain-specific constraint logic and custom violation response mechanisms.</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6><i class="bi bi-layers me-2"></i>Multi-Level Norm Hierarchies</h6>
+                                    <p class="small">Support for organizational, departmental, and personal norm layers with inheritance and conflict resolution.</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6><i class="bi bi-lightning me-2"></i>Real-Time Performance</h6>
+                                    <p class="small">Millisecond response times through optimized filtering algorithms and cached norm evaluations.</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6><i class="bi bi-shield-check me-2"></i>Violation Tracking</h6>
+                                    <p class="small">Comprehensive audit trails for compliance monitoring and regulatory reporting requirements.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-3">
+                        <h2 class="text-center mb-5">Real-World Applications & Use Cases</h2>
+                    
+                    <div class="use-case-item slide-in-left">
+                        <h4>Financial Services & Regulatory Compliance</h4>
+                        <p>Implement complex financial regulations with norm-based constraint enforcement. Define prohibition norms for high-risk trading strategies, permission norms for authorized transaction types, and automatic violation detection with penalty calculations. Perfect for MiFID II compliance, anti-money laundering protocols, and risk management systems requiring real-time regulatory constraint validation.</p>
+                    </div>
+                    
+                    <div class="use-case-item slide-in-left">
+                        <h4>Healthcare & Medical Protocol Enforcement</h4>
+                        <p>Deploy normative agents for clinical decision support systems with HIPAA compliance constraints, medical protocol adherence, and patient safety rules. Implement permission-based access controls for medical records, prohibition norms for contraindicated treatments, and automated compliance monitoring with audit trails for regulatory reporting.</p>
+                    </div>
+                    
+                    <div class="use-case-item slide-in-left">
+                        <h4>Smart Grid & Critical Infrastructure</h4>
+                        <p>Apply normative reasoning for power grid management with safety constraints, load balancing rules, and emergency response protocols. Define inviolable norms for system stability, violable norms for optimization preferences, and dynamic norm activation based on grid conditions and regulatory requirements.</p>
+                    </div>
+                    
+                    <div class="use-case-item slide-in-left">
+                        <h4>Autonomous Systems & IoT Governance</h4>
+                        <p>Deploy norm-aware autonomous agents in IoT environments with privacy constraints, resource allocation rules, and safety protocols. Implement organizational structures for device hierarchies, domain-specific norms for different sensor types, and distributed normative reasoning for large-scale autonomous system coordination.</p>
+                    </div>
+
+                    <div class="use-case-item slide-in-left">
+                        <h4>Multi-Agent Simulation & Social Modeling</h4>
+                        <p>Research normative behavior in complex social systems with customizable deontic logic frameworks. Model social norm emergence, compliance behavior analysis, and organizational culture simulation with configurable sanction/reward mechanisms and role-based normative reasoning processes.</p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-4">
+                        <h2 class="mb-4">Technical Benefits & Implementation Advantages</h2>
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Decoupled Normative Architecture:</strong> Normative backpack design separates constraint logic from agent behavior, enabling flexible norm management without modifying core agent implementations
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Formal Deontic Logic Foundation:</strong> Based on established deontic logic principles with mathematically sound norm representation and constraint satisfaction mechanisms
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Performance-Optimized Filtering:</strong> Domain and role-based norm clustering significantly reduces computational overhead in large-scale multi-agent systems
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Multi-Organization Support:</strong> Agents can participate in multiple organizations with hierarchical norm inheritance and conflict resolution mechanisms
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Extensible Reasoning Engine:</strong> Customizable normative reasoning engine with pluggable constraint evaluation and violation response mechanisms
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Real-Time Constraint Validation:</strong> Pre-action validation with millisecond response times for time-critical applications requiring immediate normative decisions
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Distributed & Scalable:</strong> Designed for distributed multi-agent systems with horizontal scaling capabilities and fault-tolerant normative reasoning
+                            </li>
+                        </ul>
+                        
+                        <div class="text-center mt-4">
+                            <h5>Ready to implement normative reasoning in your multi-agent system?</h5>
+                            <div class="d-flex justify-content-center gap-3 flex-wrap mt-3">
+                                <a href="https://github.com/javipalanca/spade_norms" class="btn btn-primary">
+                                    Explore the Repository
+                                </a>
+                                <a href="https://spade-norms.readthedocs.io" class="btn btn-outline-primary">
+                                    Technical Documentation
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <Footer />
+</SimplePluginLayout>
+
+<style>
+    /* Custom styling for SPADE Norms page with main site theme */
+    .plugin-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .plugin-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="20" r="1.5" fill="rgba(255,255,255,0.08)"/><circle cx="20" cy="50" r="1" fill="rgba(255,255,255,0.06)"/></svg>') repeat;
+        opacity: 0.3;
+    }
+
+    .plugin-content {
+        background: linear-gradient(180deg, #f8fcff 0%, #ffffff 50%, #f0f9f7 100%) !important;
+    }
+
+    /* Enhanced feature items with main page theme */
+    .feature-item {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid transparent;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
+    }
+
+    .feature-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.02));
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        border-radius: 18px;
+    }
+
+    .feature-item:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(52, 152, 219, 0.15);
+        border-color: rgba(52, 152, 219, 0.3);
+    }
+
+    .feature-item:hover::before {
+        opacity: 1;
+    }
+
+    .feature-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 1.5rem;
+        margin-bottom: 1rem;
+        flex-shrink: 0;
+        font-size: 1.8rem;
+        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        position: relative;
+        transition: all 0.4s ease;
+    }
+
+    .feature-item:hover .feature-icon {
+        transform: rotate(5deg) scale(1.1);
+        box-shadow: 0 12px 30px rgba(52, 152, 219, 0.4);
+    }
+
+    .feature-icon::after {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 22px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .feature-item:hover .feature-icon::after {
+        opacity: 1;
+    }
+
+    /* Enhanced use case items */
+    .use-case-item {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border-left: 6px solid var(--primary-color);
+        border-radius: 0 15px 15px 0;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .use-case-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+        border-radius: 3px;
+    }
+
+    .use-case-item::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 0;
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.02));
+        transition: width 0.4s ease;
+    }
+
+    .use-case-item:hover {
+        transform: translateX(15px) scale(1.02);
+        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.15);
+    }
+
+    .use-case-item:hover::after {
+        width: 100%;
+    }
+
+    .use-case-item h4 {
+        color: #2c3e50;
+        position: relative;
+        z-index: 2;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .use-case-item p {
+        color: #5a6c7d;
+        position: relative;
+        z-index: 2;
+        line-height: 1.6;
+    }
+
+    /* Enhanced info cards */
+    .info-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid rgba(52, 152, 219, 0.1);
+        border-radius: 25px;
+        padding: 3rem;
+        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.08);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 25px 25px 0 0;
+    }
+
+    .info-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(52, 152, 219, 0.12);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    /* Enhanced buttons */
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border: none;
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #2980b9, var(--secondary-color));
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(52, 152, 219, 0.4);
+    }
+
+    .btn-outline-primary {
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+    }
+
+    .btn-outline-light {
+        border: 2px solid rgba(255, 255, 255, 0.6);
+        color: white;
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-light:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Success icons with main theme */
+    .text-success {
+        color: var(--primary-color) !important;
+        font-size: 1.2rem;
+    }
+
+    /* Code block styling */
+    .code-block {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border: 2px solid rgba(52, 152, 219, 0.2);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .code-block::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 12px 12px 0 0;
+    }
+
+    .code-block code {
+        color: #2c3e50;
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    /* Typography enhancements */
+    .plugin-content h2 {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .plugin-content h2::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 2px;
+    }
+
+    .feature-item h4 {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .feature-item p {
+        color: #5a6c7d;
+        line-height: 1.6;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .feature-item {
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+
+        .use-case-item {
+            padding: 2rem;
+        }
+
+        .info-card {
+            padding: 2rem;
+        }
+    }
+
+    /* Dark mode support */
+    :global(body.dark-mode) .feature-item {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    :global(body.dark-mode) .use-case-item {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+    }
+
+    :global(body.dark-mode) .info-card {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+    }
+
+    :global(body.dark-mode) .plugin-content {
+        background: linear-gradient(180deg, var(--dark-bg) 0%, #1a1a1a 50%, #0f1a21 100%) !important;
+    }
+
+    :global(body.dark-mode) .code-block {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+        border-color: rgba(52, 152, 219, 0.3);
+    }
+
+    :global(body.dark-mode) .code-block code {
+        color: #e9ecef;
+    }
+</style>
