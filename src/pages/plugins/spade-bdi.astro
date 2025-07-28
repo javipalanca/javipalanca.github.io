@@ -1,0 +1,726 @@
+---
+import SimplePluginLayout from '../../layouts/SimplePluginLayout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<SimplePluginLayout 
+    title="SPADE BDI - Cognitive Agent Programming"
+    description="Implement sophisticated BDI agents with AgentSpeak(L) programming language and belief-desire-intention reasoning architecture."
+>
+    <Navbar />
+    
+    <section class="plugin-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="bi bi-brain me-3"></i>
+                        SPADE BDI
+                    </h1>
+                    <p class="lead mb-4">
+                        Build intelligent cognitive agents with AgentSpeak(L) programming and BDI reasoning architecture
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="https://github.com/javipalanca/spade_bdi" class="btn btn-primary">
+                            <i class="bi bi-github me-2"></i>View on GitHub
+                        </a>
+                        <a href="https://spade-bdi.readthedocs.io" class="btn btn-outline-light">
+                            <i class="bi bi-book me-2"></i>Documentation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="plugin-content">
+        <div class="container">
+            
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-1">
+                        <h2 class="mb-4">What is SPADE BDI?</h2>
+                        <p class="lead">
+                            SPADE BDI is a comprehensive plugin for SPADE 3 that implements the Belief-Desire-Intention cognitive architecture, 
+                            enabling agents to parse and execute AgentSpeak(L) programs with sophisticated reasoning capabilities.
+                        </p>
+                        <p>
+                            Built on Bratman's BDI model, this framework creates <strong>hybrid agents</strong> that combine reactive behaviors with 
+                            deliberative reasoning. Agents maintain a <strong>belief base</strong> (knowledge about the world), pursue 
+                            <strong>goals</strong> (desired states), and execute <strong>plans</strong> through structured intention stacks.
+                        </p>
+                        <div class="code-example mt-4">
+                            <h5>Agent Creation Example:</h5>
+                            <pre><code class="language-python">from spade_bdi import BDIAgent
+
+# Create BDI agent with AgentSpeak program
+agent = BDIAgent("agent@server.com", "password", "agent_program.asl")
+await agent.start()
+
+# Dynamic belief management
+agent.set_belief("location", "office")
+agent.set_belief("temperature", 25)
+current_location = agent.get_belief("location")</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-2">
+                        <h2 class="text-center mb-5">BDI Architecture Components</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-database"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Belief Base Management</h4>
+                                        <p>Dynamic knowledge base storing agent beliefs as predicates. Supports belief insertion, deletion, querying, and automatic updates from environmental perception and inter-agent communication.</p>
+                                        <div class="code-snippet mt-2">
+                                            <small><code>temperature(25), location(office), weather(sunny)</code></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-bullseye"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Goal Processing</h4>
+                                        <p>Achievement goals (prefixed with !) trigger plan selection and execution. Goals represent desired states or conditions the agent commits to achieving through deliberative reasoning.</p>
+                                        <div class="code-snippet mt-2">
+                                            <small><code>!find_shelter, !maintain_temperature(22)</code></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-gear-wide-connected"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Plan Library & Execution</h4>
+                                        <p>Plans follow TriggeringEvent : Context <- Body syntax. Context conditions determine plan applicability through logical evaluation and variable unification.</p>
+                                        <div class="code-snippet mt-2">
+                                            <small><code>+!cool_room : temperature(T) & T > 25 <- turn_on_ac.</code></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-arrow-clockwise"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Reasoning Cycle</h4>
+                                        <p>Implements belief revision, goal generation, plan selection, and intention management. Processes events from message queue, selects applicable plans, and manages intention stacks for concurrent goal pursuit.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-2-5">
+                        <h2 class="mb-4">AgentSpeak(L) Programming Language</h2>
+                        <p class="lead">
+                            SPADE BDI implements AgentSpeak(L), a logic programming language based on the BDI model, 
+                            enabling declarative specification of agent behaviors through beliefs, plans, and goals.
+                        </p>
+                        
+                        <div class="agentspeak-syntax mt-4">
+                            <h5>Core Language Elements:</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6><strong>Beliefs:</strong></h6>
+                                    <pre><code class="language-agentspeak">// Initial beliefs
+temperature(22).
+location(kitchen).
+is_sunny(true).</code></pre>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6><strong>Plans:</strong></h6>
+                                    <pre><code class="language-agentspeak">// Plan structure
++!stay_cool : temperature(T) & T > 25 <-
+    !find_shade;
+    !drink_water.</code></pre>
+                                </div>
+                            </div>
+                            
+                            <h6 class="mt-4"><strong>Variables & Unification:</strong></h6>
+                            <p>Variables start with uppercase letters and support Prolog-like unification for dynamic information processing:</p>
+                            <pre><code class="language-agentspeak">+temperature(Temp) : Temp > 30 <-
+    .print("Temperature is high: ", Temp);
+    !activate_cooling(Temp).</code></pre>
+
+                            <h6 class="mt-4"><strong>Communication:</strong></h6>
+                            <p>Built-in KQML performatives for inter-agent communication:</p>
+                            <pre><code class="language-agentspeak">// Send beliefs and achieve goals
+.send(robot1, tell, location(kitchen));
+.send(coordinator, achieve, !patrol_area(zone_a));</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-3">
+                        <h2 class="text-center mb-5">Cognitive Agent Applications</h2>
+                        
+                        <div class="use-case-item slide-in-left">
+                            <h4>Autonomous Multi-Robot Coordination</h4>
+                            <p>Deploy cognitive robots with individual belief bases, shared goals, and coordinated planning. Agents reason about environmental conditions, teammate capabilities, and mission objectives using AgentSpeak plans for dynamic task allocation and collaborative problem-solving.</p>
+                            <div class="tech-highlight mt-2">
+                                <small><strong>Technical:</strong> Distributed belief sharing, intention coordination, plan synchronization</small>
+                            </div>
+                        </div>
+                        
+                        <div class="use-case-item slide-in-left">
+                            <h4>Intelligent Process Automation</h4>
+                            <p>Create business process agents that maintain beliefs about system states, pursue workflow goals, and adapt to exceptions through plan selection. Agents handle complex decision trees, error recovery, and multi-step process orchestration with BDI reasoning.</p>
+                            <div class="tech-highlight mt-2">
+                                <small><strong>Technical:</strong> Context-aware plan selection, failure handling, process state management</small>
+                            </div>
+                        </div>
+                        
+                        <div class="use-case-item slide-in-left">
+                            <h4>Cognitive IoT Management</h4>
+                            <p>Build smart environment controllers that reason about sensor data, maintain environmental beliefs, and pursue comfort/efficiency goals. Agents coordinate HVAC, lighting, and security systems through intelligent plan execution and adaptation.</p>
+                            <div class="tech-highlight mt-2">
+                                <small><strong>Technical:</strong> Sensor fusion beliefs, multi-objective optimization, reactive plan triggering</small>
+                            </div>
+                        </div>
+                        
+                        <div class="use-case-item slide-in-left">
+                            <h4>Game AI & NPCs</h4>
+                            <p>Develop believable game characters with personality-driven beliefs, dynamic goals, and contextual behavior plans. Agents exhibit realistic decision-making, emotional responses, and social interactions through sophisticated BDI modeling.</p>
+                            <div class="tech-highlight mt-2">
+                                <small><strong>Technical:</strong> Personality belief systems, emotional goal priorities, social plan libraries</small>
+                            </div>
+                        </div>
+                        
+                        <div class="use-case-item slide-in-left">
+                            <h4>Research & Simulation Platforms</h4>
+                            <p>Academic research in cognitive science, multi-agent systems, and AI reasoning. SPADE BDI provides a robust platform for experimenting with BDI theories, agent coordination protocols, and cognitive architectures with formal AgentSpeak semantics.</p>
+                            <div class="tech-highlight mt-2">
+                                <small><strong>Technical:</strong> Formal operational semantics, reasoning cycle analysis, scalability testing</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-3-5">
+                        <h2 class="mb-4">BDI Reasoning Cycle Implementation</h2>
+                        <p class="lead">
+                            SPADE BDI implements a complete BDI reasoning cycle with belief revision, goal generation, 
+                            plan selection, and intention management for sophisticated cognitive agent behavior.
+                        </p>
+                        
+                        <div class="reasoning-cycle mt-4">
+                            <div class="cycle-step">
+                                <h6><i class="bi bi-1-circle-fill me-2"></i><strong>Event Processing</strong></h6>
+                                <p>Messages from the SPADE mailbox are processed as triggering events. Events can be belief additions/deletions or goal achievements, initiating the reasoning cycle.</p>
+                            </div>
+                            
+                            <div class="cycle-step">
+                                <h6><i class="bi bi-2-circle-fill me-2"></i><strong>Plan Selection</strong></h6>
+                                <p>The agent searches the plan library for applicable plans whose trigger matches the event and whose context conditions are satisfied through belief base queries and unification.</p>
+                            </div>
+                            
+                            <div class="cycle-step">
+                                <h6><i class="bi bi-3-circle-fill me-2"></i><strong>Intention Formation</strong></h6>
+                                <p>Selected plans become intentions and are pushed onto the intention stack. Multiple intentions can be pursued concurrently through interleaved execution.</p>
+                            </div>
+                            
+                            <div class="cycle-step">
+                                <h6><i class="bi bi-4-circle-fill me-2"></i><strong>Plan Execution</strong></h6>
+                                <p>Plan bodies are executed step-by-step, performing actions, sending messages, adding/removing beliefs, and triggering new goals through recursive plan activation.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-4">
+                        <h2 class="mb-4">Technical Advantages</h2>
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Formal Semantics:</strong> Based on operational semantics with theoretical foundations from Bratman's BDI model and Jason's AgentSpeak implementation
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Hybrid Architecture:</strong> Combines reactive SPADE behaviors with deliberative BDI reasoning for optimal agent performance
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Extensible Framework:</strong> Custom actions, functions, and belief manipulation with KQML communication support (TELL, UNTELL, ACHIEVE)
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Prolog-like Unification:</strong> Sophisticated variable binding and context evaluation with logical inference capabilities
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Distributed Reasoning:</strong> Service-oriented plan composition with distributed execution across multiple agents
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Production Ready:</strong> Cross-platform Python implementation with active development and comprehensive documentation
+                            </li>
+                        </ul>
+                        
+                        <div class="integration-example mt-4">
+                            <h5>Quick Integration Example:</h5>
+                            <pre><code class="language-python"># Install and create BDI agent
+pip install spade-bdi
+
+# Agent script file (agent.asl)
+!start.
++!start <- +location(home); !patrol.
++!patrol : location(home) <- 
+    .print("Starting patrol");
+    !move_to(checkpoint1).
+
+# Python integration
+from spade_bdi import BDIAgent
+import asyncio
+
+async def main():
+    agent = BDIAgent("agent@server", "pass", "agent.asl")
+    await agent.start()
+    # Agent runs BDI reasoning cycle automatically
+    
+asyncio.run(main())</code></pre>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <h5>Build Cognitive Agents with Formal BDI Reasoning</h5>
+                            <div class="d-flex justify-content-center gap-3 flex-wrap mt-3">
+                                <a href="https://github.com/javipalanca/spade_bdi" class="btn btn-primary">
+                                    <i class="bi bi-github me-2"></i>Start Building on GitHub
+                                </a>
+                                <a href="https://spade-bdi.readthedocs.io" class="btn btn-outline-primary">
+                                    <i class="bi bi-book me-2"></i>Technical Documentation
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <Footer />
+</SimplePluginLayout>
+
+<style>
+    /* Custom styling for SPADE BDI page with main site theme */
+    .plugin-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .plugin-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="20" r="1.5" fill="rgba(255,255,255,0.08)"/><circle cx="20" cy="50" r="1" fill="rgba(255,255,255,0.06)"/></svg>') repeat;
+        opacity: 0.3;
+    }
+
+    .plugin-content {
+        background: linear-gradient(180deg, #f8fcff 0%, #ffffff 50%, #f0f9f7 100%) !important;
+    }
+
+    /* Enhanced feature items with main page theme */
+    .feature-item {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid transparent;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
+    }
+
+    .feature-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.02));
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        border-radius: 18px;
+    }
+
+    .feature-item:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(52, 152, 219, 0.15);
+        border-color: rgba(52, 152, 219, 0.3);
+    }
+
+    .feature-item:hover::before {
+        opacity: 1;
+    }
+
+    .feature-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 1.5rem;
+        margin-bottom: 1rem;
+        flex-shrink: 0;
+        font-size: 1.8rem;
+        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        position: relative;
+        transition: all 0.4s ease;
+    }
+
+    .feature-item:hover .feature-icon {
+        transform: rotate(5deg) scale(1.1);
+        box-shadow: 0 12px 30px rgba(52, 152, 219, 0.4);
+    }
+
+    .feature-icon::after {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 22px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .feature-item:hover .feature-icon::after {
+        opacity: 1;
+    }
+
+    /* Enhanced use case items */
+    .use-case-item {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border-left: 6px solid var(--primary-color);
+        border-radius: 0 15px 15px 0;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .use-case-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+        border-radius: 3px;
+    }
+
+    .use-case-item::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 0;
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.02));
+        transition: width 0.4s ease;
+    }
+
+    .use-case-item:hover {
+        transform: translateX(15px) scale(1.02);
+        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.15);
+    }
+
+    .use-case-item:hover::after {
+        width: 100%;
+    }
+
+    .use-case-item h4 {
+        color: #2c3e50;
+        position: relative;
+        z-index: 2;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .use-case-item p {
+        color: #5a6c7d;
+        position: relative;
+        z-index: 2;
+        line-height: 1.6;
+    }
+
+    /* Enhanced info cards */
+    .info-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid rgba(52, 152, 219, 0.1);
+        border-radius: 25px;
+        padding: 3rem;
+        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.08);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 25px 25px 0 0;
+    }
+
+    .info-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(52, 152, 219, 0.12);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    /* Enhanced buttons */
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border: none;
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #2980b9, var(--secondary-color));
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(52, 152, 219, 0.4);
+    }
+
+    .btn-outline-primary {
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+    }
+
+    .btn-outline-light {
+        border: 2px solid rgba(255, 255, 255, 0.6);
+        color: white;
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-light:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Success icons with main theme */
+    .text-success {
+        color: var(--primary-color) !important;
+        font-size: 1.2rem;
+    }
+
+    /* Typography enhancements */
+    .plugin-content h2 {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .plugin-content h2::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 2px;
+    }
+
+    .feature-item h4 {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .feature-item p {
+        color: #5a6c7d;
+        line-height: 1.6;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .feature-item {
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+
+        .use-case-item {
+            padding: 2rem;
+        }
+
+        .info-card {
+            padding: 2rem;
+        }
+    }
+
+    /* Code examples and snippets */
+    .code-example {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 1.5rem;
+        border-left: 4px solid var(--primary-color);
+    }
+
+    .code-snippet {
+        background: rgba(52, 152, 219, 0.1);
+        border-radius: 8px;
+        padding: 0.5rem;
+        border-left: 3px solid var(--primary-color);
+    }
+
+    .agentspeak-syntax pre {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        overflow-x: auto;
+    }
+
+    .agentspeak-syntax code {
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+    }
+
+    .tech-highlight {
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(46, 204, 113, 0.05));
+        border-radius: 8px;
+        padding: 0.5rem;
+        border-left: 3px solid var(--secondary-color);
+    }
+
+    .reasoning-cycle .cycle-step {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid var(--primary-color);
+        transition: all 0.3s ease;
+    }
+
+    .reasoning-cycle .cycle-step:hover {
+        transform: translateX(10px);
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.1);
+    }
+
+    .integration-example {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 1.5rem;
+        border: 2px solid rgba(52, 152, 219, 0.1);
+    }
+
+    .integration-example pre {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-top: 1rem;
+        overflow-x: auto;
+    }
+
+    /* Dark mode support */
+    :global(body.dark-mode) .feature-item {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    :global(body.dark-mode) .use-case-item {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+    }
+
+    :global(body.dark-mode) .info-card {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+    }
+
+    :global(body.dark-mode) .plugin-content {
+        background: linear-gradient(180deg, var(--dark-bg) 0%, #1a1a1a 50%, #0f1a21 100%) !important;
+    }
+
+    :global(body.dark-mode) .code-example {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+    }
+
+    :global(body.dark-mode) .integration-example {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    :global(body.dark-mode) .reasoning-cycle .cycle-step {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+    }
+</style>
