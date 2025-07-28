@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPADE Artifact Plugin - Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #7f8c8d;
+        }
+        .highlight {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+        }
+        ul {
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        .links {
+            background-color: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .links a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SPADE Artifact Plugin</h1>
+        
+        <div class="highlight">
+            <strong>SPADE Artifact</strong> is a Python plugin designed to enhance SPADE 3 (Smart Python Agent Development Environment) by providing advanced artifact development capabilities for multi-agent systems.
+        </div>
+
+        <h2>Purpose and Overview</h2>
+        <p>The SPADE Artifact plugin was created to address the need for <strong>shared objects and environments</strong> in multi-agent systems. Traditional agent-based systems often lack mechanisms for agents to interact with common resources or shared data sources. This plugin introduces the concept of "artifacts" - observable, interactive objects that can:</p>
+        <ul>
+            <li>Serve as shared resources between multiple agents</li>
+            <li>Provide observable properties that agents can monitor</li>
+            <li>Act as environmental components that agents can interact with</li>
+            <li>Enable publish-subscribe communication patterns</li>
+        </ul>
+
+        <h2>Key Features and Capabilities</h2>
+        
+        <h3>Core Artifact Functionality</h3>
+        <ul>
+            <li><strong>Observable Properties:</strong> Based on PubSub (Publish-Subscribe) mechanism for dynamic monitoring</li>
+            <li><strong>Presence Notifications:</strong> Artifacts can detect and respond to agent presence</li>
+            <li><strong>Knowledge Management:</strong> Built-in storage and retrieval of information</li>
+            <li><strong>Lifecycle Management:</strong> Complete control over artifact startup, operation, and shutdown</li>
+        </ul>
+
+        <h3>Agent-Artifact Interaction</h3>
+        <ul>
+            <li><strong>ArtifactMixin:</strong> Special mixin class for SPADE agents to interact with artifacts</li>
+            <li><strong>Focus/Ignore System:</strong> Agents can subscribe to or unsubscribe from artifact observations</li>
+            <li><strong>Callback Mechanisms:</strong> Automatic notification when artifacts publish updates</li>
+            <li><strong>Message Passing:</strong> Direct communication between agents and artifacts</li>
+        </ul>
+
+        <h3>Data Integration Capabilities</h3>
+        <ul>
+            <li><strong>CSVReader:</strong> Read and process CSV data files</li>
+            <li><strong>SQLReader:</strong> Connect to and query SQL databases</li>
+            <li><strong>APIReader:</strong> Fetch data from REST APIs</li>
+            <li><strong>MongoDBReader:</strong> Interface with MongoDB databases</li>
+        </ul>
+
+        <h2>Applications and Use Cases</h2>
+        
+        <h3>Shared Environment Scenarios</h3>
+        <ul>
+            <li><strong>Smart Home Systems:</strong> Artifacts representing IoT devices that multiple agents can monitor and control</li>
+            <li><strong>Trading Systems:</strong> Market data artifacts that provide real-time information to trading agents</li>
+            <li><strong>Simulation Environments:</strong> Environmental artifacts that represent shared resources or conditions</li>
+            <li><strong>Collaborative Systems:</strong> Shared workspaces or documents that multiple agents can access</li>
+        </ul>
+
+        <h3>Data-Driven Applications</h3>
+        <ul>
+            <li><strong>Real-time Monitoring:</strong> Artifacts that continuously process data streams and notify interested agents</li>
+            <li><strong>Database Integration:</strong> Artifacts serving as intelligent database interfaces for agent systems</li>
+            <li><strong>API Gateways:</strong> Artifacts that aggregate and distribute external API data to agents</li>
+            <li><strong>Sensor Networks:</strong> Artifacts representing sensor data that multiple agents need to access</li>
+        </ul>
+
+        <h2>Technical Requirements</h2>
+        
+        <h3>Installation</h3>
+        <p>Install the stable release using pip:</p>
+        <p class="code">pip install spade_artifact</p>
+        
+        <p>Or install from source:</p>
+        <p class="code">git clone git://github.com/javipalanca/spade_artifact</p>
+        <p class="code">python setup.py install</p>
+
+        <h3>Dependencies</h3>
+        <ul>
+            <li><strong>SPADE 3:</strong> The core multi-agent framework</li>
+            <li><strong>Python:</strong> Compatible with multiple Python versions</li>
+            <li><strong>Additional dependencies:</strong> Automatically installed via pip</li>
+        </ul>
+
+        <h3>Core Classes and Methods</h3>
+        <ul>
+            <li><strong>Artifact Class:</strong> Base class with methods like <span class="code">get()</span>, <span class="code">set()</span>, <span class="code">publish()</span>, <span class="code">start()</span></li>
+            <li><strong>ArtifactMixin:</strong> Mixin for agents with <span class="code">focus()</span> and <span class="code">ignore()</span> methods</li>
+            <li><strong>ArtifactComponent:</strong> Component handling artifact interactions</li>
+        </ul>
+
+        <h2>Implementation Example</h2>
+        <p>A typical implementation involves:</p>
+        <ol>
+            <li><strong>Creating Artifacts:</strong> Implement artifacts with async <span class="code">run()</span> methods that publish observations</li>
+            <li><strong>Agent Integration:</strong> Inherit from <span class="code">ArtifactMixin</span> in agent classes</li>
+            <li><strong>Subscription:</strong> Use <span class="code">self.artifacts.focus()</span> to subscribe to artifact updates</li>
+            <li><strong>Processing:</strong> Handle artifact observations through callback methods</li>
+        </ol>
+
+        <div class="highlight">
+            <strong>Important Note:</strong> When using mixins, they MUST always be placed before the base class in the inheritance chain.
+        </div>
+
+        <h2>Real-World Applications</h2>
+        <p>SPADE Artifact is particularly useful in scenarios requiring:</p>
+        <ul>
+            <li><strong>Distributed Systems:</strong> Where multiple agents need access to shared resources</li>
+            <li><strong>IoT Environments:</strong> For managing device interactions and data sharing</li>
+            <li><strong>Research Simulations:</strong> Creating complex environments with observable properties</li>
+            <li><strong>Corporate Applications:</strong> Building intelligent systems that integrate with existing databases and APIs</li>
+            <li><strong>Real-time Systems:</strong> Applications requiring immediate notification of state changes</li>
+        </ul>
+
+        <div class="links">
+            <h2>Resources</h2>
+            <p><strong>GitHub Repository:</strong> <a href="https://github.com/javipalanca/spade_artifact" target="_blank">https://github.com/javipalanca/spade_artifact</a></p>
+            <p><strong>Documentation:</strong> <a href="https://spade-artifact.readthedocs.io" target="_blank">https://spade-artifact.readthedocs.io</a></p>
+            <p><strong>License:</strong> MIT License</p>
+            <p><strong>Current Version:</strong> 0.1.2</p>
+            <p><strong>Developer:</strong> Javi Palanca</p>
+        </div>
+
+        <h2>Conclusion</h2>
+        <p>The SPADE Artifact plugin extends SPADE's capabilities by introducing sophisticated artifact management and agent-artifact interaction mechanisms. It's particularly valuable for developers building complex multi-agent systems that require shared environments, real-time data integration, and observable properties. The plugin's support for multiple data sources and its publish-subscribe architecture make it suitable for a wide range of applications from IoT systems to financial trading platforms.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,597 @@
+---
+import SimplePluginLayout from '../../layouts/SimplePluginLayout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<SimplePluginLayout 
+    title="SPADE Artifact - Shared Agent Environment"
+    description="Create shared objects and environments for agents to interact with collaboratively."
+>
+    <Navbar />
+    
+    <section class="plugin-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="bi bi-box me-3"></i>
+                        SPADE Artifact
+                    </h1>
+                    <p class="lead mb-4">
+                        Advanced artifact framework for multi-agent systems with observable properties, PubSub communication, and comprehensive data source integration
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="https://github.com/javipalanca/spade_artifact" class="btn btn-primary">
+                            <i class="bi bi-github me-2"></i>View on GitHub
+                        </a>
+                        <a href="https://spade-artifact.readthedocs.io" class="btn btn-outline-light">
+                            <i class="bi bi-book me-2"></i>Documentation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="plugin-content">
+        <div class="container">
+            
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-1">
+                        <h2 class="mb-4">What is SPADE Artifact?</h2>
+                        <p class="lead">
+                            SPADE Artifact is a sophisticated plugin for SPADE 3 that implements the artifact-based multi-agent systems paradigm. 
+                            It provides a framework for creating shared computational resources that agents can observe, manipulate, and interact with through well-defined interfaces.
+                        </p>
+                        <p>
+                            Built on Python's asyncio architecture and XMPP messaging protocol, SPADE Artifact enables agents to coordinate through shared data structures, 
+                            databases, APIs, and external systems. The framework implements observable properties using PubSub mechanisms, ensuring real-time synchronization 
+                            across distributed agent networks.
+                        </p>
+                        <div class="mt-4 p-4 bg-light rounded">
+                            <h5><i class="bi bi-gear me-2"></i>Technical Architecture</h5>
+                            <ul class="mb-0">
+                                <li><strong>Framework:</strong> Built for SPADE 3 multi-agent platform</li>
+                                <li><strong>Communication:</strong> XMPP-based with PubSub notification system</li>
+                                <li><strong>Language:</strong> Python with asyncio support</li>
+                                <li><strong>License:</strong> MIT Open Source</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-2">
+                        <h2 class="text-center mb-5">Core Data Integration Capabilities</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="feature-item fade-in-up">
+                                <div class="feature-icon">
+                                    <i class="bi bi-database"></i>
+                                </div>
+                                <div>
+                                    <h4>Database Artifacts (SQLReader)</h4>
+                                    <p>Connect to SQL databases with native SQLReader support. Execute queries, manage transactions, and enable real-time data synchronization across agent networks with automatic connection pooling and error recovery.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-item fade-in-up">
+                                <div class="feature-icon">
+                                    <i class="bi bi-file-earmark-spreadsheet"></i>
+                                </div>
+                                <div>
+                                    <h4>CSV Data Artifacts (CSVReader)</h4>
+                                    <p>Process CSV files with built-in CSVReader functionality. Handle large datasets, streaming data processing, and automatic schema detection with support for various encoding formats and delimiter configurations.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-item fade-in-up">
+                                <div class="feature-icon">
+                                    <i class="bi bi-cloud-arrow-up"></i>
+                                </div>
+                                <div>
+                                    <h4>API Integration (APIReader)</h4>
+                                    <p>Integrate with external REST APIs using APIReader. Support for authentication, rate limiting, response caching, and automatic retry mechanisms. Handle JSON, XML, and other data formats seamlessly.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-item fade-in-up">
+                                <div class="feature-icon">
+                                    <i class="bi bi-diagram-3"></i>
+                                </div>
+                                <div>
+                                    <h4>MongoDB Integration (MongoDBReader)</h4>
+                                    <p>Native MongoDB support with MongoDBReader for document-based data management. Handle complex queries, aggregation pipelines, and real-time change streams with automatic connection management.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-item fade-in-up">
+                                <div class="feature-icon">
+                                    <i class="bi bi-bell"></i>
+                                </div>
+                                <div>
+                                    <h4>PubSub Notification System</h4>
+                                    <p>XMPP-based publish-subscribe mechanism for real-time agent communication. Observable properties automatically trigger notifications when artifact state changes, ensuring distributed synchronization.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-item fade-in-up">
+                                <div class="feature-icon">
+                                    <i class="bi bi-globe"></i>
+                                </div>
+                                <div>
+                                    <h4>FIWARE Context Broker</h4>
+                                    <p>Advanced integration with FIWARE ecosystem through spade-fiware-artifacts. Support for NGSI-LD protocol, Orion and Scorpio Context Brokers, and IoT data management with asyncio operations.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-3">
+                        <h2 class="text-center mb-5">Advanced Technical Use Cases</h2>
+                    
+                    <div class="use-case-item slide-in-left">
+                        <h4>IoT Data Management with FIWARE Integration</h4>
+                        <p>Deploy SPADE Artifact with FIWARE Context Brokers to manage IoT sensor networks. Use NGSI-LD protocol for standardized data exchange, implement real-time analytics with MongoDB aggregation pipelines, and enable automatic device provisioning through API artifacts. Perfect for smart city infrastructure, industrial IoT monitoring, and distributed sensor networks.</p>
+                    </div>
+                    
+                    <div class="use-case-item slide-in-left">
+                        <h4>Financial Trading Systems with SQL Integration</h4>
+                        <p>Create high-performance trading artifacts using SQLReader for market data analysis. Implement real-time portfolio management with PubSub notifications for trade execution, use CSV artifacts for historical data backtesting, and integrate with external trading APIs for order management. Support transaction management and data consistency across distributed trading agents.</p>
+                    </div>
+                    
+                    <div class="use-case-item slide-in-left">
+                        <h4>Scientific Data Processing Pipelines</h4>
+                        <p>Build distributed scientific computing systems with MongoDB artifacts for storing experimental results, CSV artifacts for dataset processing, and API artifacts for external research database integration. Enable collaborative research environments where analysis agents can share computational resources and synchronize results through observable properties.</p>
+                    </div>
+                    
+                    <div class="use-case-item slide-in-left">
+                        <h4>Enterprise Integration and ERP Systems</h4>
+                        <p>Connect legacy ERP systems using SQL artifacts for database integration, API artifacts for REST service communication, and CSV artifacts for bulk data import/export. Implement business process automation with agent workflows that coordinate through shared artifacts, enabling seamless data flow between departments and external systems.</p>
+                    </div>
+                    
+                    <div class="use-case-item slide-in-left">
+                        <h4>Real-Time Analytics and Monitoring</h4>
+                        <p>Deploy monitoring systems using MongoDB artifacts for log aggregation, API artifacts for external service integration, and PubSub mechanisms for real-time alert distribution. Create dashboard agents that observe system artifacts and automatically generate reports, implement predictive maintenance through data correlation across multiple artifact types.</p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-12 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-4">
+                        <h2 class="text-center mb-5">Installation & Quick Start</h2>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="info-card">
+                                    <h4><i class="bi bi-download me-2"></i>Installation</h4>
+                                    <div class="bg-dark p-3 rounded mt-3">
+                                        <pre><code class="text-light"># Install SPADE Artifact plugin
+pip install spade-artifact
+
+# Install FIWARE integration (optional)
+pip install spade-fiware-artifacts
+
+# Install PubSub support (optional)
+pip install spade-pubsub</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="info-card">
+                                    <h4><i class="bi bi-code-slash me-2"></i>Basic Implementation</h4>
+                                    <div class="bg-dark p-3 rounded mt-3">
+                                        <pre><code class="text-light">from spade import Agent
+from spade_artifact import Artifact, ArtifactMixin
+
+class DataAgent(Agent, ArtifactMixin):
+    async def setup(self):
+        # Connect to artifact
+        await self.connect_artifact("db_artifact")</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-6">
+                        <h2 class="mb-4">Why Choose SPADE Artifact?</h2>
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Multi-Protocol Data Integration:</strong> Native support for SQL, MongoDB, CSV, and REST APIs with unified artifact interface
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>XMPP-Based PubSub Architecture:</strong> Real-time notifications and observable properties for distributed agent synchronization
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>FIWARE Ecosystem Integration:</strong> NGSI-LD protocol support for IoT and smart city applications with Context Broker connectivity
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Asyncio Performance:</strong> Built on Python's async/await paradigm for high-performance concurrent operations
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Enterprise-Ready:</strong> Production-grade features including connection pooling, error recovery, and transaction management
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Extensible Architecture:</strong> ArtifactMixin pattern allows easy integration with existing SPADE agent hierarchies
+                            </li>
+                        </ul>
+                        
+                        <div class="text-center mt-4">
+                            <h5>Ready to build advanced multi-agent data systems?</h5>
+                            <div class="d-flex justify-content-center gap-3 flex-wrap mt-3">
+                                <a href="https://github.com/javipalanca/spade_artifact" class="btn btn-primary">
+                                    <i class="bi bi-github me-2"></i>Explore on GitHub
+                                </a>
+                                <a href="https://spade-artifact.readthedocs.io" class="btn btn-outline-primary">
+                                    <i class="bi bi-book me-2"></i>Technical Documentation
+                                </a>
+                                <a href="https://pypi.org/project/spade-fiware-artifacts/" class="btn btn-outline-primary">
+                                    <i class="bi bi-cloud me-2"></i>FIWARE Integration
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <Footer />
+</SimplePluginLayout>
+
+<style>
+    /* Custom styling for SPADE Artifact page with main page theme */
+    .plugin-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .plugin-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="20" r="1.5" fill="rgba(255,255,255,0.08)"/><circle cx="20" cy="50" r="1" fill="rgba(255,255,255,0.06)"/></svg>') repeat;
+        opacity: 0.3;
+    }
+
+    .plugin-content {
+        background: linear-gradient(180deg, #f8fcff 0%, #ffffff 50%, #f0f9f7 100%) !important;
+    }
+
+    /* Enhanced feature items with main page theme */
+    .feature-item {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid transparent;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
+    }
+
+    .feature-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(52, 152, 219, 0.02));
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        border-radius: 18px;
+    }
+
+    .feature-item:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(52, 152, 219, 0.15);
+        border-color: rgba(52, 152, 219, 0.3);
+    }
+
+    .feature-item:hover::before {
+        opacity: 1;
+    }
+
+    .feature-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 1.5rem;
+        margin-bottom: 1rem;
+        flex-shrink: 0;
+        font-size: 1.8rem;
+        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        position: relative;
+        transition: all 0.4s ease;
+    }
+
+    .feature-item:hover .feature-icon {
+        transform: rotate(5deg) scale(1.1);
+        box-shadow: 0 12px 30px rgba(52, 152, 219, 0.4);
+    }
+
+    .feature-icon::after {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, #2ecc71, #27ae60, #16a085);
+        border-radius: 22px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .feature-item:hover .feature-icon::after {
+        opacity: 1;
+    }
+
+    /* Enhanced use case items */
+    .use-case-item {
+        background: linear-gradient(135deg, #ffffff 0%, #f0f9f7 100%);
+        border-left: 6px solid var(--primary-color);
+        border-radius: 0 15px 15px 0;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .use-case-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+        border-radius: 3px;
+    }
+
+    .use-case-item::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 0;
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(52, 152, 219, 0.02));
+        transition: width 0.4s ease;
+    }
+
+    .use-case-item:hover {
+        transform: translateX(15px) scale(1.02);
+        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.15);
+    }
+
+    .use-case-item:hover::after {
+        width: 100%;
+    }
+
+    .use-case-item h4 {
+        color: #2c3e50;
+        position: relative;
+        z-index: 2;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .use-case-item p {
+        color: #5a6c7d;
+        position: relative;
+        z-index: 2;
+        line-height: 1.6;
+    }
+
+    /* Enhanced info cards */
+    .info-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f0f9f7 100%);
+        border: 2px solid rgba(52, 152, 219, 0.1);
+        border-radius: 25px;
+        padding: 3rem;
+        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.08);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 25px 25px 0 0;
+    }
+
+    .info-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(52, 152, 219, 0.12);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    /* Enhanced buttons */
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border: none;
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #2980b9, var(--secondary-color));
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(52, 152, 219, 0.4);
+    }
+
+    .btn-outline-primary {
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+    }
+
+    .btn-outline-light {
+        border: 2px solid rgba(255, 255, 255, 0.6);
+        color: white;
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-light:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Success icons with green theme */
+    .text-success {
+        color: var(--primary-color) !important;
+        font-size: 1.2rem;
+    }
+
+    /* Typography enhancements */
+    .plugin-content h2 {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .plugin-content h2::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 2px;
+    }
+
+    .feature-item h4 {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .feature-item p {
+        color: #5a6c7d;
+        line-height: 1.6;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .feature-item {
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+
+        .use-case-item {
+            padding: 2rem;
+        }
+
+        .info-card {
+            padding: 2rem;
+        }
+    }
+
+    /* Code styling */
+    code {
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+
+    code.text-sm {
+        font-size: 0.8rem;
+    }
+
+    .bg-dark code {
+        background: transparent !important;
+    }
+
+    /* Dark mode support */
+    :global(body.dark-mode) .feature-item {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    :global(body.dark-mode) .use-case-item {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+    }
+
+    :global(body.dark-mode) .info-card {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+    }
+
+    :global(body.dark-mode) .plugin-content {
+        background: linear-gradient(180deg, var(--dark-bg) 0%, #1a1a1a 50%, #0f1a21 100%) !important;
+    }
+</style>
