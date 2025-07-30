@@ -34,7 +34,7 @@ import Footer from '../../components/Footer.astro';
         </div>
     </section>
 
-    <section class="plugin-content">
+    <section class="plugin-content" style="padding-top: 4rem;">
         <div class="container">
             
             <div class="row mb-5">
@@ -42,7 +42,7 @@ import Footer from '../../components/Footer.astro';
                     <div class="info-card plugin-section animate-on-scroll stagger-1">
                         <h2 class="mb-4">What is SPADE Norms?</h2>
                         <p class="lead">
-                            SPADE Norms is a distributed normative framework that extends the SPADE platform with comprehensive norm management capabilities based on deontic logic. 
+                            SPADE Norms is a distributed normative framework that extends the SPADE 3+ platform with comprehensive norm management capabilities based on deontic logic. 
                             It enables the development of norm-aware agents that can reason about permissions, prohibitions, and obligations in real-time.
                         </p>
                         <p>
@@ -193,38 +193,6 @@ import Footer from '../../components/Footer.astro';
                 </div>
             </div>
 
-            <div class="row mb-5">
-                <div class="col-lg-10 mx-auto">
-                    <div class="plugin-section animate-on-scroll stagger-3">
-                        <h2 class="text-center mb-5">Real-World Applications & Use Cases</h2>
-                    
-                    <div class="use-case-item slide-in-left">
-                        <h4>Financial Services & Regulatory Compliance</h4>
-                        <p>Implement complex financial regulations with norm-based constraint enforcement. Define prohibition norms for high-risk trading strategies, permission norms for authorized transaction types, and automatic violation detection with penalty calculations. Perfect for MiFID II compliance, anti-money laundering protocols, and risk management systems requiring real-time regulatory constraint validation.</p>
-                    </div>
-                    
-                    <div class="use-case-item slide-in-left">
-                        <h4>Healthcare & Medical Protocol Enforcement</h4>
-                        <p>Deploy normative agents for clinical decision support systems with HIPAA compliance constraints, medical protocol adherence, and patient safety rules. Implement permission-based access controls for medical records, prohibition norms for contraindicated treatments, and automated compliance monitoring with audit trails for regulatory reporting.</p>
-                    </div>
-                    
-                    <div class="use-case-item slide-in-left">
-                        <h4>Smart Grid & Critical Infrastructure</h4>
-                        <p>Apply normative reasoning for power grid management with safety constraints, load balancing rules, and emergency response protocols. Define inviolable norms for system stability, violable norms for optimization preferences, and dynamic norm activation based on grid conditions and regulatory requirements.</p>
-                    </div>
-                    
-                    <div class="use-case-item slide-in-left">
-                        <h4>Autonomous Systems & IoT Governance</h4>
-                        <p>Deploy norm-aware autonomous agents in IoT environments with privacy constraints, resource allocation rules, and safety protocols. Implement organizational structures for device hierarchies, domain-specific norms for different sensor types, and distributed normative reasoning for large-scale autonomous system coordination.</p>
-                    </div>
-
-                    <div class="use-case-item slide-in-left">
-                        <h4>Multi-Agent Simulation & Social Modeling</h4>
-                        <p>Research normative behavior in complex social systems with customizable deontic logic frameworks. Model social norm emergence, compliance behavior analysis, and organizational culture simulation with configurable sanction/reward mechanisms and role-based normative reasoning processes.</p>
-                    </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="row">
                 <div class="col-lg-8 mx-auto">
@@ -287,6 +255,19 @@ import Footer from '../../components/Footer.astro';
         background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
         position: relative;
         overflow: hidden;
+        color: white !important;
+        padding: 6rem 0 7rem 0 !important;
+    }
+
+    .plugin-header * {
+        color: white !important;
+    }
+
+    .plugin-header h1,
+    .plugin-header .lead,
+    .plugin-header p,
+    .plugin-header .display-4 {
+        color: white !important;
     }
 
     .plugin-header::before {
@@ -307,7 +288,7 @@ import Footer from '../../components/Footer.astro';
     /* Enhanced feature items with main page theme */
     .feature-item {
         background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
-        border: 2px solid transparent;
+        border: 2px solid rgba(52, 152, 219, 0.15);
         border-radius: 20px;
         padding: 2rem;
         margin-bottom: 2rem;
@@ -333,7 +314,7 @@ import Footer from '../../components/Footer.astro';
     .feature-item:hover {
         transform: translateY(-10px) scale(1.02);
         box-shadow: 0 20px 40px rgba(52, 152, 219, 0.15);
-        border-color: rgba(52, 152, 219, 0.3);
+        border-color: rgba(52, 152, 219, 0.5);
     }
 
     .feature-item:hover::before {
@@ -443,7 +424,7 @@ import Footer from '../../components/Footer.astro';
     /* Enhanced info cards */
     .info-card {
         background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
-        border: 2px solid rgba(52, 152, 219, 0.1);
+        border: 2px solid rgba(52, 152, 219, 0.25);
         border-radius: 25px;
         padding: 3rem;
         box-shadow: 0 15px 35px rgba(52, 152, 219, 0.08);
@@ -465,7 +446,7 @@ import Footer from '../../components/Footer.astro';
     .info-card:hover {
         transform: translateY(-8px);
         box-shadow: 0 25px 50px rgba(52, 152, 219, 0.12);
-        border-color: rgba(52, 152, 219, 0.2);
+        border-color: rgba(52, 152, 219, 0.4);
     }
 
     /* Enhanced buttons */
@@ -527,7 +508,7 @@ import Footer from '../../components/Footer.astro';
     /* Code block styling */
     .code-block {
         background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        border: 2px solid rgba(52, 152, 219, 0.2);
+        border: 2px solid rgba(52, 152, 219, 0.3);
         border-radius: 12px;
         padding: 1.5rem;
         text-align: center;

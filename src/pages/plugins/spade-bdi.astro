@@ -34,7 +34,7 @@ import Footer from '../../components/Footer.astro';
         </div>
     </section>
 
-    <section class="plugin-content">
+    <section class="plugin-content" style="padding-top: 4rem;">
         <div class="container">
             
             <div class="row mb-5">
@@ -42,7 +42,7 @@ import Footer from '../../components/Footer.astro';
                     <div class="info-card plugin-section animate-on-scroll stagger-1">
                         <h2 class="mb-4">What is SPADE BDI?</h2>
                         <p class="lead">
-                            SPADE BDI is a comprehensive plugin for SPADE 3 that implements the Belief-Desire-Intention cognitive architecture, 
+                            SPADE BDI is a comprehensive plugin for SPADE 3+ that implements the Belief-Desire-Intention cognitive architecture, 
                             enabling agents to parse and execute AgentSpeak(L) programs with sophisticated reasoning capabilities.
                         </p>
                         <p>
@@ -174,53 +174,6 @@ is_sunny(true).</code></pre>
                 </div>
             </div>
 
-            <div class="row mb-5">
-                <div class="col-lg-10 mx-auto">
-                    <div class="plugin-section animate-on-scroll stagger-3">
-                        <h2 class="text-center mb-5">Cognitive Agent Applications</h2>
-                        
-                        <div class="use-case-item slide-in-left">
-                            <h4>Autonomous Multi-Robot Coordination</h4>
-                            <p>Deploy cognitive robots with individual belief bases, shared goals, and coordinated planning. Agents reason about environmental conditions, teammate capabilities, and mission objectives using AgentSpeak plans for dynamic task allocation and collaborative problem-solving.</p>
-                            <div class="tech-highlight mt-2">
-                                <small><strong>Technical:</strong> Distributed belief sharing, intention coordination, plan synchronization</small>
-                            </div>
-                        </div>
-                        
-                        <div class="use-case-item slide-in-left">
-                            <h4>Intelligent Process Automation</h4>
-                            <p>Create business process agents that maintain beliefs about system states, pursue workflow goals, and adapt to exceptions through plan selection. Agents handle complex decision trees, error recovery, and multi-step process orchestration with BDI reasoning.</p>
-                            <div class="tech-highlight mt-2">
-                                <small><strong>Technical:</strong> Context-aware plan selection, failure handling, process state management</small>
-                            </div>
-                        </div>
-                        
-                        <div class="use-case-item slide-in-left">
-                            <h4>Cognitive IoT Management</h4>
-                            <p>Build smart environment controllers that reason about sensor data, maintain environmental beliefs, and pursue comfort/efficiency goals. Agents coordinate HVAC, lighting, and security systems through intelligent plan execution and adaptation.</p>
-                            <div class="tech-highlight mt-2">
-                                <small><strong>Technical:</strong> Sensor fusion beliefs, multi-objective optimization, reactive plan triggering</small>
-                            </div>
-                        </div>
-                        
-                        <div class="use-case-item slide-in-left">
-                            <h4>Game AI & NPCs</h4>
-                            <p>Develop believable game characters with personality-driven beliefs, dynamic goals, and contextual behavior plans. Agents exhibit realistic decision-making, emotional responses, and social interactions through sophisticated BDI modeling.</p>
-                            <div class="tech-highlight mt-2">
-                                <small><strong>Technical:</strong> Personality belief systems, emotional goal priorities, social plan libraries</small>
-                            </div>
-                        </div>
-                        
-                        <div class="use-case-item slide-in-left">
-                            <h4>Research & Simulation Platforms</h4>
-                            <p>Academic research in cognitive science, multi-agent systems, and AI reasoning. SPADE BDI provides a robust platform for experimenting with BDI theories, agent coordination protocols, and cognitive architectures with formal AgentSpeak semantics.</p>
-                            <div class="tech-highlight mt-2">
-                                <small><strong>Technical:</strong> Formal operational semantics, reasoning cycle analysis, scalability testing</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="row mb-5">
                 <div class="col-lg-8 mx-auto">
@@ -337,6 +290,19 @@ asyncio.run(main())</code></pre>
         background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
         position: relative;
         overflow: hidden;
+        color: white !important;
+        padding: 6rem 0 7rem 0 !important;
+    }
+
+    .plugin-header * {
+        color: white !important;
+    }
+
+    .plugin-header h1,
+    .plugin-header .lead,
+    .plugin-header p,
+    .plugin-header .display-4 {
+        color: white !important;
     }
 
     .plugin-header::before {
@@ -357,7 +323,7 @@ asyncio.run(main())</code></pre>
     /* Enhanced feature items with main page theme */
     .feature-item {
         background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
-        border: 2px solid transparent;
+        border: 2px solid rgba(52, 152, 219, 0.15);
         border-radius: 20px;
         padding: 2rem;
         margin-bottom: 2rem;
@@ -383,7 +349,7 @@ asyncio.run(main())</code></pre>
     .feature-item:hover {
         transform: translateY(-10px) scale(1.02);
         box-shadow: 0 20px 40px rgba(52, 152, 219, 0.15);
-        border-color: rgba(52, 152, 219, 0.3);
+        border-color: rgba(52, 152, 219, 0.5);
     }
 
     .feature-item:hover::before {
@@ -493,7 +459,7 @@ asyncio.run(main())</code></pre>
     /* Enhanced info cards */
     .info-card {
         background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
-        border: 2px solid rgba(52, 152, 219, 0.1);
+        border: 2px solid rgba(52, 152, 219, 0.25);
         border-radius: 25px;
         padding: 3rem;
         box-shadow: 0 15px 35px rgba(52, 152, 219, 0.08);
@@ -515,7 +481,7 @@ asyncio.run(main())</code></pre>
     .info-card:hover {
         transform: translateY(-8px);
         box-shadow: 0 25px 50px rgba(52, 152, 219, 0.12);
-        border-color: rgba(52, 152, 219, 0.2);
+        border-color: rgba(52, 152, 219, 0.4);
     }
 
     /* Enhanced buttons */
@@ -630,6 +596,7 @@ asyncio.run(main())</code></pre>
     /* Code examples and snippets */
     .code-example {
         background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border: 2px solid rgba(52, 152, 219, 0.2);
         border-radius: 15px;
         padding: 1.5rem;
         border-left: 4px solid var(--primary-color);
@@ -665,6 +632,7 @@ asyncio.run(main())</code></pre>
 
     .reasoning-cycle .cycle-step {
         background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid rgba(52, 152, 219, 0.15);
         border-radius: 12px;
         padding: 1.5rem;
         margin-bottom: 1rem;
@@ -681,7 +649,7 @@ asyncio.run(main())</code></pre>
         background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         border-radius: 15px;
         padding: 1.5rem;
-        border: 2px solid rgba(52, 152, 219, 0.1);
+        border: 2px solid rgba(52, 152, 219, 0.25);
     }
 
     .integration-example pre {

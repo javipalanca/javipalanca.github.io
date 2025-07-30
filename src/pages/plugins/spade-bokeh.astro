@@ -34,7 +34,7 @@ import Footer from '../../components/Footer.astro';
         </div>
     </section>
 
-    <section class="plugin-content">
+    <section class="plugin-content" style="padding-top: 4rem;">
         <div class="container">
             
             <div class="row mb-5">
@@ -46,7 +46,7 @@ import Footer from '../../components/Footer.astro';
                             This plugin leverages Bokeh's HTML5 Canvas and WebGL rendering to create high-performance, real-time visualizations that update dynamically as your agents operate.
                         </p>
                         <p>
-                            Built on Bokeh's server architecture, the plugin provides seamless integration with SPADE's web controller and Jinja2 template system. 
+                            Built on Bokeh's server architecture, the plugin provides seamless integration with SPADE 3+ web controller and Jinja2 template system. 
                             It transforms your multi-agent systems into visually rich, interactive monitoring and analysis platforms where complex agent behaviors, 
                             communication patterns, and system metrics are rendered as publication-quality charts accessible from any web browser.
                         </p>
@@ -112,38 +112,6 @@ import Footer from '../../components/Footer.astro';
                 </div>
             </div>
 
-            <div class="row mb-5">
-                <div class="col-lg-10 mx-auto">
-                    <div class="plugin-section animate-on-scroll stagger-3">
-                        <h2 class="text-center mb-5">Multi-Agent System Applications</h2>
-                    
-                    <div class="use-case-item slide-in-left">
-                        <h4>Distributed Sensor Networks & IoT</h4>
-                        <p>Create real-time geographic visualizations of sensor agent data with interactive maps, streaming time-series plots of environmental readings, and network topology diagrams showing agent communication patterns. Monitor device health, data quality, and coordination efficiency across large-scale distributed systems.</p>
-                    </div>
-                    
-                    <div class="use-case-item slide-in-left">
-                        <h4>Autonomous Vehicle Fleets</h4>
-                        <p>Visualize vehicle agent positions on interactive maps, track route optimization in real-time, monitor traffic coordination between autonomous agents, and analyze performance metrics like fuel efficiency, response times, and collaborative decision-making patterns.</p>
-                    </div>
-                    
-                    <div class="use-case-item slide-in-left">
-                        <h4>Financial Multi-Agent Trading</h4>
-                        <p>Build sophisticated trading dashboards with real-time market data visualization, agent portfolio performance tracking, risk analysis heatmaps, and interactive charts showing agent negotiation patterns, market sentiment analysis, and algorithmic trading strategy comparisons.</p>
-                    </div>
-                    
-                    <div class="use-case-item slide-in-left">
-                        <h4>Smart Grid & Energy Management</h4>
-                        <p>Monitor distributed energy agent systems with real-time power flow visualization, demand-supply balance charts, grid stability metrics, and interactive network diagrams showing energy trading between autonomous grid agents and renewable source coordination.</p>
-                    </div>
-                    
-                    <div class="use-case-item slide-in-left">
-                        <h4>Research & Complex Systems Analysis</h4>
-                        <p>Create publication-quality visualizations for multi-agent research with interactive parameter exploration, comparative analysis charts, agent behavior evolution over time, emergent system property visualization, and statistical analysis plots for academic presentations and papers.</p>
-                    </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="row">
                 <div class="col-lg-8 mx-auto">
@@ -232,7 +200,7 @@ class MyVisualizationAgent(BokehServerMixin, Agent):
                         <div class="installation-info mt-4 p-3" style="background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%); border-radius: 8px; border-left: 4px solid #28a745;">
                             <h6><i class="bi bi-download me-2"></i>Installation</h6>
                             <code>pip install spade_bokeh</code>
-                            <p class="mb-0 mt-2 small">Requires Python 3.7+, SPADE framework, and Bokeh 2.0+</p>
+                            <p class="mb-0 mt-2 small">Requires Python 3.7+, SPADE 3+ framework, and Bokeh 2.0+</p>
                         </div>
                         
                         <div class="text-center mt-4">
@@ -261,6 +229,19 @@ class MyVisualizationAgent(BokehServerMixin, Agent):
         background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
         position: relative;
         overflow: hidden;
+        color: white !important;
+        padding: 6rem 0 7rem 0 !important;
+    }
+
+    .plugin-header * {
+        color: white !important;
+    }
+
+    .plugin-header h1,
+    .plugin-header .lead,
+    .plugin-header p,
+    .plugin-header .display-4 {
+        color: white !important;
     }
 
     .plugin-header::before {
@@ -281,7 +262,7 @@ class MyVisualizationAgent(BokehServerMixin, Agent):
     /* Enhanced feature items with main page theme */
     .feature-item {
         background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
-        border: 2px solid transparent;
+        border: 2px solid rgba(52, 152, 219, 0.15);
         border-radius: 20px;
         padding: 2rem;
         margin-bottom: 2rem;
@@ -307,7 +288,7 @@ class MyVisualizationAgent(BokehServerMixin, Agent):
     .feature-item:hover {
         transform: translateY(-10px) scale(1.02);
         box-shadow: 0 20px 40px rgba(52, 152, 219, 0.15);
-        border-color: rgba(52, 152, 219, 0.3);
+        border-color: rgba(52, 152, 219, 0.5);
     }
 
     .feature-item:hover::before {
@@ -417,7 +398,7 @@ class MyVisualizationAgent(BokehServerMixin, Agent):
     /* Enhanced info cards */
     .info-card {
         background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
-        border: 2px solid rgba(52, 152, 219, 0.1);
+        border: 2px solid rgba(52, 152, 219, 0.25);
         border-radius: 25px;
         padding: 3rem;
         box-shadow: 0 15px 35px rgba(52, 152, 219, 0.08);
@@ -439,7 +420,7 @@ class MyVisualizationAgent(BokehServerMixin, Agent):
     .info-card:hover {
         transform: translateY(-8px);
         box-shadow: 0 25px 50px rgba(52, 152, 219, 0.12);
-        border-color: rgba(52, 152, 219, 0.2);
+        border-color: rgba(52, 152, 219, 0.4);
     }
 
     /* Enhanced buttons */

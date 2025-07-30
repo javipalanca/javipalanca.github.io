@@ -34,7 +34,7 @@ import Footer from '../../components/Footer.astro';
         </div>
     </section>
 
-    <section class="plugin-content">
+    <section class="plugin-content" style="padding-top: 4rem;">
         <div class="container">
             
             <div class="row mb-5">
@@ -42,7 +42,7 @@ import Footer from '../../components/Footer.astro';
                     <div class="info-card plugin-section animate-on-scroll stagger-1">
                         <h2 class="mb-4">What is SPADE Artifact?</h2>
                         <p class="lead">
-                            SPADE Artifact is a sophisticated plugin for SPADE 3 that implements the artifact-based multi-agent systems paradigm. 
+                            SPADE Artifact is a sophisticated plugin for SPADE 3+ that implements the artifact-based multi-agent systems paradigm. 
                             It provides a framework for creating shared computational resources that agents can observe, manipulate, and interact with through well-defined interfaces.
                         </p>
                         <p>
@@ -53,7 +53,7 @@ import Footer from '../../components/Footer.astro';
                         <div class="mt-4 p-4 bg-light rounded">
                             <h5><i class="bi bi-gear me-2"></i>Technical Architecture</h5>
                             <ul class="mb-0">
-                                <li><strong>Framework:</strong> Built for SPADE 3 multi-agent platform</li>
+                                <li><strong>Framework:</strong> Compatible with SPADE 3+ multi-agent platform</li>
                                 <li><strong>Communication:</strong> XMPP-based with PubSub notification system</li>
                                 <li><strong>Language:</strong> Python with asyncio support</li>
                                 <li><strong>License:</strong> MIT Open Source</li>
@@ -142,32 +142,21 @@ import Footer from '../../components/Footer.astro';
             <div class="row mb-5">
                 <div class="col-lg-10 mx-auto">
                     <div class="plugin-section animate-on-scroll stagger-3">
-                        <h2 class="text-center mb-5">Advanced Technical Use Cases</h2>
-                    
-                    <div class="use-case-item slide-in-left">
-                        <h4>IoT Data Management with FIWARE Integration</h4>
-                        <p>Deploy SPADE Artifact with FIWARE Context Brokers to manage IoT sensor networks. Use NGSI-LD protocol for standardized data exchange, implement real-time analytics with MongoDB aggregation pipelines, and enable automatic device provisioning through API artifacts. Perfect for smart city infrastructure, industrial IoT monitoring, and distributed sensor networks.</p>
-                    </div>
-                    
-                    <div class="use-case-item slide-in-left">
-                        <h4>Financial Trading Systems with SQL Integration</h4>
-                        <p>Create high-performance trading artifacts using SQLReader for market data analysis. Implement real-time portfolio management with PubSub notifications for trade execution, use CSV artifacts for historical data backtesting, and integrate with external trading APIs for order management. Support transaction management and data consistency across distributed trading agents.</p>
-                    </div>
-                    
-                    <div class="use-case-item slide-in-left">
-                        <h4>Scientific Data Processing Pipelines</h4>
-                        <p>Build distributed scientific computing systems with MongoDB artifacts for storing experimental results, CSV artifacts for dataset processing, and API artifacts for external research database integration. Enable collaborative research environments where analysis agents can share computational resources and synchronize results through observable properties.</p>
-                    </div>
-                    
-                    <div class="use-case-item slide-in-left">
-                        <h4>Enterprise Integration and ERP Systems</h4>
-                        <p>Connect legacy ERP systems using SQL artifacts for database integration, API artifacts for REST service communication, and CSV artifacts for bulk data import/export. Implement business process automation with agent workflows that coordinate through shared artifacts, enabling seamless data flow between departments and external systems.</p>
-                    </div>
-                    
-                    <div class="use-case-item slide-in-left">
-                        <h4>Real-Time Analytics and Monitoring</h4>
-                        <p>Deploy monitoring systems using MongoDB artifacts for log aggregation, API artifacts for external service integration, and PubSub mechanisms for real-time alert distribution. Create dashboard agents that observe system artifacts and automatically generate reports, implement predictive maintenance through data correlation across multiple artifact types.</p>
-                    </div>
+                        <h2 class="text-center mb-5">PubSub Communication Architecture</h2>
+                        <div class="pubsub-diagram-container">
+                            <img 
+                                src="/img/pubsub.png" 
+                                alt="SPADE PubSub Communication Mechanism" 
+                                class="pubsub-diagram img-fluid rounded shadow"
+                            />
+                            <div class="diagram-caption mt-4">
+                                <p class="text-center text-muted">
+                                    <strong>PubSub Architecture:</strong> SPADE Artifact uses XMPP-based publish-subscribe mechanisms to enable real-time 
+                                    communication between agents and shared artifacts. Observable properties automatically trigger notifications when 
+                                    artifact state changes, ensuring distributed synchronization across the multi-agent system.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -272,6 +261,19 @@ class DataAgent(Agent, ArtifactMixin):
         background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
         position: relative;
         overflow: hidden;
+        color: white !important;
+        padding: 6rem 0 7rem 0 !important;
+    }
+
+    .plugin-header * {
+        color: white !important;
+    }
+
+    .plugin-header h1,
+    .plugin-header .lead,
+    .plugin-header p,
+    .plugin-header .display-4 {
+        color: white !important;
     }
 
     .plugin-header::before {
@@ -366,63 +368,59 @@ class DataAgent(Agent, ArtifactMixin):
         opacity: 1;
     }
 
-    /* Enhanced use case items */
-    .use-case-item {
-        background: linear-gradient(135deg, #ffffff 0%, #f0f9f7 100%);
-        border-left: 6px solid var(--primary-color);
-        border-radius: 0 15px 15px 0;
-        padding: 2.5rem;
-        margin-bottom: 2rem;
+    /* PubSub Diagram Styling */
+    .pubsub-diagram-container {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid rgba(52, 152, 219, 0.1);
+        border-radius: 25px;
+        padding: 3rem;
+        text-align: center;
+        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.08);
         position: relative;
         overflow: hidden;
-        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.4s ease;
     }
 
-    .use-case-item::before {
+    .pubsub-diagram-container::before {
         content: '';
         position: absolute;
+        top: 0;
         left: 0;
-        top: 0;
-        bottom: 0;
-        width: 6px;
-        background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
-        border-radius: 3px;
-    }
-
-    .use-case-item::after {
-        content: '';
-        position: absolute;
-        top: 0;
         right: 0;
-        bottom: 0;
-        width: 0;
-        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(52, 152, 219, 0.02));
-        transition: width 0.4s ease;
+        height: 5px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 25px 25px 0 0;
     }
 
-    .use-case-item:hover {
-        transform: translateX(15px) scale(1.02);
-        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.15);
+    .pubsub-diagram-container:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(52, 152, 219, 0.12);
+        border-color: rgba(52, 152, 219, 0.2);
     }
 
-    .use-case-item:hover::after {
-        width: 100%;
+    .pubsub-diagram {
+        max-width: 100%;
+        height: auto;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     }
 
-    .use-case-item h4 {
-        color: #2c3e50;
-        position: relative;
-        z-index: 2;
-        margin-bottom: 1rem;
-        font-weight: 600;
+    .pubsub-diagram:hover {
+        transform: scale(1.02);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
     }
 
-    .use-case-item p {
-        color: #5a6c7d;
-        position: relative;
-        z-index: 2;
+    .diagram-caption {
+        margin-top: 2rem;
+    }
+
+    .diagram-caption p {
+        font-size: 1rem;
         line-height: 1.6;
+        color: #5a6c7d;
+        max-width: 800px;
+        margin: 0 auto;
     }
 
     /* Enhanced info cards */
@@ -583,8 +581,13 @@ class DataAgent(Agent, ArtifactMixin):
         border-color: rgba(52, 152, 219, 0.2);
     }
 
-    :global(body.dark-mode) .use-case-item {
+    :global(body.dark-mode) .pubsub-diagram-container {
         background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    :global(body.dark-mode) .diagram-caption p {
+        color: var(--dark-text-muted);
     }
 
     :global(body.dark-mode) .info-card {

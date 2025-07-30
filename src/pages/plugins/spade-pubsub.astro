@@ -34,7 +34,7 @@ import Footer from '../../components/Footer.astro';
         </div>
     </section>
 
-    <section class="plugin-content">
+    <section class="plugin-content" style="padding-top: 4rem;">
         <div class="container">
             
             <div class="row mb-5">
@@ -42,7 +42,7 @@ import Footer from '../../components/Footer.astro';
                     <div class="info-card plugin-section animate-on-scroll stagger-1">
                         <h2 class="mb-4">What is SPADE PubSub?</h2>
                         <p class="lead">
-                            SPADE PubSub is a Python plugin that extends the SPADE (Smart Python Agent Development Environment) 
+                            SPADE PubSub is a Python plugin that extends the SPADE 3+ (Smart Python Agent Development Environment) 
                             framework with XMPP XEP-0060 Publish-Subscribe capabilities, providing agents with standardized 
                             event-driven communication patterns for scalable multi-agent systems.
                         </p>
@@ -120,38 +120,6 @@ import Footer from '../../components/Footer.astro';
                 </div>
             </div>
 
-            <div class="row mb-5">
-                <div class="col-lg-10 mx-auto">
-                    <div class="plugin-section animate-on-scroll stagger-3">
-                        <h2 class="text-center mb-5">Real-World Multi-Agent System Applications</h2>
-                        
-                        <div class="use-case-item slide-in-left">
-                            <h4>Distributed Sensor Network Coordination</h4>
-                            <p><strong>Node-Based Data Aggregation:</strong> Environmental monitoring agents create PubSub nodes for different sensor types (temperature, humidity, air quality). Data collection agents subscribe to relevant nodes based on geographical regions. Collection nodes organize sensors hierarchically by location, while access models ensure only authorized agents can retrieve sensitive environmental data.</p>
-                        </div>
-                        
-                        <div class="use-case-item slide-in-left">
-                            <h4>Multi-Agent Market Simulation</h4>
-                            <p><strong>Event-Driven Trading Systems:</strong> Trading agents subscribe to market data nodes with different access models - public data uses "open" access while sensitive trading signals use "authorize" access. Price update agents publish to specific instrument nodes, triggering callbacks in subscriber agents for automated trading decisions. Node retraction enables removing outdated market information.</p>
-                        </div>
-                        
-                        <div class="use-case-item slide-in-left">
-                            <h4>Collaborative Robotics Networks</h4>
-                            <p><strong>Task Coordination & Status Broadcasting:</strong> Robot agents create nodes for task announcements and status updates. Coordination agents subscribe to task nodes to monitor progress across the robotic fleet. Emergency stop notifications use notification-without-items for immediate broadcast to all agents. Presence-based access ensures only active robots receive task assignments.</p>
-                        </div>
-                        
-                        <div class="use-case-item slide-in-left">
-                            <h4>Distributed System Monitoring</h4>
-                            <p><strong>Agent Health & Performance Tracking:</strong> System agents publish performance metrics to dedicated monitoring nodes. Administrative agents subscribe to health status nodes with callback functions for automated incident response. Collection nodes group related system components, while metadata subscriptions track configuration changes across the distributed system infrastructure.</p>
-                        </div>
-                        
-                        <div class="use-case-item slide-in-left">
-                            <h4>Smart Grid Energy Management</h4>
-                            <p><strong>Dynamic Load Balancing:</strong> Energy production agents publish availability to supply nodes, while consumption agents subscribe to demand nodes. Grid management agents use collection nodes to organize regional power distribution networks. Authorization access models protect critical grid control data while allowing transparent energy market participation through open nodes.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="row">
                 <div class="col-lg-8 mx-auto">
@@ -222,6 +190,19 @@ import Footer from '../../components/Footer.astro';
         background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
         position: relative;
         overflow: hidden;
+        color: white !important;
+        padding: 6rem 0 7rem 0 !important;
+    }
+
+    .plugin-header * {
+        color: white !important;
+    }
+
+    .plugin-header h1,
+    .plugin-header .lead,
+    .plugin-header p,
+    .plugin-header .display-4 {
+        color: white !important;
     }
 
     .plugin-header::before {
@@ -242,7 +223,7 @@ import Footer from '../../components/Footer.astro';
     /* Enhanced feature items with main page theme */
     .feature-item {
         background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
-        border: 2px solid transparent;
+        border: 2px solid rgba(52, 152, 219, 0.15);
         border-radius: 20px;
         padding: 2rem;
         margin-bottom: 2rem;
@@ -268,7 +249,7 @@ import Footer from '../../components/Footer.astro';
     .feature-item:hover {
         transform: translateY(-10px) scale(1.02);
         box-shadow: 0 20px 40px rgba(52, 152, 219, 0.15);
-        border-color: rgba(52, 152, 219, 0.3);
+        border-color: rgba(52, 152, 219, 0.5);
     }
 
     .feature-item:hover::before {
@@ -378,7 +359,7 @@ import Footer from '../../components/Footer.astro';
     /* Enhanced info cards */
     .info-card {
         background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
-        border: 2px solid rgba(52, 152, 219, 0.1);
+        border: 2px solid rgba(52, 152, 219, 0.25);
         border-radius: 25px;
         padding: 3rem;
         box-shadow: 0 15px 35px rgba(52, 152, 219, 0.08);
@@ -400,7 +381,7 @@ import Footer from '../../components/Footer.astro';
     .info-card:hover {
         transform: translateY(-8px);
         box-shadow: 0 25px 50px rgba(52, 152, 219, 0.12);
-        border-color: rgba(52, 152, 219, 0.2);
+        border-color: rgba(52, 152, 219, 0.4);
     }
 
     /* Enhanced buttons */
@@ -515,7 +496,7 @@ import Footer from '../../components/Footer.astro';
     /* Code example styling */
     .technical-highlight {
         background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        border: 1px solid rgba(52, 152, 219, 0.2);
+        border: 2px solid rgba(52, 152, 219, 0.3);
         border-radius: 15px;
     }
 
@@ -525,7 +506,7 @@ import Footer from '../../components/Footer.astro';
         line-height: 1.4;
         color: #2c3e50;
         background: #ffffff !important;
-        border: 1px solid rgba(52, 152, 219, 0.1);
+        border: 1px solid rgba(52, 152, 219, 0.25);
     }
 
     /* Dark mode support */

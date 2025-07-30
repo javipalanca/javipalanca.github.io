@@ -18,7 +18,7 @@ import Footer from '../../components/Footer.astro';
                     <div class="mb-3">
                         <span class="featured-badge">
                             <i class="bi bi-star-fill"></i>
-                            Featured Plugin
+                            New Plugin
                         </span>
                     </div>
                     <h1 class="display-4 fw-bold mb-4">
@@ -41,7 +41,7 @@ import Footer from '../../components/Footer.astro';
         </div>
     </section>
 
-    <section class="plugin-content">
+    <section class="plugin-content" style="padding-top: 4rem;">
         <div class="container">
             
             <div class="row mb-5">
@@ -53,7 +53,7 @@ import Footer from '../../components/Footer.astro';
                             enabling intelligent communication, reasoning, and decision-making capabilities across distributed agent networks.
                         </p>
                         <p>
-                            Built with enterprise requirements in mind, SpadeLLM supports multiple LLM providers (OpenAI, Ollama, vLLM), 
+                            Built with enterprise requirements in mind, SpadeLLM supports multiple LLM providers (OpenAI, Ollama, LM Studio), 
                             advanced memory management, human-in-the-loop workflows, and comprehensive guardrails for safe AI deployment. 
                             Compatible with Python 3.10-3.12 and SPADE 3.3.0+.
                         </p>
@@ -73,7 +73,7 @@ import Footer from '../../components/Footer.astro';
                                     </div>
                                     <div>
                                         <h4>Multi-Provider Architecture</h4>
-                                        <p>Seamlessly integrate with OpenAI GPT-4, Ollama local models, vLLM high-performance serving, and LM Studio. Switch providers dynamically or use multiple models simultaneously for different agent roles.</p>
+                                        <p>Seamlessly integrate with OpenAI GPT-4, Ollama local models, and LM Studio. Switch providers dynamically or use multiple models simultaneously for different agent roles.</p>
                                     </div>
                                 </div>
                             </div>
@@ -118,31 +118,116 @@ import Footer from '../../components/Footer.astro';
             <div class="row mb-5">
                 <div class="col-lg-10 mx-auto">
                     <div class="plugin-section animate-on-scroll stagger-3">
-                        <h2 class="text-center mb-5">Real-World AI Agent Applications</h2>
+                        <h2 class="text-center mb-5">Learn SpadeLLM - Step by Step</h2>
+                        <p class="text-center text-muted mb-5">Follow our comprehensive tutorials to master SpadeLLM, from your first agent to advanced multi-agent systems.</p>
                         
-                        <div class="use-case-item slide-in-left stagger-1">
-                            <h4>Intelligent Multi-Agent Workflows</h4>
-                            <p>Deploy coordinated agent networks where LLM-powered agents communicate, negotiate, and collaborate on complex tasks. Each agent can reason about their role, share context, and adapt behavior based on system-wide objectives.</p>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="simple-tutorial-card">
+                                    <div class="tutorial-header-simple">
+                                        <div class="tutorial-icon-simple beginner">🤖</div>
+                                        <div>
+                                            <h4>Your First LLM Agent</h4>
+                                            <div class="tutorial-badges">
+                                                <span class="badge-beginner">Beginner</span>
+                                                <span class="duration-text">30-45 min</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p>Learn how to create a basic SPADE-LLM agent step by step, starting with a simple setup and gradually adding features to understand core concepts.</p>
+                                    <div class="tutorial-topics-simple">
+                                        <span class="topic-tag">Basic Agent Setup</span>
+                                        <span class="topic-tag">LLM Provider Config</span>
+                                        <span class="topic-tag">Interactive Chat</span>
+                                    </div>
+                                    <a href="https://sosanzma.github.io/spade_llm/getting-started/first-agent/" class="btn-tutorial-simple" target="_blank">
+                                        Start Tutorial →
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="simple-tutorial-card">
+                                    <div class="tutorial-header-simple">
+                                        <div class="tutorial-icon-simple intermediate">🛡️</div>
+                                        <div>
+                                            <h4>Guardrails System Tutorial</h4>
+                                            <div class="tutorial-badges">
+                                                <span class="badge-intermediate">Intermediate</span>
+                                                <span class="duration-text">1-2 hours</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p>Learn how to implement safety and content filtering in SPADE-LLM agents using comprehensive guardrail mechanisms.</p>
+                                    <div class="tutorial-topics-simple">
+                                        <span class="topic-tag">Input/Output Guardrails</span>
+                                        <span class="topic-tag">Keyword Filtering</span>
+                                        <span class="topic-tag">LLM Safety Validation</span>
+                                    </div>
+                                    <a href="https://sosanzma.github.io/spade_llm/getting-started/guardrails-tutorial/" class="btn-tutorial-simple" target="_blank">
+                                        Learn Guardrails →
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="simple-tutorial-card">
+                                    <div class="tutorial-header-simple">
+                                        <div class="tutorial-icon-simple intermediate">🔧</div>
+                                        <div>
+                                            <h4>Custom Tools Tutorial</h4>
+                                            <div class="tutorial-badges">
+                                                <span class="badge-intermediate">Intermediate</span>
+                                                <span class="duration-text">1-2 hours</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p>Learn how to create and use custom tools with SPADE-LLM agents to perform actions beyond text generation.</p>
+                                    <div class="tutorial-topics-simple">
+                                        <span class="topic-tag">Tool Creation</span>
+                                        <span class="topic-tag">Schema Definition</span>
+                                        <span class="topic-tag">Multi-Tool Agents</span>
+                                    </div>
+                                    <a href="https://sosanzma.github.io/spade_llm/getting-started/tools-tutorial/" class="btn-tutorial-simple" target="_blank">
+                                        Build Tools →
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="simple-tutorial-card">
+                                    <div class="tutorial-header-simple">
+                                        <div class="tutorial-icon-simple advanced">🏗️</div>
+                                        <div>
+                                            <h4>Advanced Multi-Feature Agent</h4>
+                                            <div class="tutorial-badges">
+                                                <span class="badge-advanced">Advanced</span>
+                                                <span class="duration-text">2-3 hours</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p>Create sophisticated multi-agent systems with advanced features like MCP integration, human-in-the-loop workflows, and complex routing.</p>
+                                    <div class="tutorial-topics-simple">
+                                        <span class="topic-tag">Multi-Agent Systems</span>
+                                        <span class="topic-tag">MCP Integration</span>
+                                        <span class="topic-tag">Human-in-the-Loop</span>
+                                    </div>
+                                    <a href="https://sosanzma.github.io/spade_llm/getting-started/advanced-agent/" class="btn-tutorial-simple" target="_blank">
+                                        Build Advanced System →
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div class="use-case-item slide-in-left stagger-2">
-                            <h4>Autonomous Customer Service Systems</h4>
-                            <p>Create sophisticated customer service networks with specialized agents for different domains. Agents can escalate to human experts, maintain conversation history, and apply guardrails to ensure appropriate responses.</p>
-                        </div>
-                        
-                        <div class="use-case-item slide-in-left stagger-3">
-                            <h4>Research and Knowledge Management</h4>
-                            <p>Build research agent networks that can process documents, synthesize information from multiple sources, and maintain persistent knowledge bases with agent-based and thread-level memory systems.</p>
-                        </div>
-                        
-                        <div class="use-case-item slide-in-left stagger-4">
-                            <h4>Local and Cloud Hybrid Deployments</h4>
-                            <p>Leverage Ollama for local model serving alongside cloud providers for sensitive data processing. Use vLLM for high-throughput scenarios while maintaining data sovereignty and cost control.</p>
-                        </div>
-                        
-                        <div class="use-case-item slide-in-left stagger-5">
-                            <h4>Enterprise AI Orchestration</h4>
-                            <p>Implement production-grade AI systems with comprehensive logging, monitoring, and safety controls. Agents can use custom tools, integrate with existing systems, and maintain audit trails for compliance.</p>
+                        <div class="text-center mt-4">
+                            <div class="tutorial-cta">
+                                <h5>Ready to become a SpadeLLM expert?</h5>
+                                <p class="text-muted mb-3">Explore all tutorials and guides in our comprehensive documentation.</p>
+                                <a href="https://sosanzma.github.io/spade_llm/getting-started/first-agent/" class="btn btn-primary btn-lg" target="_blank">
+                                    <i class="bi bi-mortarboard me-2"></i>Start with Your First Agent
+                                    <i class="bi bi-arrow-up-right ms-2"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -154,33 +239,26 @@ import Footer from '../../components/Footer.astro';
                         <h2 class="mb-4">LLM Provider Architecture</h2>
                         <p class="mb-4">Production-ready integration with leading AI providers and local serving frameworks:</p>
                         <div class="row text-center">
-                            <div class="col-md-3 mb-3">
-                                <div class="provider-icon mx-auto mb-2 scale-in stagger-1">
-                                    <i class="bi bi-robot"></i>
+                            <div class="col-md-4 mb-3">
+                                <div class="provider-card mx-auto">
+                                    <img src="/img/openai_light.png" alt="OpenAI Logo" class="provider-logo provider-logo-openai mb-2">
+                                    <strong>OpenAI</strong>
+                                    <small class="d-block text-muted">GPT-4o, GPT-4o-mini<br/>GPT-3.5-turbo</small>
                                 </div>
-                                <strong>OpenAI</strong>
-                                <small class="d-block text-muted">GPT-4o, GPT-4o-mini<br/>GPT-3.5-turbo</small>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <div class="provider-icon mx-auto mb-2 scale-in stagger-2">
-                                    <i class="bi bi-hdd-stack"></i>
+                            <div class="col-md-4 mb-3">
+                                <div class="provider-card mx-auto">
+                                    <img src="https://avatars.githubusercontent.com/u/151674099?s=200&v=4" alt="Ollama Logo" class="provider-logo mb-2">
+                                    <strong>Ollama</strong>
+                                    <small class="d-block text-muted">Llama 3.1, Mistral<br/>Local deployment</small>
                                 </div>
-                                <strong>Ollama</strong>
-                                <small class="d-block text-muted">Llama 3.1, Mistral<br/>Local deployment</small>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <div class="provider-icon mx-auto mb-2 scale-in stagger-3">
-                                    <i class="bi bi-lightning"></i>
+                            <div class="col-md-4 mb-3">
+                                <div class="provider-card mx-auto">
+                                    <img src="/img/lmstudio_light.png" alt="LM Studio Logo" class="provider-logo provider-logo-lmstudio mb-2">
+                                    <strong>LM Studio</strong>
+                                    <small class="d-block text-muted">Local inference<br/>Custom models</small>
                                 </div>
-                                <strong>vLLM</strong>
-                                <small class="d-block text-muted">High-throughput<br/>PagedAttention</small>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <div class="provider-icon mx-auto mb-2 scale-in stagger-4">
-                                    <i class="bi bi-pc-display"></i>
-                                </div>
-                                <strong>LM Studio</strong>
-                                <small class="d-block text-muted">Local inference<br/>Custom models</small>
                             </div>
                         </div>
                     </div>
@@ -264,7 +342,7 @@ import Footer from '../../components/Footer.astro';
                             </li>
                             <li class="mb-3">
                                 <i class="bi bi-check-circle text-success me-2"></i>
-                                <strong>Provider Flexibility:</strong> Dynamic provider switching with unified API across OpenAI, Ollama, vLLM, and LM Studio
+                                <strong>Provider Flexibility:</strong> Dynamic provider switching with unified API across OpenAI, Ollama, and LM Studio
                             </li>
                             <li class="mb-3">
                                 <i class="bi bi-check-circle text-success me-2"></i>
@@ -315,11 +393,24 @@ async def main():
 </SimplePluginLayout>
 
 <style>
-    /* Custom styling for SpadeLLM plugin page with main site theme */
+    /* Custom styling for SpadeLLM plugin page with purple theme */
     .plugin-header {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+        background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 25%, #3498db 50%, #2ecc71 75%, #f39c12 100%) !important;
         position: relative;
         overflow: hidden;
+        color: white !important;
+        padding: 6rem 0 7rem 0 !important;
+    }
+
+    .plugin-header * {
+        color: white !important;
+    }
+
+    .plugin-header h1,
+    .plugin-header .lead,
+    .plugin-header p,
+    .plugin-header .display-4 {
+        color: white !important;
     }
 
     .plugin-header::before {
@@ -331,13 +422,55 @@ async def main():
         bottom: 0;
         background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="20" r="1.5" fill="rgba(255,255,255,0.08)"/><circle cx="20" cy="50" r="1" fill="rgba(255,255,255,0.06)"/></svg>') repeat;
         opacity: 0.3;
+        z-index: 1;
+    }
+
+    .plugin-header::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.12) 0%, transparent 50%),
+            radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+            linear-gradient(45deg, transparent 0%, rgba(255, 255, 255, 0.08) 50%, transparent 100%);
+        z-index: 1;
+    }
+
+    .plugin-header h1,
+    .plugin-header .lead,
+    .plugin-header .btn {
+        position: relative;
+        z-index: 2;
     }
 
     .plugin-content {
         background: linear-gradient(180deg, #f8fcff 0%, #ffffff 50%, #f0f9f7 100%) !important;
+        position: relative;
     }
 
-    /* Enhanced feature items with main page theme */
+    .plugin-content::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23bbb" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        opacity: 0.4;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .plugin-content > .container {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Enhanced feature items with softer gradients like main page */
     .feature-item {
         background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
         border: 2px solid transparent;
@@ -347,7 +480,7 @@ async def main():
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
-        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
+        box-shadow: 0 8px 25px rgba(142, 68, 173, 0.08);
     }
 
     .feature-item::before {
@@ -357,7 +490,7 @@ async def main():
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.02));
+        background: linear-gradient(135deg, rgba(142, 68, 173, 0.05), rgba(155, 89, 182, 0.02));
         opacity: 0;
         transition: opacity 0.4s ease;
         border-radius: 18px;
@@ -365,8 +498,8 @@ async def main():
 
     .feature-item:hover {
         transform: translateY(-10px) scale(1.02);
-        box-shadow: 0 20px 40px rgba(52, 152, 219, 0.15);
-        border-color: rgba(52, 152, 219, 0.3);
+        box-shadow: 0 20px 40px rgba(142, 68, 173, 0.15);
+        border-color: rgba(142, 68, 173, 0.3);
     }
 
     .feature-item:hover::before {
@@ -376,7 +509,7 @@ async def main():
     .feature-icon {
         width: 70px;
         height: 70px;
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        background: linear-gradient(135deg, #8e44ad, #9b59b6);
         border-radius: 20px;
         display: flex;
         align-items: center;
@@ -386,14 +519,14 @@ async def main():
         margin-bottom: 1rem;
         flex-shrink: 0;
         font-size: 1.8rem;
-        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        box-shadow: 0 8px 20px rgba(142, 68, 173, 0.3);
         position: relative;
         transition: all 0.4s ease;
     }
 
     .feature-item:hover .feature-icon {
         transform: rotate(5deg) scale(1.1);
-        box-shadow: 0 12px 30px rgba(52, 152, 219, 0.4);
+        box-shadow: 0 12px 30px rgba(142, 68, 173, 0.4);
     }
 
     .feature-icon::after {
@@ -403,7 +536,7 @@ async def main():
         left: -2px;
         right: -2px;
         bottom: -2px;
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        background: linear-gradient(135deg, #8e44ad, #9b59b6);
         border-radius: 22px;
         z-index: -1;
         opacity: 0;
@@ -416,104 +549,175 @@ async def main():
 
     /* Special styling for featured icons */
     .feature-icon.featured {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        background: linear-gradient(135deg, #8e44ad, #9b59b6);
         box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
     }
 
     .feature-item:hover .feature-icon.featured {
-        box-shadow: 0 12px 30px rgba(52, 152, 219, 0.4);
+        box-shadow: 0 12px 30px rgba(142, 68, 173, 0.4);
     }
 
     .feature-icon.featured::after {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        background: linear-gradient(135deg, #8e44ad, #9b59b6);
     }
 
-    /* Provider icons styling */
-    .provider-icon {
+    /* Provider cards styling */
+    .provider-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid rgba(142, 68, 173, 0.25);
+        border-radius: 20px;
+        padding: 2rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(142, 68, 173, 0.12);
+        text-align: center;
+    }
+
+    .provider-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(142, 68, 173, 0.2);
+        border-color: rgba(142, 68, 173, 0.5);
+    }
+
+    .provider-logo {
         width: 60px;
         height: 60px;
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        border-radius: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 1.5rem;
-        box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
+        object-fit: contain;
+        border-radius: 10px;
         transition: all 0.3s ease;
     }
 
-    .provider-icon:hover {
-        transform: scale(1.1) rotate(5deg);
-        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+    .provider-card:hover .provider-logo {
+        transform: scale(1.1);
     }
 
-    /* Enhanced use case items */
-    .use-case-item {
+    /* Simple Tutorial Cards Styling */
+    .simple-tutorial-card {
         background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
-        border-left: 6px solid var(--primary-color);
-        border-radius: 0 15px 15px 0;
-        padding: 2.5rem;
-        margin-bottom: 2rem;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid rgba(142, 68, 173, 0.25);
+        border-radius: 15px;
+        padding: 2rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(142, 68, 173, 0.1);
     }
 
-    .use-case-item::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 6px;
-        background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
-        border-radius: 3px;
+    .simple-tutorial-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(142, 68, 173, 0.15);
+        border-color: rgba(142, 68, 173, 0.5);
     }
 
-    .use-case-item::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 0;
-        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.02));
-        transition: width 0.4s ease;
-    }
-
-    .use-case-item:hover {
-        transform: translateX(15px) scale(1.02);
-        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.15);
-    }
-
-    .use-case-item:hover::after {
-        width: 100%;
-    }
-
-    .use-case-item h4 {
-        color: #2c3e50;
-        position: relative;
-        z-index: 2;
+    .tutorial-header-simple {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
         margin-bottom: 1rem;
+    }
+
+    .tutorial-icon-simple {
+        font-size: 2rem;
+        flex-shrink: 0;
+        margin-top: 0.25rem;
+    }
+
+    .tutorial-badges {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        margin-top: 0.5rem;
+    }
+
+    .badge-beginner {
+        background: #2ecc71;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
         font-weight: 600;
     }
 
-    .use-case-item p {
-        color: #5a6c7d;
-        position: relative;
-        z-index: 2;
-        line-height: 1.6;
+    .badge-intermediate {
+        background: #f39c12;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .badge-advanced {
+        background: #e74c3c;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .duration-text {
+        font-size: 0.85rem;
+        color: #666;
+        font-weight: 500;
+    }
+
+    .tutorial-topics-simple {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .topic-tag {
+        background: rgba(142, 68, 173, 0.15);
+        color: #8e44ad;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        border: 1px solid rgba(142, 68, 173, 0.35);
+    }
+
+    .btn-tutorial-simple {
+        background: linear-gradient(135deg, #8e44ad, #9b59b6);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 4px 15px rgba(142, 68, 173, 0.3);
+        transition: all 0.3s ease;
+        width: 100%;
+        text-align: center;
+    }
+
+    .btn-tutorial-simple:hover {
+        background: linear-gradient(135deg, #7d3c98, #8e44ad);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(142, 68, 173, 0.4);
+        text-decoration: none;
+    }
+
+    .tutorial-cta {
+        background: linear-gradient(135deg, rgba(142, 68, 173, 0.05), rgba(155, 89, 182, 0.02));
+        border-radius: 20px;
+        padding: 2rem;
+        margin-top: 2rem;
+    }
+
+    .tutorial-cta h5 {
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
     }
 
     /* Enhanced info cards */
     .info-card {
         background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
-        border: 2px solid rgba(52, 152, 219, 0.1);
+        border: 2px solid rgba(142, 68, 173, 0.2);
         border-radius: 25px;
         padding: 3rem;
-        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.08);
+        box-shadow: 0 15px 35px rgba(142, 68, 173, 0.12);
         position: relative;
         overflow: hidden;
     }
@@ -537,19 +741,19 @@ async def main():
         left: 0;
         right: 0;
         height: 5px;
-        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        background: linear-gradient(90deg, #8e44ad, #9b59b6);
         border-radius: 25px 25px 0 0;
     }
 
     .info-card:hover {
         transform: translateY(-8px);
-        box-shadow: 0 25px 50px rgba(52, 152, 219, 0.12);
-        border-color: rgba(52, 152, 219, 0.2);
+        box-shadow: 0 25px 50px rgba(142, 68, 173, 0.18);
+        border-color: rgba(142, 68, 173, 0.4);
     }
 
     /* Enhanced buttons */
     .btn-primary {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        background: linear-gradient(135deg, #8e44ad, #9b59b6);
         border: none;
         border-radius: 25px;
         padding: 0.8rem 2.5rem;
@@ -559,14 +763,14 @@ async def main():
     }
 
     .btn-primary:hover {
-        background: linear-gradient(135deg, #2980b9, var(--secondary-color));
+        background: linear-gradient(135deg, #7d3c98, #8e44ad);
         transform: translateY(-3px);
-        box-shadow: 0 10px 30px rgba(52, 152, 219, 0.4);
+        box-shadow: 0 10px 30px rgba(142, 68, 173, 0.4);
     }
 
     .btn-outline-primary {
-        border: 2px solid var(--primary-color);
-        color: var(--primary-color);
+        border: 2px solid #8e44ad;
+        color: #8e44ad;
         border-radius: 25px;
         padding: 0.8rem 2.5rem;
         font-weight: 600;
@@ -574,10 +778,10 @@ async def main():
     }
 
     .btn-outline-primary:hover {
-        background: var(--primary-color);
+        background: #8e44ad;
         color: white;
         transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+        box-shadow: 0 8px 25px rgba(142, 68, 173, 0.3);
     }
 
     .btn-outline-light {
@@ -597,9 +801,9 @@ async def main():
         box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
     }
 
-    /* Success icons with main theme */
+    /* Success icons with purple theme */
     .text-success {
-        color: var(--primary-color) !important;
+        color: #8e44ad !important;
         font-size: 1.2rem;
     }
 
@@ -619,7 +823,7 @@ async def main():
         transform: translateX(-50%);
         width: 60px;
         height: 4px;
-        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        background: linear-gradient(90deg, #8e44ad, #9b59b6);
         border-radius: 2px;
     }
 
@@ -672,14 +876,33 @@ async def main():
             font-size: 1.5rem;
         }
 
-        .provider-icon {
+        .provider-card {
+            padding: 1.5rem;
+        }
+        
+        .provider-logo {
+            width: 50px;
+            height: 50px;
+        }
+
+        .tutorial-card {
+            padding: 1.5rem;
+        }
+
+        .tutorial-icon {
             width: 50px;
             height: 50px;
             font-size: 1.3rem;
         }
 
-        .use-case-item {
-            padding: 2rem;
+        .tutorial-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.75rem;
+        }
+        
+        .tutorial-meta {
+            justify-content: center;
         }
 
         .info-card {
@@ -693,8 +916,75 @@ async def main():
         border-color: rgba(52, 152, 219, 0.2);
     }
 
-    :global(body.dark-mode) .use-case-item {
+    :global(body.dark-mode) .provider-card {
         background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+        border-color: rgba(142, 68, 173, 0.2);
+    }
+
+    :global(body.dark-mode) .provider-logo-openai {
+        content: url('/img/openai_dark.png');
+    }
+
+    :global(body.dark-mode) .provider-logo-lmstudio {
+        content: url('/img/lmstudio_dark.png');
+    }
+
+    :global(body.dark-mode) .simple-tutorial-card {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+        border-color: rgba(142, 68, 173, 0.2);
+    }
+
+    :global(body.dark-mode) .simple-tutorial-card h4 {
+        color: var(--dark-text);
+    }
+
+    :global(body.dark-mode) .simple-tutorial-card p {
+        color: var(--dark-text-muted);
+    }
+
+    :global(body.dark-mode) .tutorial-card {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    :global(body.dark-mode) .tutorial-card h4 {
+        color: var(--dark-text);
+    }
+
+    :global(body.dark-mode) .tutorial-card p {
+        color: var(--dark-text-muted);
+    }
+
+    :global(body.dark-mode) .duration-text {
+        color: var(--dark-text-muted);
+    }
+
+    :global(body.dark-mode) .topic-tag {
+        background: rgba(142, 68, 173, 0.2);
+        color: #a569bd;
+        border-color: rgba(142, 68, 173, 0.3);
+    }
+
+    :global(body.dark-mode) .tutorial-cta {
+        background: linear-gradient(135deg, rgba(142, 68, 173, 0.1), rgba(155, 89, 182, 0.05));
+    }
+
+    :global(body.dark-mode) .tutorial-cta h5 {
+        color: var(--dark-text);
+    }
+
+    :global(body.dark-mode) .topic {
+        background: rgba(52, 152, 219, 0.2);
+        color: #5dade2;
+        border-color: rgba(142, 68, 173, 0.3);
+    }
+
+    :global(body.dark-mode) .tutorial-cta {
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(46, 204, 113, 0.05));
+    }
+
+    :global(body.dark-mode) .tutorial-cta h5 {
+        color: var(--dark-text);
     }
 
     :global(body.dark-mode) .info-card {
@@ -703,6 +993,11 @@ async def main():
 
     :global(body.dark-mode) .plugin-content {
         background: linear-gradient(180deg, var(--dark-bg) 0%, #1a1a1a 50%, #0f1a21 100%) !important;
+    }
+
+    :global(body.dark-mode) .plugin-content::before {
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23444" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        opacity: 0.2;
     }
 
     :global(body.dark-mode) .featured-badge {
