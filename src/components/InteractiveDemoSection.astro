@@ -713,8 +713,8 @@ import PythonCodeBlock from './PythonCodeBlock.astro';
 // Load Python code examples from demos.json and populate the tabs
 document.addEventListener('DOMContentLoaded', async function() {
     try {
-        // Get base URL from meta tag instead of import.meta
-        const baseUrl = document.querySelector('meta[name="astro-base-url"]')?.getAttribute('content') || '/';
+        // Use absolute paths from root to ensure it works from any page
+        const baseUrl = '/';
         
         // Log the base URL to help with debugging
         console.log('Using base URL for Python files:', baseUrl);
