@@ -65,6 +65,63 @@ import Footer from '../../components/Footer.astro';
 
             <div class="row mb-5">
                 <div class="col-lg-10 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-15">
+                        <h2 class="mb-4 text-center">Repository Architecture</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="repo-card">
+                                    <div class="repo-header">
+                                        <i class="bi bi-box-seam repo-icon"></i>
+                                        <h4>Core SPADE Artifact</h4>
+                                        <span class="repo-badge core">Core Framework</span>
+                                    </div>
+                                    <p>Main artifact framework with general data integration capabilities including SQL, MongoDB, CSV, and REST API support.</p>
+                                    <ul class="repo-features">
+                                        <li>✅ Database Artifacts (SQLReader)</li>
+                                        <li>✅ CSV Processing (CSVReader)</li>
+                                        <li>✅ API Integration (APIReader)</li>
+                                        <li>✅ MongoDB Integration (MongoDBReader)</li>
+                                        <li>✅ PubSub Communication</li>
+                                    </ul>
+                                    <a href="https://github.com/javipalanca/spade_artifact" class="btn btn-sm btn-outline-primary mt-3">
+                                        <i class="bi bi-github me-1"></i> Main Repository
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="repo-card">
+                                    <div class="repo-header">
+                                        <i class="bi bi-globe-americas repo-icon"></i>
+                                        <h4>FIWARE Artifacts</h4>
+                                        <span class="repo-badge fiware">FIWARE Specific</span>
+                                    </div>
+                                    <p>Specialized implementation for FIWARE Context Broker integration with NGSI-LD protocol support and IoT-focused features.</p>
+                                    <ul class="repo-features">
+                                        <li>✅ NGSI-LD Protocol Support</li>
+                                        <li>✅ Orion Context Broker</li>
+                                        <li>✅ Scorpio Context Broker</li>
+                                    </ul>
+                                    <a href="https://github.com/sosanzma/SPADE-FIWARE-Artifacts" class="btn btn-sm btn-outline-primary mt-3">
+                                        <i class="bi bi-github me-1"></i> FIWARE Repository
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="repo-note mt-4">
+                            <div class="alert alert-info d-flex align-items-center">
+                                <i class="bi bi-info-circle-fill me-3"></i>
+                                <div>
+                                    <strong>Choose Your Implementation:</strong> Use the core repository for general data integration needs, 
+                                    or the FIWARE-specific repository when working with FIWARE Context Brokers and IoT applications.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-10 mx-auto">
                     <div class="plugin-section animate-on-scroll stagger-2">
                         <h2 class="text-center mb-5">Core Data Integration Capabilities</h2>
                     <div class="row">
@@ -129,8 +186,8 @@ import Footer from '../../components/Footer.astro';
                                     <i class="bi bi-globe"></i>
                                 </div>
                                 <div>
-                                    <h4>FIWARE Context Broker</h4>
-                                    <p>Advanced integration with FIWARE ecosystem through spade-fiware-artifacts. Support for NGSI-LD protocol, Orion and Scorpio Context Brokers, and IoT data management with asyncio operations.</p>
+                                    <h4>FIWARE Context Broker Integration</h4>
+                                    <p>Advanced integration with FIWARE ecosystem through dedicated <strong>spade-fiware-artifacts</strong> library. Separate implementation with full NGSI-LD protocol support, Orion and Scorpio Context Brokers, and specialized IoT data management optimized for asyncio operations.</p>
                                 </div>
                             </div>
                         </div>
@@ -168,16 +225,25 @@ import Footer from '../../components/Footer.astro';
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="info-card">
-                                    <h4><i class="bi bi-download me-2"></i>Installation</h4>
-                                    <div class="bg-dark p-3 rounded mt-3">
-                                        <pre><code class="text-light"># Install SPADE Artifact plugin
+                                    <h4><i class="bi bi-download me-2"></i>Installation Options</h4>
+                                    <div class="installation-options">
+                                        <div class="install-option mb-3">
+                                            <h6 class="text-primary">Core Framework:</h6>
+                                            <div class="bg-dark p-3 rounded">
+                                                <pre><code class="text-light"># Install core SPADE Artifact
 pip install spade-artifact
 
-# Install FIWARE integration (optional)
-pip install spade-fiware-artifacts
-
-# Install PubSub support (optional)
+# Optional: PubSub support
 pip install spade-pubsub</code></pre>
+                                            </div>
+                                        </div>
+                                        <div class="install-option">
+                                            <h6 class="text-warning">FIWARE Integration:</h6>
+                                            <div class="bg-dark p-3 rounded">
+                                                <pre><code class="text-light"># Install FIWARE-specific artifacts
+pip install spade-fiware-artifacts</code></pre>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -216,7 +282,7 @@ class DataAgent(Agent, ArtifactMixin):
                             </li>
                             <li class="mb-3">
                                 <i class="bi bi-check-circle text-success me-2"></i>
-                                <strong>FIWARE Ecosystem Integration:</strong> NGSI-LD protocol support for IoT and smart city applications with Context Broker connectivity
+                                <strong>Modular Architecture:</strong> Choose between core framework for general use or specialized FIWARE implementation for IoT and Context Broker applications
                             </li>
                             <li class="mb-3">
                                 <i class="bi bi-check-circle text-success me-2"></i>
@@ -241,8 +307,8 @@ class DataAgent(Agent, ArtifactMixin):
                                 <a href="https://spade-artifact.readthedocs.io" class="btn btn-outline-primary">
                                     <i class="bi bi-book me-2"></i>Technical Documentation
                                 </a>
-                                <a href="https://pypi.org/project/spade-fiware-artifacts/" class="btn btn-outline-primary">
-                                    <i class="bi bi-cloud me-2"></i>FIWARE Integration
+                                <a href="https://github.com/sosanzma/SPADE-FIWARE-Artifacts" class="btn btn-outline-primary">
+                                    <i class="bi bi-github me-2"></i>FIWARE Repository
                                 </a>
                             </div>
                         </div>
@@ -575,10 +641,154 @@ class DataAgent(Agent, ArtifactMixin):
         background: transparent !important;
     }
 
+    /* Repository Cards Styling */
+    .repo-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid rgba(52, 152, 219, 0.1);
+        border-radius: 20px;
+        padding: 2rem;
+        height: 100%;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .repo-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 20px 20px 0 0;
+    }
+
+    .repo-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(52, 152, 219, 0.15);
+        border-color: rgba(52, 152, 219, 0.3);
+    }
+
+    .repo-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .repo-icon {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .repo-header h4 {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .repo-badge {
+        padding: 0.375rem 1rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .repo-badge.core {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        color: white;
+    }
+
+    .repo-badge.fiware {
+        background: linear-gradient(135deg, #e67e22, #d35400);
+        color: white;
+    }
+
+    .repo-features {
+        list-style: none;
+        padding: 0;
+        margin: 1.5rem 0;
+    }
+
+    .repo-features li {
+        padding: 0.5rem 0;
+        font-size: 0.9rem;
+        color: #5a6c7d;
+        border-bottom: 1px solid rgba(52, 152, 219, 0.1);
+    }
+
+    .repo-features li:last-child {
+        border-bottom: none;
+    }
+
+    .repo-note {
+        margin-top: 2rem;
+    }
+
+    .alert {
+        background: linear-gradient(135deg, #e3f2fd 0%, #f0f9ff 100%);
+        border: 1px solid rgba(52, 152, 219, 0.2);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin: 0;
+    }
+
+    .alert-info {
+        color: #1565c0;
+    }
+
+    .alert-info .bi-info-circle-fill {
+        color: var(--primary-color);
+        font-size: 1.5rem;
+    }
+
+    /* Installation Options Styling */
+    .installation-options {
+        margin-top: 1rem;
+    }
+
+    .install-option h6 {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .install-option .bg-dark {
+        margin-bottom: 0.5rem;
+    }
+
     /* Dark mode support */
     :global(body.dark-mode) .feature-item {
         background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
         border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    :global(body.dark-mode) .repo-card {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    :global(body.dark-mode) .repo-header h4 {
+        color: var(--dark-text);
+    }
+
+    :global(body.dark-mode) .repo-features li {
+        color: var(--dark-text-muted);
+        border-bottom-color: rgba(52, 152, 219, 0.1);
+    }
+
+    :global(body.dark-mode) .alert {
+        background: linear-gradient(135deg, var(--dark-border) 0%, var(--dark-card-bg) 100%);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    :global(body.dark-mode) .alert-info {
+        color: var(--dark-text);
     }
 
     :global(body.dark-mode) .pubsub-diagram-container {

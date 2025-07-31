@@ -54,7 +54,8 @@ import Footer from '../../components/Footer.astro';
                         </p>
                         <p>
                             Built with enterprise requirements in mind, SpadeLLM supports multiple LLM providers (OpenAI, Ollama, LM Studio), 
-                            advanced memory management, human-in-the-loop workflows, and comprehensive guardrails for safe AI deployment. 
+                            Model Context Protocol (MCP) integration for both local and HTTP streaming servers, advanced memory management, 
+                            human-in-the-loop workflows, and comprehensive guardrails for safe AI deployment. 
                             Compatible with Python 3.10-3.12 and SPADE 3.3.0+.
                         </p>
                     </div>
@@ -83,8 +84,8 @@ import Footer from '../../components/Footer.astro';
                                         <i class="bi bi-tools"></i>
                                     </div>
                                     <div>
-                                        <h4>Async Function Calling</h4>
-                                        <p>Agents can execute custom tools and functions asynchronously with JSON schema validation. Supports LangChain tool integration and custom tool creation for seamless system interaction.</p>
+                                        <h4>Advanced Tool & MCP Integration</h4>
+                                        <p>Agents can execute custom tools and functions asynchronously with JSON schema validation. Full Model Context Protocol (MCP) support for local servers (stdout/stdin) and HTTP streaming servers. Includes LangChain tool integration and custom tool creation.</p>
                                     </div>
                                 </div>
                             </div>
@@ -243,14 +244,14 @@ import Footer from '../../components/Footer.astro';
                                 <div class="provider-card mx-auto">
                                     <img src="/img/openai_light.png" alt="OpenAI Logo" class="provider-logo provider-logo-openai mb-2">
                                     <strong>OpenAI</strong>
-                                    <small class="d-block text-muted">GPT-4o, GPT-4o-mini<br/>GPT-3.5-turbo</small>
+                                    <small class="d-block text-muted">GPT-4.1, GPT-4.1-mini<br/>GPT-4o, GPT-4-turbo</small>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <div class="provider-card mx-auto">
                                     <img src="https://avatars.githubusercontent.com/u/151674099?s=200&v=4" alt="Ollama Logo" class="provider-logo mb-2">
                                     <strong>Ollama</strong>
-                                    <small class="d-block text-muted">Llama 3.1, Mistral<br/>Local deployment</small>
+                                    <small class="d-block text-muted">Llama 3.3, Qwen3, Gemma 3<br/>DeepSeek-R1, Phi-4</small>
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
@@ -346,7 +347,7 @@ import Footer from '../../components/Footer.astro';
                             </li>
                             <li class="mb-3">
                                 <i class="bi bi-check-circle text-success me-2"></i>
-                                <strong>Tool Integration:</strong> JSON schema-validated tool calling with LangChain compatibility and custom function support
+                                <strong>Tool & MCP Integration:</strong> JSON schema-validated tool calling with full Model Context Protocol support (local stdout/stdin and HTTP streaming), LangChain compatibility and custom function support
                             </li>
                         </ul>
                         
@@ -359,7 +360,7 @@ async def main():
     # Configure provider
     provider = LLMProvider.create_openai(
         api_key="your-api-key",
-        model="gpt-4o-mini"
+        model="gpt-4.1-mini"
     )
     
     # Create intelligent agent
