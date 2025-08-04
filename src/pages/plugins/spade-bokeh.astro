@@ -2,6 +2,7 @@
 import SimplePluginLayout from '../../layouts/SimplePluginLayout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
 ---
 
 <SimplePluginLayout 
@@ -9,6 +10,7 @@ import Footer from '../../components/Footer.astro';
     description="Enterprise-grade interactive data visualization and real-time dashboards for SPADE multi-agent systems using Bokeh's HTML5 rendering and streaming capabilities."
 >
     <Navbar />
+    <Breadcrumb currentPageTitle="SPADE Bokeh - Visualization" />
     
     <section class="plugin-header">
         <div class="container">

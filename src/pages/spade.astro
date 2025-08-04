@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import PythonCodeBlock from '../components/PythonCodeBlock.astro';
 import InteractiveDemoSection from '../components/InteractiveDemoSection.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
 ---
 
 <SimplePluginLayout 
@@ -11,6 +12,7 @@ import InteractiveDemoSection from '../components/InteractiveDemoSection.astro';
     description="Multi-agent systems platform written in Python, powered by XMPP messaging for intelligent agent communication."
 >
     <Navbar />
+    <Breadcrumb currentPageTitle="SPADE Framework" />
     
     <section class="plugin-header">
         <div class="container">
@@ -21,7 +23,7 @@ import InteractiveDemoSection from '../components/InteractiveDemoSection.astro';
                         SPADE Framework
                     </h1>
                     <p class="lead mb-4">
-                        Smart Python Agent Development Environment - A comprehensive multi-agent systems platform powered by XMPP messaging, enabling intelligent agents to communicate with each other and humans.
+                        Smart Python Agent Development Environment - A  multi-agent systems framework powered by XMPP messaging, enabling intelligent agents to communicate with each other and humans.
                     </p>
                     <div class="d-flex justify-content-center gap-3 flex-wrap">
                         <a href="https://github.com/javipalanca/spade" class="btn btn-primary">
