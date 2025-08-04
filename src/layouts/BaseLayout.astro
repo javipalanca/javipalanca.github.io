@@ -4,7 +4,7 @@ export interface Props {
   description?: string;
 }
 
-const { title, description = 'SPADE - Smart Python Agent Development Environment. A multi-agent systems platform written in Python and based on XMPP.' } = Astro.props;
+const { title, description = 'Build intelligent multi-agent systems with SPADE - the Python framework for creating smart agents with XMPP messaging, LLM integration, and advanced behavior patterns. Start developing AI agents today.' } = Astro.props;
 
 // Import global styles and get base path
 import '../styles/global.css';
@@ -17,10 +17,13 @@ const baseUrl = import.meta.env.BASE_URL;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content={description}>
-    <meta name="keywords" content="SPADE, Python, Multi-agent, XMPP, Agent-based, MAS">
+    <meta name="keywords" content="SPADE, spade agents, spade multiagents, Python multi-agent systems, intelligent agents, agent framework, XMPP agents, AI agents, multi-agent platform, MAS, agent-based systems">
     <meta name="author" content="SPADE Team">
     <meta name="astro-base-url" content={baseUrl}>
     <title>{title}</title>
+    
+    <!-- Canonical URL for SEO - prevents duplicate content -->
+    <link rel="canonical" href={`https://javipalanca.github.io/spade${Astro.url.pathname}`} />
     
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
@@ -100,6 +103,71 @@ const baseUrl = import.meta.env.BASE_URL;
     <meta property="og:image" content={`${baseUrl}img/spade_index.png`}>
     <meta property="og:url" content="https://github.com/javipalanca/spade">
     <meta name="astro-base-url" content={import.meta.env.BASE_URL || '/'}>
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "SPADE",
+      "description": "Smart Python Agent Development Environment - A comprehensive multi-agent systems platform for building intelligent agents",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Cross-platform",
+      "programmingLanguage": ["Python"],
+      "keywords": ["spade agents", "spade multiagents", "Python multi-agent systems", "intelligent agents", "XMPP agents", "AI agents"],
+      "url": "https://spade-mas.readthedocs.io",
+      "downloadUrl": "https://pypi.org/project/spade/",
+      "author": {
+        "@type": "Organization",
+        "name": "SPADE Team",
+        "url": "https://github.com/javipalanca/spade"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "sameAs": [
+        "https://github.com/javipalanca/spade",
+        "https://pypi.org/project/spade/",
+        "https://spade-mas.readthedocs.io"
+      ]
+    }
+    </script>
+    
+    <!-- FAQ Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is SPADE and what makes it unique?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SPADE (Smart Python Agent Development Environment) is a multi-agent systems platform built in Python that leverages XMPP for communication. SPADE provides presence awareness, asynchronous operation through asyncio, and a web-based interface for building intelligent spade agents and spade multiagents systems."
+          }
+        },
+        {
+          "@type": "Question", 
+          "name": "What types of behaviors can SPADE agents have?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SPADE agents can have CyclicBehaviour (executes repeatedly), PeriodicBehaviour (executes at intervals), OneShotBehaviour (executes once), TimeoutBehaviour (executes after delay), and FSMBehaviour (finite state machine) for building sophisticated spade multiagents."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I create LLM-powered agents in SPADE?", 
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use the SpadeLLM extension to integrate Large Language Models into your SPADE agents. It supports multiple LLM providers and includes async function calling, dual memory architecture, guardrails system, and human-in-the-loop capabilities for intelligent spade agents."
+          }
+        }
+      ]
+    }
+    </script>
     
     <!-- Custom CSS will be injected by Astro from the import above -->
 </head>

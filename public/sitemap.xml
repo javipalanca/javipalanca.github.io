@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Homepage - Highest priority for SPADE agents -->
+  <url>
+    <loc>https://javipalanca.github.io/spade/</loc>
+    <lastmod>2025-08-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- Core SPADE Framework page -->
+  <url>
+    <loc>https://javipalanca.github.io/spade/spade</loc>
+    <lastmod>2025-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Plugins Hub -->
+  <url>
+    <loc>https://javipalanca.github.io/spade/plugins/</loc>
+    <lastmod>2025-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- SPADE-LLM Plugin - High priority for spadeLLM keyword -->
+  <url>
+    <loc>https://javipalanca.github.io/spade/plugins/spade-llm</loc>
+    <lastmod>2025-08-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- SPADE-BDI Plugin -->
+  <url>
+    <loc>https://javipalanca.github.io/spade/plugins/spade-bdi</loc>
+    <lastmod>2025-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- SPADE-PubSub Plugin -->
+  <url>
+    <loc>https://javipalanca.github.io/spade/plugins/spade-pubsub</loc>
+    <lastmod>2025-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <!-- SPADE-Artifact Plugin -->
+  <url>
+    <loc>https://javipalanca.github.io/spade/plugins/spade-artifact</loc>
+    <lastmod>2025-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <!-- SPADE-Norms Plugin -->
+  <url>
+    <loc>https://javipalanca.github.io/spade/plugins/spade-norms</loc>
+    <lastmod>2025-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <!-- SPADE-Bokeh Plugin -->
+  <url>
+    <loc>https://javipalanca.github.io/spade/plugins/spade-bokeh</loc>
+    <lastmod>2025-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>

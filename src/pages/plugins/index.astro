@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
 
 // Define plugins data
 const plugins = [
@@ -73,6 +74,7 @@ const categories = [...new Set(plugins.map(p => p.category))];
 
 <BaseLayout title="SPADE Plugins - Extend Your Agent Platform">
     <Navbar />
+    <Breadcrumb currentPageTitle="Plugin Ecosystem" />
     
     <!-- Hero Section -->
     <section class="hero-section bg-gradient-primary text-white py-5" style="margin-top: 76px;">

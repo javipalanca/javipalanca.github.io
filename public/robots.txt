@@ -1,0 +1,34 @@
+# Robots.txt for SPADE - Smart Python Agent Development Environment
+# Optimized for spade agents, spade, and spadeLLM SEO
+
+User-agent: *
+Allow: /
+
+# Allow all important pages for indexing
+Allow: /spade
+Allow: /plugins/
+Allow: /plugins/spade-llm
+Allow: /plugins/spade-bdi
+Allow: /plugins/spade-pubsub
+Allow: /plugins/spade-artifact
+Allow: /plugins/spade-norms
+Allow: /plugins/spade-bokeh
+
+# Block common non-content directories
+Disallow: /node_modules/
+Disallow: /.git/
+Disallow: /.astro/
+Disallow: /dist/
+Disallow: /.vscode/
+Disallow: /.claude/
+
+# Block temporary and build files
+Disallow: *.log
+Disallow: *.tmp
+Disallow: *.cache
+
+# Sitemap location for search engines
+Sitemap: https://javipalanca.github.io/spade/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
