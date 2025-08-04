@@ -7,7 +7,7 @@ const baseUrl = import.meta.env.BASE_URL;
     <div class="container">
         <div class="row">
             <!-- Section Header -->
-            <div class="col-12 text-center mb-5">
+            <div class="col-12 text-center mb-5 fade-in-up">
                 <div class="section-badge">
                     <i class="bi bi-brain me-2"></i>AI Enhancement
                 </div>
@@ -23,7 +23,7 @@ const baseUrl = import.meta.env.BASE_URL;
 
         <div class="row align-items-center mb-5">
             <!-- Left Column - Content -->
-            <div class="col-lg-6">
+            <div class="col-lg-6 slide-in-left">
                 <div class="llm-content">
                     <h3 class="fw-bold mb-3">
                         <i class="bi bi-lightning-charge text-warning me-2"></i>
@@ -81,7 +81,10 @@ const baseUrl = import.meta.env.BASE_URL;
                     </div>
 
                     <div class="action-buttons">
-                        <a href="https://github.com/sosanzma/spade_llm" class="btn btn-llm btn-lg me-3">
+                        <a href="/plugins/spade-llm" class="btn btn-llm btn-lg me-3">
+                            <i class="bi bi-lightbulb-fill me-2"></i>Explore SpadeLLM Plugin
+                        </a>
+                        <a href="https://github.com/sosanzma/spade_llm" class="btn btn-outline-primary btn-lg me-3">
                             <i class="bi bi-github me-2"></i>View on GitHub
                         </a>
                         <a href="https://sosanzma.github.io/spade_llm/" class="btn btn-outline-primary btn-lg">
@@ -92,7 +95,7 @@ const baseUrl = import.meta.env.BASE_URL;
             </div>
 
             <!-- Right Column - Interactive Demo -->
-            <div class="col-lg-6">
+            <div class="col-lg-6 slide-in-right">
                 <div class="demo-container">
                     <div class="demo-header">
                         <div class="demo-title">
@@ -458,35 +461,35 @@ const baseUrl = import.meta.env.BASE_URL;
         <!-- SpadeLLM Advantages -->
         <div class="row">
             <div class="col-12">
-                <div class="advantages-showcase">
+                <div class="advantages-showcase fade-in-up">
                     <h4 class="text-center mb-4 advantages-title">Why SpadeLLM? Key Advantages</h4>
                     <div class="advantages-grid">
-                        <div class="advantage-block">
+                        <div class="advantage-block scale-in stagger-1">
                             <div class="advantage-icon">🌐</div>
                             <h5>XMPP-Based Distributed</h5>
                             <p>Fully distributed and decentralized architecture based on XMPP protocol for robust, scalable agent communication.</p>
                         </div>
-                        <div class="advantage-block">
+                        <div class="advantage-block scale-in stagger-2">
                             <div class="advantage-icon">🎯</div>
                             <h5>Flexible Orchestration</h5>
                             <p>Advanced orchestration capabilities with conditional routing, dynamic workflows, and intelligent message handling.</p>
                         </div>
-                        <div class="advantage-block">
+                        <div class="advantage-block scale-in stagger-3">
                             <div class="advantage-icon">🔄</div>
                             <h5>Intelligent Routing</h5>
                             <p>Smart message routing with context-aware decision making, load balancing, and automatic failover mechanisms.</p>
                         </div>
-                        <div class="advantage-block">
+                        <div class="advantage-block scale-in stagger-4">
                             <div class="advantage-icon">🔧</div>
                             <h5>Rich Tool Ecosystem</h5>
                             <p>Extensive tool integration including MCP servers, LangChain tools, and custom function calling capabilities.</p>
                         </div>
-                        <div class="advantage-block">
+                        <div class="advantage-block scale-in stagger-5">
                             <div class="advantage-icon">🛡️</div>
                             <h5>Safe & Secure Agents</h5>
                             <p>Built-in security features, content filtering, guardrails system, and comprehensive safety controls for production use.</p>
                         </div>
-                        <div class="advantage-block">
+                        <div class="advantage-block scale-in stagger-6">
                             <div class="advantage-icon">🔌</div>
                             <h5>SPADE Extension Compatible</h5>
                             <p>Seamlessly integrates with all SPADE extensions like BDI, PubSub, Artifacts, and Norms for enhanced functionality.</p>

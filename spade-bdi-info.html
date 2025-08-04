@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPADE BDI Plugin - Comprehensive Information</title>
+</head>
+<body>
+    <h1>SPADE BDI Plugin</h1>
+    
+    <h2>Overview</h2>
+    <p><strong>SPADE BDI</strong> is a plugin for the SPADE 3 Multi-Agent System (MAS) platform that enables the creation of intelligent agents using the Belief-Desire-Intention (BDI) cognitive architecture. The plugin allows developers to create hybrid agents with sophisticated reasoning capabilities using the AgentSpeak programming language.</p>
+    
+    <h2>Purpose and BDI Architecture</h2>
+    <p>The Belief-Desire-Intention (BDI) architecture was created to provide a theoretical and practical framework for building rational agents that can:</p>
+    <ul>
+        <li><strong>Reason about their environment</strong> - Through beliefs about the current state of the world</li>
+        <li><strong>Make goal-oriented decisions</strong> - Using desires to represent what they want to achieve</li>
+        <li><strong>Execute planned actions</strong> - Via intentions that represent committed courses of action</li>
+    </ul>
+    
+    <h3>Core BDI Components</h3>
+    <ul>
+        <li><strong>Beliefs:</strong> The agent's knowledge about the world, itself, and other agents</li>
+        <li><strong>Desires/Goals:</strong> States or conditions that the agent aims to bring about</li>
+        <li><strong>Intentions:</strong> Committed plans of action that the agent is currently pursuing</li>
+    </ul>
+    
+    <h2>Key Features and Capabilities</h2>
+    <ul>
+        <li>Parse and execute AgentSpeak (ASL) files for agent behavior definition</li>
+        <li>Support for Agentspeak-like BDI behaviors with logic programming syntax</li>
+        <li>Dynamic belief management (set, get, remove beliefs)</li>
+        <li>Custom actions and functions integration</li>
+        <li>KQML performatives support (TELL, UNTELL, ACHIEVE) for agent communication</li>
+        <li>Plan execution with triggering events, contexts, and action bodies</li>
+        <li>Variable handling with uppercase naming conventions</li>
+        <li>Robust error handling and plan failure recovery</li>
+        <li>Message passing between agents</li>
+        <li>Recursive list handling and manipulation</li>
+    </ul>
+    
+    <h2>AgentSpeak Language</h2>
+    <p>AgentSpeak is a logic-based programming language specifically designed for creating intelligent agents in multi-agent systems. It provides:</p>
+    <ul>
+        <li><strong>Plan Structure:</strong> TriggeringEvent : Context &lt;- Body</li>
+        <li><strong>Internal Actions:</strong> Start with '.' (e.g., .print(), .send())</li>
+        <li><strong>Goal Achievement:</strong> Marked with '!' (e.g., !find_shelter)</li>
+        <li><strong>Belief Syntax:</strong> belief(arguments) format</li>
+        <li><strong>Variable Handling:</strong> Uppercase variables with '?' operator for retrieval</li>
+    </ul>
+    
+    <h3>Example AgentSpeak Code</h3>
+    <pre>
+!start.
+
++!start &lt;-
+    +car(red);
+    .a_function(3,W);
+    .print("w =", W);
+    +truck(blue).
+
++car(Color)
+ &lt;- .print("The car is ", Color).
+
++!stay_cool : is_sunny &amp; temperature(high) &lt;-
+    !find_shade;
+    !drink_water.
+    </pre>
+    
+    <h2>Applications and Use Cases</h2>
+    <h3>Real-World Applications</h3>
+    <ul>
+        <li><strong>Robotics:</strong> Autonomous robots that can negotiate tasks, adapt to changing conditions, and coordinate actions</li>
+        <li><strong>Air Traffic Management:</strong> Intelligent control systems for managing aircraft routing and scheduling</li>
+        <li><strong>E-Health Applications:</strong> Medical decision support systems and patient monitoring</li>
+        <li><strong>Customer Service Automation:</strong> Intelligent chatbots and support systems</li>
+        <li><strong>Social Simulations:</strong> Modeling human behavior and social interactions</li>
+        <li><strong>Virtual Reality Environments:</strong> Intelligent NPCs and interactive virtual worlds</li>
+        <li><strong>Distributed Systems:</strong> Coordination and resource management across networks</li>
+        <li><strong>Intelligent Assistants:</strong> Personal AI assistants with reasoning capabilities</li>
+    </ul>
+    
+    <h3>Specific Use Cases</h3>
+    <ul>
+        <li>Multi-agent coordination in smart cities</li>
+        <li>Supply chain optimization</li>
+        <li>Game AI with adaptive behavior</li>
+        <li>IoT device orchestration</li>
+        <li>Financial trading systems</li>
+        <li>Environmental monitoring networks</li>
+    </ul>
+    
+    <h2>Technical Requirements and Installation</h2>
+    <h3>Dependencies</h3>
+    <ul>
+        <li><strong>Python:</strong> Compatible with Python 3.x</li>
+        <li><strong>SPADE 3:</strong> Requires SPADE Multi-Agent System framework</li>
+        <li><strong>Jabber Server:</strong> Requires XMPP/Jabber server for agent communication</li>
+    </ul>
+    
+    <h3>Installation Options</h3>
+    <ul>
+        <li>Stable release installation (via pip)</li>
+        <li>Installation from source code</li>
+        <li>Development installation for contributors</li>
+    </ul>
+    
+    <h3>Basic Usage Example</h3>
+    <pre>
+from spade_bdi.bdi import BDIAgent
+
+# Create BDI agent with AgentSpeak file
+a = BDIAgent("BasicAgent@server", password, "basic.asl")
+a.start()
+
+# Manage beliefs dynamically
+a.bdi.set_belief("car", "blue", "big")
+a.bdi.print_beliefs()
+    </pre>
+    
+    <h2>Technical Specifications</h2>
+    <ul>
+        <li><strong>License:</strong> MIT License (Open Source)</li>
+        <li><strong>Platform:</strong> Cross-platform (Windows, Linux, macOS)</li>
+        <li><strong>Language:</strong> Python (87.6%), Makefile (12.4%)</li>
+        <li><strong>Version:</strong> 0.3.2 (actively maintained)</li>
+        <li><strong>Architecture:</strong> Plugin-based extension for SPADE 3</li>
+        <li><strong>Communication Protocol:</strong> XMPP/Jabber for inter-agent messaging</li>
+    </ul>
+    
+    <h2>Advantages and Benefits</h2>
+    <ul>
+        <li><strong>Human-like Decision Making:</strong> Enables AI systems to make rational, context-aware decisions</li>
+        <li><strong>Adaptability:</strong> Agents can handle unexpected events and revise plans dynamically</li>
+        <li><strong>Robustness:</strong> Built-in failure handling and plan revision capabilities</li>
+        <li><strong>Scalability:</strong> Supports complex multi-agent scenarios</li>
+        <li><strong>Flexibility:</strong> Custom actions and functions for domain-specific requirements</li>
+        <li><strong>Standards Compliance:</strong> Based on established BDI theory and AgentSpeak language</li>
+    </ul>
+    
+    <h2>Resources and Links</h2>
+    <ul>
+        <li><strong>GitHub Repository:</strong> <a href="https://github.com/javipalanca/spade_bdi">https://github.com/javipalanca/spade_bdi</a></li>
+        <li><strong>Documentation:</strong> <a href="https://spade-bdi.readthedocs.io">https://spade-bdi.readthedocs.io</a></li>
+        <li><strong>SPADE Framework:</strong> <a href="https://spade-mas.readthedocs.io">https://spade-mas.readthedocs.io</a></li>
+        <li><strong>AgentSpeak Documentation:</strong> <a href="https://spade-bdi.readthedocs.io/latest/agentspeak.html">AgentSpeak Language Guide</a></li>
+        <li><strong>Creating Agents Guide:</strong> <a href="https://spade-bdi.readthedocs.io/latest/create_agent.html">BDI Agent Creation</a></li>
+    </ul>
+    
+    <h2>Development and Community</h2>
+    <p>SPADE BDI is an actively maintained open-source project with regular updates and community contributions. The project was created using Cookiecutter and follows Python packaging best practices. It represents a mature implementation of BDI agent theory suitable for both research and production applications.</p>
+    
+    <footer>
+        <p><em>This information was compiled from the official SPADE BDI repository, documentation, and related research materials as of January 2025.</em></p>
+    </footer>
+</body>
+</html>

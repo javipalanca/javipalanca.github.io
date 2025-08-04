@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPADE Bokeh Plugin - Interactive Visualization for Agent Systems</title>
+</head>
+<body>
+    <header>
+        <h1>SPADE Bokeh Server Plugin</h1>
+        <p><strong>Interactive Visualization Integration for Multi-Agent Systems</strong></p>
+    </header>
+
+    <main>
+        <section>
+            <h2>Overview</h2>
+            <p>The SPADE Bokeh Server Plugin is a specialized Python tool designed to integrate interactive Bokeh visualizations with the SPADE (Smart Python Agent Development Environment) framework. It enables developers to render dynamic, interactive plots directly within agent templates, bridging the gap between agent-based systems and modern web visualization.</p>
+        </section>
+
+        <section>
+            <h2>Purpose and Motivation</h2>
+            <p>The plugin was created to address the need for real-time, interactive data visualization in multi-agent systems. By integrating Bokeh's powerful plotting capabilities with SPADE's agent framework, developers can:</p>
+            <ul>
+                <li>Monitor agent behaviors and interactions in real-time</li>
+                <li>Create dashboards for complex multi-agent system analysis</li>
+                <li>Visualize agent communications and state changes dynamically</li>
+                <li>Build web-based interfaces for agent system monitoring and control</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Key Features</h2>
+            <ul>
+                <li><strong>Seamless Integration:</strong> Easy integration with SPADE agent web services</li>
+                <li><strong>Dynamic Plot Rendering:</strong> Real-time plot updates within agent templates</li>
+                <li><strong>Web Controller Support:</strong> Built-in web controller functionality for plot management</li>
+                <li><strong>Multiple Plot Support:</strong> Ability to add multiple interactive plots per agent</li>
+                <li><strong>Bokeh Server Integration:</strong> Full access to Bokeh's interactive plotting capabilities</li>
+                <li><strong>Template Integration:</strong> Simple JavaScript injection for Jinja2 templates</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Applications and Use Cases</h2>
+            <h3>Agent System Monitoring</h3>
+            <ul>
+                <li>Real-time visualization of agent states and behaviors</li>
+                <li>Network topology visualization for multi-agent communications</li>
+                <li>Performance metrics dashboards for agent systems</li>
+            </ul>
+
+            <h3>Research and Development</h3>
+            <ul>
+                <li>Academic research in multi-agent systems</li>
+                <li>Simulation visualization for complex adaptive systems</li>
+                <li>Algorithm performance comparison and analysis</li>
+            </ul>
+
+            <h3>Industrial Applications</h3>
+            <ul>
+                <li>Smart manufacturing system monitoring</li>
+                <li>IoT device coordination visualization</li>
+                <li>Distributed system health monitoring</li>
+                <li>Supply chain optimization dashboards</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Technical Requirements</h2>
+            <h3>Dependencies</h3>
+            <ul>
+                <li>Python (version not specified, but modern Python 3.x recommended)</li>
+                <li>SPADE framework</li>
+                <li>Bokeh library</li>
+                <li>pip package manager</li>
+            </ul>
+
+            <h3>Installation Methods</h3>
+            <h4>Stable Release (Recommended)</h4>
+            <pre><code>$ pip install spade_bokeh</code></pre>
+
+            <h4>From Source</h4>
+            <pre><code>$ git clone git://github.com/javipalanca/spade_bokeh
+$ cd spade_bokeh
+$ python setup.py install</code></pre>
+        </section>
+
+        <section>
+            <h2>Basic Usage Example</h2>
+            <pre><code>import spade
+import spade_bokeh
+from bokeh.plotting import figure
+from bokeh.layouts import column
+
+class MyBokehAgent(spade_bokeh.BokehServerMixin, spade.agent.Agent):
+    async def setup(self):
+        self.web.start(port=10000)
+        self.bokeh_server.start()
+        self.bokeh_server.add_plot("/my_plot", self.create_plot)
+
+    def create_plot(self, doc):
+        # Create interactive Bokeh plot
+        plot = figure(title="Agent Data Visualization")
+        # Add plot elements here
+        doc.add_root(plot)
+</code></pre>
+        </section>
+
+        <section>
+            <h2>Technical Specifications</h2>
+            <ul>
+                <li><strong>License:</strong> MIT License (Open Source)</li>
+                <li><strong>Current Version:</strong> 0.2.1 (as of June 2023)</li>
+                <li><strong>Language:</strong> Python</li>
+                <li><strong>Architecture:</strong> Mixin-based design for easy integration</li>
+                <li><strong>Template Engine:</strong> Jinja2 compatibility</li>
+                <li><strong>Web Framework:</strong> Integrates with SPADE's built-in web server</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Real-World Applications</h2>
+            <p>The SPADE Bokeh plugin is particularly valuable in scenarios where:</p>
+            <ul>
+                <li><strong>Distributed Systems:</strong> Monitoring and visualizing the behavior of distributed agent networks</li>
+                <li><strong>Smart Cities:</strong> Visualizing traffic flow, energy consumption, or resource allocation managed by agent systems</li>
+                <li><strong>Financial Systems:</strong> Real-time trading agent monitoring and market analysis</li>
+                <li><strong>Robotics:</strong> Multi-robot coordination visualization and control interfaces</li>
+                <li><strong>Supply Chain:</strong> Agent-based logistics and inventory management dashboards</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Resources and Links</h2>
+            <ul>
+                <li><strong>GitHub Repository:</strong> <a href="https://github.com/javipalanca/spade_bokeh" target="_blank">https://github.com/javipalanca/spade_bokeh</a></li>
+                <li><strong>Documentation:</strong> <a href="https://spade-bokeh.readthedocs.io" target="_blank">https://spade-bokeh.readthedocs.io</a></li>
+                <li><strong>SPADE Framework:</strong> <a href="https://spade-mas.readthedocs.io" target="_blank">https://spade-mas.readthedocs.io</a></li>
+                <li><strong>PyPI Package:</strong> Available via <code>pip install spade_bokeh</code></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Development and Community</h2>
+            <p>The plugin is actively maintained by Javi Palanca and follows standard Python package development practices. It was created using Cookiecutter and the cookiecutter-pypackage template, ensuring a well-structured and maintainable codebase. The project welcomes contributions from the community and provides comprehensive documentation for developers.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p><em>Information compiled from official documentation and repository sources.</em></p>
+    </footer>
+</body>
+</html>

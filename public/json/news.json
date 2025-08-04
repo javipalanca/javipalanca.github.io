@@ -1,6 +1,16 @@
 {
   "news": [
     {
+      "id": 4,
+      "title": "🚀 Introducing SPADE-LLM: Official Launch",
+      "date": "July 23, 2025",
+      "category": "Release",
+      "categoryClass": "bg-primary",
+      "description": "We're excited to officially announce the launch of SPADE-LLM! This powerful new library extends SPADE's multi-agent capabilities with advanced Large Language Model integration.<br>🤖 Build intelligent agents powered by LLMs<br>⚡ Seamless integration with existing SPADE projects<br>🔗 Available now on GitHub - start building the future of AI agents today!",
+      "image": "img/spade_llm_launch.PNG",
+      "link": "https://github.com/sosanzma/spade_llm"
+    },
+    {
       "id": 1,
       "title": "\ud83c\udf89 SPADE 4.1 Released",
       "date": "May 25, 2025",

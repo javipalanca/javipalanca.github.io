@@ -11,8 +11,6 @@ import FeaturesSection from '../components/FeaturesSection.astro';
 import SpadeLLMSection from '../components/SpadeLLMSection.astro';
 import CodeExampleSection from '../components/CodeExampleSection.astro';
 import PluginsSection from '../components/PluginsSection.astro';
-import InteractiveDemoSection from '../components/InteractiveDemoSection.astro';
-import GettingStartedSection from '../components/GettingStartedSection.astro';
 import UseCasesSection from '../components/UseCasesSection.astro';
 import FAQSection from '../components/FAQSection.astro';
 import StatisticsSection from '../components/StatisticsSection.astro';
@@ -66,6 +64,7 @@ const plugins = [
         icon: 'brain',
         githubUrl: 'https://github.com/sosanzma/spade_llm',
         docsUrl: 'https://sosanzma.github.io/spade_llm/',
+        pluginUrl: '/plugins/spade-llm',
         featured: true
     },
     {
@@ -73,35 +72,40 @@ const plugins = [
         description: 'Implement Belief-Desire-Intention agents with AgentSpeak language support.',
         icon: 'brain',
         githubUrl: 'https://github.com/javipalanca/spade_bdi',
-        docsUrl: 'https://spade-bdi.readthedocs.io'
+        docsUrl: 'https://spade-bdi.readthedocs.io',
+        pluginUrl: '/plugins/spade-bdi'
     },
     {
         name: 'SPADE PubSub',
         description: 'Add publish-subscribe communication patterns to your agent platform.',
         icon: 'broadcast',
         githubUrl: 'https://github.com/javipalanca/spade_pubsub',
-        docsUrl: 'https://spade-pubsub.readthedocs.io'
+        docsUrl: 'https://spade-pubsub.readthedocs.io',
+        pluginUrl: '/plugins/spade-pubsub'
     },
     {
         name: 'SPADE Artifact',
         description: 'Create and manage artifacts for your agents to interact with.',
         icon: 'box',
         githubUrl: 'https://github.com/javipalanca/spade_artifact',
-        docsUrl: 'https://spade-artifact.readthedocs.io'
+        docsUrl: 'https://spade-artifact.readthedocs.io',
+        pluginUrl: '/plugins/spade-artifact'
     },
     {
         name: 'SPADE Norms',
         description: 'Implement normative systems to regulate agent behaviors.',
         icon: 'shield-check',
         githubUrl: 'https://github.com/javipalanca/spade_norms',
-        docsUrl: 'https://spade-norms.readthedocs.io'
+        docsUrl: 'https://spade-norms.readthedocs.io',
+        pluginUrl: '/plugins/spade-norms'
     },
     {
         name: 'SPADE Bokeh',
         description: 'Integrate interactive Bokeh plots with your agent interfaces.',
         icon: 'graph-up',
         githubUrl: 'https://github.com/javipalanca/spade_bokeh',
-        docsUrl: 'https://spade-bokeh.readthedocs.io'
+        docsUrl: 'https://spade-bokeh.readthedocs.io',
+        pluginUrl: '/plugins/spade-bokeh'
     }
 ];
 ---
@@ -111,15 +115,13 @@ const plugins = [
     <Hero />
     
     <BadgeSection />
+    <StatisticsSection />
     <FeaturesSection features={features} />
     <CodeExampleSection />
     <PluginsSection plugins={plugins} />
-    <GettingStartedSection />
     <UseCasesSection />
     <SpadeLLMSection />
     <FAQSection />
-    <StatisticsSection />
     <NewsSection />
-    <InteractiveDemoSection />
     <Footer />
 </BaseLayout>

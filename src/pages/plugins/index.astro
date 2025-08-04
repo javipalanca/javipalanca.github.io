@@ -1,0 +1,363 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+
+// Define plugins data
+const plugins = [
+    {
+        name: 'SpadeLLM',
+        description: 'Production-ready LLM integration with guardrails, memory, human-in-the-loop, and advanced tool support for secure AI agents.',
+        icon: 'lightbulb-fill',
+        githubUrl: 'https://github.com/sosanzma/spade_llm',
+        docsUrl: 'https://sosanzma.github.io/spade_llm/',
+        pluginUrl: '/plugins/spade-llm',
+        featured: true,
+        category: 'AI / LLMs',
+        status: 'stable'
+    },
+    {
+        name: 'SPADE BDI',
+        description: 'Implement Belief-Desire-Intention agents with AgentSpeak language support.',
+        icon: 'cpu',
+        githubUrl: 'https://github.com/javipalanca/spade_bdi',
+        docsUrl: 'https://spade-bdi.readthedocs.io',
+        pluginUrl: '/plugins/spade-bdi',
+        category: 'Agent Reasoning',
+        status: 'stable'
+    },
+    {
+        name: 'SPADE PubSub',
+        description: 'Add publish-subscribe communication patterns to your agent platform.',
+        icon: 'broadcast',
+        githubUrl: 'https://github.com/javipalanca/spade_pubsub',
+        docsUrl: 'https://spade-pubsub.readthedocs.io',
+        pluginUrl: '/plugins/spade-pubsub',
+        category: 'Communication',
+        status: 'stable'
+    },
+    {
+        name: 'SPADE Artifact',
+        description: 'Create and manage artifacts for your agents to interact with.',
+        icon: 'box',
+        githubUrl: 'https://github.com/javipalanca/spade_artifact',
+        docsUrl: 'https://spade-artifact.readthedocs.io',
+        pluginUrl: '/plugins/spade-artifact',
+        category: 'Data Integration',
+        status: 'stable'
+    },
+    {
+        name: 'SPADE Norms',
+        description: 'Implement normative systems to regulate agent behaviors.',
+        icon: 'shield-check',
+        githubUrl: 'https://github.com/javipalanca/spade_norms',
+        docsUrl: 'https://spade-norms.readthedocs.io',
+        pluginUrl: '/plugins/spade-norms',
+        category: 'Compliance & Rules',
+        status: 'stable'
+    },
+    {
+        name: 'SPADE Bokeh',
+        description: 'Integrate interactive Bokeh plots with your agent interfaces.',
+        icon: 'graph-up',
+        githubUrl: 'https://github.com/javipalanca/spade_bokeh',
+        docsUrl: 'https://spade-bokeh.readthedocs.io',
+        pluginUrl: '/plugins/spade-bokeh',
+        category: 'Visualization',
+        status: 'stable'
+    }
+];
+
+const categories = [...new Set(plugins.map(p => p.category))];
+---
+
+<BaseLayout title="SPADE Plugins - Extend Your Agent Platform">
+    <Navbar />
+    
+    <!-- Hero Section -->
+    <section class="hero-section bg-gradient-primary text-white py-5" style="margin-top: 76px;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">SPADE Plugin Ecosystem</h1>
+                    <p class="lead mb-4">
+                        Extend your multi-agent systems with powerful plugins designed for specialized capabilities, 
+                        from AI integration to visualization and everything in between.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <span class="badge bg-light text-dark px-3 py-2">
+                            <i class="bi bi-puzzle me-1"></i>
+                            {plugins.length} Plugins Available
+                        </span>
+                        <span class="badge bg-light text-dark px-3 py-2">
+                            <i class="bi bi-stars me-1"></i>
+                            Production Ready
+                        </span>
+                        <span class="badge bg-light text-dark px-3 py-2">
+                            <i class="bi bi-code-slash me-1"></i>
+                            Open Source
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plugins Grid -->
+    <section class="py-5">
+        <div class="container">
+            <!-- Category Filter Tabs -->
+            <div class="row mb-5">
+                <div class="col-12">
+                    <ul class="nav nav-pills justify-content-center mb-4" id="categoryTabs">
+                        <li class="nav-item">
+                            <button class="nav-link active" data-category="all">All Plugins</button>
+                        </li>
+                        {categories.map(category => (
+                            <li class="nav-item">
+                                <button class="nav-link" data-category={category.toLowerCase().replace(/\s+/g, '-')}>{category}</button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Plugins Grid -->
+            <div class="row g-4" id="pluginsGrid">
+                {plugins.map((plugin, index) => (
+                    <div class={`col-md-6 col-lg-4 plugin-item ${plugin.category.toLowerCase().replace(/\s+/g, '-')} fade-in-up stagger-${index + 1}`}>
+                        <div class={`card h-100 border-0 shadow-sm plugin-card ${plugin.featured ? 'featured-plugin' : ''}`}>
+                            <div class="card-body p-4">
+                                {plugin.featured && (
+                                    <div class="featured-badge">
+                                        <i class="bi bi-star-fill me-1"></i>
+                                        Featured
+                                    </div>
+                                )}
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class={`plugin-icon me-3 ${plugin.featured ? 'featured-icon' : ''}`}>
+                                        <i class={`bi bi-${plugin.icon}`}></i>
+                                    </div>
+                                    <div>
+                                        <h5 class={`card-title mb-1 ${plugin.featured ? 'featured-title' : ''}`}>
+                                            {plugin.name}
+                                        </h5>
+                                        <div class="d-flex gap-2">
+                                            <span class="badge bg-secondary">{plugin.category}</span>
+                                            <span class={`badge ${plugin.status === 'stable' ? 'bg-success' : plugin.status === 'beta' ? 'bg-warning' : 'bg-info'}`}>
+                                                {plugin.status}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="card-text text-muted mb-4">{plugin.description}</p>
+                                <div class="plugin-actions">
+                                    <a href={plugin.pluginUrl} class={`btn btn-sm ${plugin.featured ? 'btn-llm' : 'btn-primary'}`}>
+                                        <i class="bi bi-info-circle me-1"></i>Learn More
+                                    </a>
+                                    <a href={plugin.githubUrl} class={`btn btn-sm ${plugin.featured ? 'btn-outline-purple' : 'btn-outline-primary'}`}>
+                                        <i class="bi bi-github me-1"></i>GitHub
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <!-- Coming Soon Section -->
+            <div class="row mt-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card border-0 shadow-sm text-center p-4">
+                        <h4 class="mb-3">More Plugins Coming Soon</h4>
+                        <p class="text-muted mb-4">
+                            The SPADE ecosystem is constantly growing. Have an idea for a plugin or want to contribute?
+                        </p>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="https://github.com/javipalanca/spade/discussions" class="btn btn-outline-primary">
+                                <i class="bi bi-lightbulb me-1"></i>Suggest Ideas
+                            </a>
+                            <a href="https://github.com/javipalanca/spade/blob/master/CONTRIBUTING.md" class="btn btn-outline-secondary">
+                                <i class="bi bi-code-slash me-1"></i>Contribute
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <Footer />
+
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .plugin-card {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plugin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .featured-plugin {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 2px solid #8e44ad !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-plugin::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23dee2e6" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .featured-plugin::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            z-index: 2;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 3;
+        }
+
+        .plugin-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .featured-icon {
+            background: linear-gradient(45deg, #8e44ad, #9b59b6);
+        }
+
+        .featured-title {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .plugin-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-llm {
+            background: linear-gradient(135deg, #8e44ad, #9b59b6);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-llm:hover {
+            background: linear-gradient(135deg, #7d3c98, #8e44ad);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline-purple {
+            border-color: #8e44ad;
+            color: #8e44ad;
+        }
+
+        .btn-outline-purple:hover {
+            background: #8e44ad;
+            color: white;
+        }
+
+        .nav-pills .nav-link {
+            color: #6c757d;
+            background: transparent;
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-pills .nav-link:hover,
+        .nav-pills .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Dark mode adjustments */
+        :global(body.dark-mode) .featured-plugin {
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-color: #a569bd !important;
+        }
+
+        :global(body.dark-mode) .featured-plugin::before {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23444" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.2;
+        }
+
+        :global(body.dark-mode) .plugin-card {
+            background: var(--dark-card-bg);
+            border-color: #333 !important;
+        }
+    </style>
+
+    <script>
+        // Category filtering functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryButtons = document.querySelectorAll('#categoryTabs .nav-link');
+            const pluginItems = document.querySelectorAll('.plugin-item');
+
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active button
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const category = this.getAttribute('data-category');
+
+                    // Filter plugins
+                    pluginItems.forEach(item => {
+                        if (category === 'all' || item.classList.contains(category)) {
+                            item.style.display = 'block';
+                            item.classList.add('fade-in-up');
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</BaseLayout>

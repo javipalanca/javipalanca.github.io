@@ -5,8 +5,9 @@ const baseUrl = import.meta.env.BASE_URL;
 ---
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="scroll-progress-bar"></div>
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="#top">
+        <a class="navbar-brand d-flex align-items-center" href={`${baseUrl}`}>
             <img src={`${baseUrl}img/spade-agent-network-fixed.svg`} alt="SPADE Logo" height="40" class="me-2">
             <span class="fw-bold" style="color: var(--primary-color);">SPADE</span>
         </a>
@@ -15,42 +16,76 @@ const baseUrl = import.meta.env.BASE_URL;
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
+                <!-- Internal Navigation Group -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#features">Features</a>
+                    <a class="nav-link" href={`${baseUrl}#features`}>Features</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#examples">Examples</a>
-                </li>                
-                <li class="nav-item">
-                    <a class="nav-link" href="#plugins">Plugins</a>
+                    <a class="nav-link" href={`${baseUrl}#usecases`}>Use Cases</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#docs">Documentation</a>
-                </li>                
-                <li class="nav-item">
-                    <a class="nav-link" href="#usecases">Use Cases</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-link-ai" href="#spade-llm">
+                    <a class="nav-link nav-link-ai" href={`${baseUrl}#spade-llm`}>
                         <i class="bi bi-brain me-1"></i>SPADE-LLM
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#faq">FAQ</a>
+                    <a class="nav-link" href={`${baseUrl}#faq`}>FAQ</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#news">News</a>
+                    <a class="nav-link" href={`${baseUrl}#news`}>News</a>
                 </li>
+                
+                <!-- Navigation Separator -->
+                <li class="nav-item nav-separator">
+                    <span class="separator-line"></span>
+                </li>
+                
+                <!-- External Navigation Group -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#interactive-demo">Demo</a>
+                    <a class="nav-link external-link" href="/spade" target="_blank" rel="noopener">
+                        SPADE Framework
+                        <i class="bi bi-arrow-up-right external-icon"></i>
+                    </a>
+                </li>                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle external-link" href="/plugins/" id="pluginsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" target="_blank" rel="noopener">
+                        Plugins
+                        <i class="bi bi-arrow-up-right external-icon"></i>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="pluginsDropdown">
+                        <li><a class="dropdown-item" href="/plugins/" target="_blank" rel="noopener">
+                            <i class="bi bi-grid-3x3-gap me-2"></i>All Plugins
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item featured-plugin" href="/plugins/spade-llm" target="_blank" rel="noopener">
+                            <i class="bi bi-lightbulb-fill me-2"></i>SpadeLLM 
+                            <span class="badge bg-purple text-white ms-1">New Plugin</span>
+                        </a></li>
+                        <li><a class="dropdown-item" href="/plugins/spade-artifact" target="_blank" rel="noopener">
+                            <i class="bi bi-box me-2"></i>SPADE Artifact
+                        </a></li>
+                        <li><a class="dropdown-item" href="/plugins/spade-bdi" target="_blank" rel="noopener">
+                            <i class="bi bi-cpu me-2"></i>SPADE BDI
+                        </a></li>
+                        <li><a class="dropdown-item" href="/plugins/spade-pubsub" target="_blank" rel="noopener">
+                            <i class="bi bi-broadcast me-2"></i>SPADE PubSub
+                        </a></li>
+                        <li><a class="dropdown-item" href="/plugins/spade-norms" target="_blank" rel="noopener">
+                            <i class="bi bi-shield-check me-2"></i>SPADE Norms
+                        </a></li>
+                        <li><a class="dropdown-item" href="/plugins/spade-bokeh" target="_blank" rel="noopener">
+                            <i class="bi bi-bar-chart me-2"></i>SPADE Bokeh
+                        </a></li>
+                    </ul>
                 </li>
+                
                 <li class="nav-item">
                     <div class="ms-2">
                         <DarkModeToggle small={true} />
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link btn btn-primary text-white ms-lg-3 px-3" href="https://github.com/javipalanca/spade">GitHub</a>
+                    <a class="nav-link btn btn-primary text-white ms-lg-3 px-3" href="https://github.com/javipalanca/spade" target="_blank" rel="noopener">GitHub</a>
                 </li>
             </ul>
         </div>
@@ -129,5 +164,326 @@ const baseUrl = import.meta.env.BASE_URL;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+    }
+
+    /* Navigation Separator */
+    .nav-separator {
+        display: flex;
+        align-items: center;
+        margin: 0 1rem;
+    }
+
+    .separator-line {
+        width: 1px;
+        height: 24px;
+        background: rgba(108, 117, 125, 0.3);
+        display: block;
+        transition: background-color 0.3s ease;
+    }
+
+    /* External Link Styling */
+    .external-link {
+        color: rgba(108, 117, 125, 0.8) !important;
+        font-weight: 500;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .external-link:hover {
+        color: var(--primary-color) !important;
+    }
+
+    .external-icon {
+        font-size: 0.75rem;
+        margin-left: 0.25rem;
+        opacity: 0.7;
+        transition: all 0.3s ease;
+    }
+
+    .external-link:hover .external-icon {
+        opacity: 1;
+        transform: translateX(2px) translateY(-1px);
+    }
+
+    /* Dropdown external link adjustments */
+    .dropdown-toggle.external-link .external-icon {
+        margin-right: 0.25rem;
+        margin-left: 0;
+    }
+
+    /* Active section highlighting */
+    .nav-link.active {
+        color: var(--primary-color) !important;
+        font-weight: 600;
+        position: relative;
+    }
+
+    .nav-link.active::after {
+        content: '';
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--primary-color);
+        border-radius: 1px;
+        opacity: 1;
+    }
+
+    /* Dark mode active styles */
+    :global(body.dark-mode) .nav-link.active {
+        color: #3498db !important;
+    }
+
+    :global(body.dark-mode) .nav-link.active::after {
+        background: #3498db;
+    }
+
+    /* Special styling for SPADE-LLM when active */
+    .nav-link-ai.active {
+        background: linear-gradient(135deg, #8e44ad, #9b59b6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .nav-link-ai.active::after {
+        background: linear-gradient(135deg, #8e44ad, #9b59b6);
+        opacity: 1;
+    }
+
+    /* Scroll Progress Bar */
+    .scroll-progress-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 6px;
+        background: linear-gradient(
+            90deg,
+            #3498db,
+            #2ecc71,
+            #8e44ad
+        );
+        width: 0%;
+        transition: width 0.1s ease-out;
+        z-index: 1031;
+        border-radius: 0 4px 4px 0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Dark mode progress bar */
+    :global(body.dark-mode) .scroll-progress-bar {
+        background: linear-gradient(
+            90deg,
+            #205080,
+            #1a573a,
+            #5d4e75
+        );
+        box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+    }
+
+    /* Dropdown Menu Styling */
+    .dropdown-menu {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid rgba(52, 152, 219, 0.1);
+        border-radius: 15px;
+        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.15);
+        padding: 0.75rem 0;
+        margin-top: 0.5rem;
+        min-width: 220px;
+        backdrop-filter: blur(10px);
+        animation: dropdownFadeIn 0.3s ease-out;
+    }
+
+    @keyframes dropdownFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .dropdown-item {
+        padding: 0.75rem 1.25rem;
+        color: #2c3e50;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border-radius: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .dropdown-item:hover {
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(46, 204, 113, 0.05));
+        color: var(--primary-color);
+        transform: translateX(5px);
+    }
+
+    .dropdown-item i {
+        font-size: 1rem;
+        width: 20px;
+        text-align: center;
+    }
+
+    .dropdown-item:hover i {
+        color: var(--primary-color);
+        transform: scale(1.1);
+    }
+
+    /* Featured plugin styling */
+    .dropdown-item.featured-plugin {
+        background: linear-gradient(135deg, rgba(142, 68, 173, 0.1), rgba(155, 89, 182, 0.05));
+        border-left: 3px solid #8e44ad;
+        margin: 0.25rem 0.5rem;
+        border-radius: 8px;
+        position: relative;
+    }
+
+    .dropdown-item.featured-plugin:hover {
+        background: linear-gradient(135deg, rgba(142, 68, 173, 0.2), rgba(155, 89, 182, 0.1));
+        transform: translateX(8px);
+    }
+
+    .dropdown-item.featured-plugin i {
+        color: #8e44ad !important;
+        font-weight: 900 !important;
+        font-size: 1.1rem !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    .dropdown-item.featured-plugin:hover i {
+        color: #7d3c98 !important;
+        transform: scale(1.15) !important;
+        font-weight: 900 !important;
+    }
+
+    .dropdown-item.featured-plugin .badge {
+        font-size: 0.65rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(142, 68, 173, 0.3);
+    }
+
+    .bg-purple {
+        background: linear-gradient(135deg, #8e44ad, #9b59b6) !important;
+    }
+
+    .dropdown-divider {
+        height: 0;
+        margin: 0.5rem 1rem;
+        overflow: hidden;
+        border-top: 2px solid rgba(52, 152, 219, 0.1);
+        opacity: 1;
+    }
+
+    /* Dropdown arrow styling */
+    .dropdown-toggle::after {
+        transition: transform 0.3s ease;
+    }
+
+    .dropdown-toggle[aria-expanded="true"]::after {
+        transform: rotate(180deg);
+    }
+
+    /* Dark mode dropdown styling */
+    :global(body.dark-mode) .dropdown-menu {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+        border-color: rgba(52, 152, 219, 0.2);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    :global(body.dark-mode) .dropdown-item {
+        color: var(--dark-text);
+    }
+
+    :global(body.dark-mode) .dropdown-item:hover {
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(46, 204, 113, 0.1));
+        color: #3498db;
+    }
+
+    :global(body.dark-mode) .dropdown-item:hover i {
+        color: #3498db;
+    }
+
+    :global(body.dark-mode) .dropdown-item.featured-plugin {
+        background: linear-gradient(135deg, rgba(142, 68, 173, 0.15), rgba(155, 89, 182, 0.08));
+        border-left-color: #a569bd;
+    }
+
+    :global(body.dark-mode) .dropdown-item.featured-plugin:hover {
+        background: linear-gradient(135deg, rgba(142, 68, 173, 0.25), rgba(155, 89, 182, 0.15));
+    }
+
+    :global(body.dark-mode) .dropdown-item.featured-plugin i {
+        color: #a569bd !important;
+        font-weight: 900 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    :global(body.dark-mode) .dropdown-item.featured-plugin:hover i {
+        color: #bb8fce !important;
+        font-weight: 900 !important;
+    }
+
+    :global(body.dark-mode) .dropdown-divider {
+        border-top-color: rgba(52, 152, 219, 0.2);
+    }
+
+    /* Dark mode separator and external links */
+    :global(body.dark-mode) .separator-line {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    :global(body.dark-mode) .external-link {
+        color: rgba(255, 255, 255, 0.7) !important;
+    }
+
+    :global(body.dark-mode) .external-link:hover {
+        color: #3498db !important;
+    }
+
+    /* Responsive dropdown adjustments */
+    @media (max-width: 991.98px) {
+        .dropdown-menu {
+            position: static !important;
+            float: none;
+            width: auto;
+            margin-top: 0;
+            background-color: transparent;
+            border: 0;
+            box-shadow: none;
+            padding-left: 1rem;
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+        }
+
+        .dropdown-item.featured-plugin {
+            margin: 0.25rem 0;
+            border-radius: 8px;
+        }
+
+        /* Hide separator on mobile */
+        .nav-separator {
+            display: none;
+        }
+
+        /* Mobile external link adjustments */
+        .external-link {
+            padding-left: 0.75rem;
+            border-left: 2px solid rgba(108, 117, 125, 0.2);
+            margin-left: 0.5rem;
+        }
+
+        :global(body.dark-mode) .external-link {
+            border-left-color: rgba(255, 255, 255, 0.2);
+        }
     }
 </style>

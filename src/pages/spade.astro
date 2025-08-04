@@ -1,0 +1,662 @@
+---
+import SimplePluginLayout from '../layouts/SimplePluginLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import PythonCodeBlock from '../components/PythonCodeBlock.astro';
+import InteractiveDemoSection from '../components/InteractiveDemoSection.astro';
+---
+
+<SimplePluginLayout 
+    title="SPADE Framework - Smart Python Agent Development Environment"
+    description="Multi-agent systems platform written in Python, powered by XMPP messaging for intelligent agent communication."
+>
+    <Navbar />
+    
+    <section class="plugin-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="bi bi-cpu-fill me-3"></i>
+                        SPADE Framework
+                    </h1>
+                    <p class="lead mb-4">
+                        Smart Python Agent Development Environment - A comprehensive multi-agent systems platform powered by XMPP messaging, enabling intelligent agents to communicate with each other and humans.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="https://github.com/javipalanca/spade" class="btn btn-primary">
+                            <i class="bi bi-github me-2"></i>View on GitHub
+                        </a>
+                        <a href="https://spade-mas.readthedocs.io" class="btn btn-outline-light">
+                            <i class="bi bi-book me-2"></i>Documentation
+                        </a>
+                        <a href="https://pypi.python.org/pypi/spade" class="btn btn-outline-light">
+                            <i class="bi bi-download me-2"></i>Download
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="plugin-content" style="padding-top: 4rem;">
+        <div class="container">
+            
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-1">
+                        <h2 class="mb-4">What is SPADE?</h2>
+                        <p class="lead">
+                            SPADE (Smart Python Agent Development Environment) is an open-source multi-agent systems platform 
+                            that enables developers to create intelligent agents capable of communicating with other agents and humans 
+                            through the XMPP protocol.
+                        </p>
+                        <p>
+                            Built with modern Python's asyncio architecture, SPADE provides a behavior-based agent model that supports 
+                            real-time presence notifications, FIPA metadata handling, and includes a built-in web interface for monitoring 
+                            and interaction. Compatible with Python ≥3.9 and works across Windows, macOS, and Linux platforms.
+                        </p>
+                        <div class="mt-4 p-4 bg-light rounded">
+                            <h5><i class="bi bi-gear me-2"></i>Technical Specifications</h5>
+                            <ul class="mb-0">
+                                <li><strong>Language:</strong> Python ≥3.9</li>
+                                <li><strong>Protocol:</strong> XMPP (Extensible Messaging and Presence Protocol)</li>
+                                <li><strong>Architecture:</strong> Asyncio-based for concurrent operations</li>
+                                <li><strong>License:</strong> MIT Open Source</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-2">
+                        <h2 class="text-center mb-5">Core Framework Features</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up stagger-1">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-router"></i>
+                                    </div>
+                                    <div>
+                                        <h4>XMPP-Based Communication</h4>
+                                        <p>Built on the XMPP protocol for robust, real-time messaging between agents and humans. Includes standardized messaging, presence notification, and built-in security features.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up stagger-2">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-diagram-3"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Behaviour-Based Model</h4>
+                                        <p>Define agent behaviors using cyclic, periodic, one-shot, and finite state machine patterns. Modular design supports task specialization and complex workflow management.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up stagger-3">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-lightning-charge"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Asyncio Support</h4>
+                                        <p>Modern asynchronous programming with Python's asyncio for concurrent agent operations. Enables non-blocking operations, efficient resource usage, and modern Python practices.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up stagger-4">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-eye"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Presence Awareness</h4>
+                                        <p>Real-time presence notification system to monitor agent status and availability. Includes status tracking, automatic reconnection, and comprehensive system monitoring.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up stagger-5">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-globe"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Web Interface</h4>
+                                        <p>Built-in web interface for easy monitoring and interaction with your agents. Features message visualization, agent status dashboard, and customizable user interface.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up stagger-6">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-file-earmark-check"></i>
+                                    </div>
+                                    <div>
+                                        <h4>FIPA Compliance</h4>
+                                        <p>Supports FIPA metadata via XMPP Data Forms, ensuring compatibility with multi-agent system standards.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-12 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-3">
+                        <h2 class="text-center mb-5">Quick Start Guide</h2>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="info-card">
+                                    <h4><i class="bi bi-download me-2"></i>Installation</h4>
+                                    <p>Install SPADE using pip and create your first agent in minutes.</p>
+                                    <div class="code-example">
+                                        <div class="code-header">Terminal</div>
+                                        <div class="code-body">
+                                            <pre><code class="language-bash">pip install spade</code></pre>
+                                        </div>
+                                    </div>
+                                    <p><small>Requirements: Python ≥3.9, works on Windows, macOS, and Linux.</small></p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="info-card">
+                                    <h4><i class="bi bi-play-circle me-2"></i>Hello World Agent</h4>
+                                    <p>Create your first SPADE agent with this simple example.</p>
+                                    <PythonCodeBlock 
+                                        filename="hello_agent.py"
+                                        showCopyButton={true}
+                                        code={`import spade
+from spade.agent import Agent
+from spade.behaviour import OneShotBehaviour
+
+class MyAgent(Agent):
+    class MyBehav(OneShotBehaviour):
+        async def run(self):
+            print("Hello World!")
+
+    async def setup(self):
+        self.add_behaviour(self.MyBehav())
+
+async def main():
+    agent = MyAgent("agent@localhost", "password")
+    await agent.start()
+
+if __name__ == "__main__":
+    spade.run(main())`}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-4">
+                        <h2 class="mb-4">Framework Resources & Documentation</h2>
+                        <p class="mb-4">Comprehensive resources to help you build powerful multi-agent systems with SPADE:</p>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="resource-item">
+                                    <h5><i class="bi bi-book me-2"></i>Documentation</h5>
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2">
+                                            <a href="https://spade-mas.readthedocs.io/en/latest/usage.html" class="text-decoration-none">
+                                                <i class="bi bi-arrow-right me-2"></i>User Guide
+                                            </a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <a href="https://spade-mas.readthedocs.io/en/latest/api.html" class="text-decoration-none">
+                                                <i class="bi bi-arrow-right me-2"></i>API Reference
+                                            </a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <a href="https://spade-mas.readthedocs.io/en/latest/installation.html" class="text-decoration-none">
+                                                <i class="bi bi-arrow-right me-2"></i>Installation Guide
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="resource-item">
+                                    <h5><i class="bi bi-code-slash me-2"></i>Development</h5>
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2">
+                                            <a href="https://github.com/javipalanca/spade/tree/master/examples" class="text-decoration-none">
+                                                <i class="bi bi-arrow-right me-2"></i>Code Examples
+                                            </a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <a href="https://github.com/javipalanca/spade" class="text-decoration-none">
+                                                <i class="bi bi-arrow-right me-2"></i>GitHub Repository
+                                            </a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <a href="https://pypi.python.org/pypi/spade" class="text-decoration-none">
+                                                <i class="bi bi-arrow-right me-2"></i>PyPI Package
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <h5>Ready to build your multi-agent system?</h5>
+                            <div class="d-flex justify-content-center gap-3 flex-wrap mt-3">
+                                <a href="https://spade-mas.readthedocs.io" class="btn btn-primary">
+                                    <i class="bi bi-book me-2"></i>Get Started
+                                </a>
+                                <a href="https://github.com/javipalanca/spade" class="btn btn-outline-primary">
+                                    <i class="bi bi-github me-2"></i>Explore Code
+                                </a>
+                                <a href="/plugins/" class="btn btn-outline-primary">
+                                    <i class="bi bi-puzzle me-2"></i>Browse Plugins
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-12 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-5">
+                        <h2 class="text-center mb-5">Agent Communication Example</h2>
+                        <div class="info-card">
+                            <h4 class="mb-4">Message Handling Agent</h4>
+                            <p class="mb-4">This example demonstrates SPADE's message handling capabilities with automatic reply functionality:</p>
+                            <PythonCodeBlock 
+                                filename="agent_example.py"
+                                showCopyButton={true}
+                                code={`import spade
+from spade.agent import Agent
+from spade.behaviour import CyclicBehaviour
+from spade.message import Message
+
+class MyAgent(Agent):
+    class MyBehaviour(CyclicBehaviour):
+        async def run(self):
+            msg = await self.receive(timeout=10)
+            if msg:
+                print(f"Message received: {msg.body}")
+                reply = Message(to=str(msg.sender))
+                reply.body = "I received your message!"
+                await self.send(reply)
+
+    async def setup(self):
+        behaviour = self.MyBehaviour()
+        self.add_behaviour(behaviour)
+
+async def main():
+    agent = MyAgent("agent@localhost", "password")
+    await agent.start()
+
+if __name__ == "__main__":
+    spade.run(main())`}
+                            />
+                            <p class="mt-3"><small>This agent can receive messages and automatically reply to them. SPADE handles all the underlying communication details for you.</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <InteractiveDemoSection />
+
+    <Footer />
+</SimplePluginLayout>
+
+<!-- Scripts needed for InteractiveDemo -->
+<script is:inline src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script is:inline src="/js/demos.js"></script>
+
+<!-- Prism CSS for syntax highlighting -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" />
+
+<style>
+    /* Custom styling for SPADE Framework page with main site theme */
+    .plugin-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+        position: relative;
+        overflow: hidden;
+        color: white !important;
+        padding: 6rem 0 7rem 0 !important;
+    }
+
+    .plugin-header * {
+        color: white !important;
+    }
+
+    .plugin-header h1,
+    .plugin-header .lead,
+    .plugin-header p,
+    .plugin-header .display-4 {
+        color: white !important;
+    }
+
+    .plugin-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="20" r="1.5" fill="rgba(255,255,255,0.08)"/><circle cx="20" cy="50" r="1" fill="rgba(255,255,255,0.06)"/></svg>') repeat;
+        opacity: 0.3;
+    }
+
+    .plugin-content {
+        background: linear-gradient(180deg, #f8fcff 0%, #ffffff 50%, #f0f9f7 100%) !important;
+    }
+
+    /* Enhanced feature items with main page theme */
+    .feature-item {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid rgba(52, 152, 219, 0.15);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
+    }
+
+    .feature-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.02));
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        border-radius: 18px;
+    }
+
+    .feature-item:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(52, 152, 219, 0.15);
+        border-color: rgba(52, 152, 219, 0.5);
+    }
+
+    .feature-item:hover::before {
+        opacity: 1;
+    }
+
+    .feature-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 1.5rem;
+        margin-bottom: 1rem;
+        flex-shrink: 0;
+        font-size: 1.8rem;
+        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        position: relative;
+        transition: all 0.4s ease;
+    }
+
+    .feature-item:hover .feature-icon {
+        transform: rotate(5deg) scale(1.1);
+        box-shadow: 0 12px 30px rgba(52, 152, 219, 0.4);
+    }
+
+    .feature-icon::after {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 22px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .feature-item:hover .feature-icon::after {
+        opacity: 1;
+    }
+
+    /* Enhanced info cards */
+    .info-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid rgba(52, 152, 219, 0.25);
+        border-radius: 25px;
+        padding: 3rem;
+        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.08);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 25px 25px 0 0;
+    }
+
+    .info-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(52, 152, 219, 0.12);
+        border-color: rgba(52, 152, 219, 0.4);
+    }
+
+    /* Code styling */
+    .code-example {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 1rem;
+    }
+    
+    .code-header {
+        background: #f0f0f0;
+        color: #333;
+        padding: 12px 20px;
+        border-bottom: 1px solid #dee2e6;
+        font-weight: 600;
+    }
+    
+    .code-body {
+        padding: 20px;
+        background-color: #ffffff;
+    }
+    
+    .code-body pre {
+        margin: 0;
+        background-color: #ffffff;
+        color: #212529;
+    }
+    
+    .code-body code {
+        background-color: transparent;
+        color: #212529;
+    }
+
+    /* Resource items */
+    .resource-item {
+        padding: 1.5rem;
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.02));
+        border-radius: 15px;
+        height: 100%;
+    }
+
+    .resource-item h5 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .resource-item a {
+        color: #5a6c7d;
+        transition: all 0.3s ease;
+    }
+
+    .resource-item a:hover {
+        color: var(--primary-color);
+        transform: translateX(5px);
+    }
+
+    /* Enhanced buttons */
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border: none;
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #2980b9, var(--secondary-color));
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(52, 152, 219, 0.4);
+    }
+
+    .btn-outline-primary {
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+    }
+
+    .btn-outline-light {
+        border: 2px solid rgba(255, 255, 255, 0.6);
+        color: white;
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-light:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Typography enhancements */
+    .plugin-content h2 {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .plugin-content h2::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 2px;
+    }
+
+    .feature-item h4 {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .feature-item p {
+        color: #5a6c7d;
+        line-height: 1.6;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .feature-item {
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+
+        .info-card {
+            padding: 2rem;
+        }
+    }
+
+    /* Dark mode support */
+    :global(body.dark-mode) .feature-item {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    :global(body.dark-mode) .info-card {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+    }
+
+    :global(body.dark-mode) .plugin-content {
+        background: linear-gradient(180deg, var(--dark-bg) 0%, #1a1a1a 50%, #0f1a21 100%) !important;
+    }
+
+    :global(body.dark-mode) .code-example {
+        background: var(--dark-card-bg);
+        border-color: var(--dark-border);
+    }
+    
+    :global(body.dark-mode) .code-header {
+        background: #343a40;
+        color: white;
+        border-bottom-color: #4a5568;
+    }
+    
+    :global(body.dark-mode) .code-body {
+        background: #1a202c;
+    }
+    
+    :global(body.dark-mode) .code-body pre,
+    :global(body.dark-mode) .code-body code {
+        background: #1a202c;
+        color: #e2e8f0;
+    }
+
+    :global(body.dark-mode) .resource-item {
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(46, 204, 113, 0.05));
+    }
+</style>

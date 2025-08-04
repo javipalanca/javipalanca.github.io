@@ -2,30 +2,30 @@
 // Statistics Section component
 ---
 
-<section class="stats-section py-5">
+<section class="stats-section py-5" id="statistics">
     <div class="container">
         <div class="row text-center">
             <div class="col-md-3">
-                <div class="stat-item">
-                    <div class="stat-number">150K+</div>
+                <div class="stat-item scale-in stagger-1">
+                    <div class="stat-number" data-target="200000" data-suffix="K+">0</div>
                     <div class="stat-label">Downloads</div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="stat-item">
-                    <div class="stat-number">250+</div>
+                <div class="stat-item scale-in stagger-2">
+                    <div class="stat-number" data-target="250" data-suffix="+">0</div>
                     <div class="stat-label">Stars</div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="stat-item">
-                    <div class="stat-number">100+</div>
+                <div class="stat-item scale-in stagger-3">
+                    <div class="stat-number" data-target="100" data-suffix="+">0</div>
                     <div class="stat-label">Forks</div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="stat-item">
-                    <div class="stat-number">5+</div>
+                <div class="stat-item scale-in stagger-4">
+                    <div class="stat-number" data-target="6" data-suffix="+">0</div>
                     <div class="stat-label">Plugins</div>
                 </div>
             </div>
@@ -35,7 +35,12 @@
 
 <style>
     .stats-section {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        background: linear-gradient(
+            135deg,
+            var(--primary-color),
+            var(--secondary-color),
+            #8e44ad
+        );
         color: white;
         padding: 4rem 0;
     }
@@ -51,10 +56,99 @@
         display: block;
         margin-bottom: 0.5rem;
         color: #fff;
+        transition: transform 0.3s ease;
+    }
+
+    .stat-number.animating {
+        transform: scale(1.1);
     }
 
     .stat-label {
         font-size: 1.1rem;
         opacity: 0.9;
     }
+
+    /* Dark mode support */
+    :global(body.dark-mode) .stats-section {
+        background: linear-gradient(
+            135deg,
+            #205080,
+            #1a573a,
+            #5d4e75
+        );
+    }
 </style>
+
+<script>
+    // Animated counter function
+    function animateCounter(element, target, duration = 2000) {
+        const start = 0;
+        const startTime = performance.now();
+        const suffix = element.getAttribute('data-suffix') || '';
+        
+        element.classList.add('animating');
+        
+        function updateCounter(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Use easeOutCubic for smooth animation
+            const easeProgress = 1 - Math.pow(1 - progress, 3);
+            const current = Math.floor(start + (target - start) * easeProgress);
+            
+            // Format the number based on target value
+            let displayValue;
+            if (target >= 150000) {
+                // For downloads, show as "200K+"
+                displayValue = Math.floor(current / 1000);
+                element.textContent = displayValue + 'K+';
+            } else {
+                element.textContent = current + suffix;
+            }
+            
+            if (progress < 1) {
+                requestAnimationFrame(updateCounter);
+            } else {
+                element.classList.remove('animating');
+                // Ensure final value is correct
+                if (target >= 150000) {
+                    element.textContent = '200K+';
+                } else {
+                    element.textContent = target + suffix;
+                }
+            }
+        }
+        
+        requestAnimationFrame(updateCounter);
+    }
+
+    // Intersection Observer to trigger animation when section comes into view
+    function initializeCounters() {
+        const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.hasAttribute('data-animated')) {
+                    const target = parseInt(entry.target.getAttribute('data-target'));
+                    entry.target.setAttribute('data-animated', 'true');
+                    animateCounter(entry.target, target);
+                }
+            });
+        }, {
+            threshold: 0.5, // Trigger when 50% of the element is visible
+            rootMargin: '0px 0px -100px 0px' // Trigger slightly before fully visible
+        });
+
+        statNumbers.forEach(el => observer.observe(el));
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initializeCounters);
+    
+    // Also initialize if the script loads after DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeCounters);
+    } else {
+        initializeCounters();
+    }
+</script>

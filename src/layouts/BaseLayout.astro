@@ -183,7 +183,7 @@ const baseUrl = import.meta.env.BASE_URL;
                 }
             }
             
-            // Navbar scroll effect
+            // Navbar scroll effect and progress bar
             window.addEventListener('scroll', function() {
                 const navbar = document.querySelector('.navbar');
                 if (navbar) {
@@ -193,7 +193,43 @@ const baseUrl = import.meta.env.BASE_URL;
                         navbar.classList.remove('scrolled');
                     }
                 }
+
+                // Update scroll progress bar
+                updateScrollProgress();
             });
+
+            // Scroll progress bar functionality
+            function updateScrollProgress() {
+                const progressBar = document.querySelector('.scroll-progress-bar');
+                if (!progressBar) {
+                    console.log('Progress bar element not found');
+                    return;
+                }
+
+                const windowHeight = window.innerHeight;
+                const documentHeight = document.documentElement.scrollHeight;
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                // Calculate scroll percentage
+                const scrollableDistance = documentHeight - windowHeight;
+                const scrollPercentage = scrollableDistance > 0 ? (scrollTop / scrollableDistance) * 100 : 0;
+                
+                // Update progress bar width
+                const finalWidth = Math.min(Math.max(scrollPercentage, 0), 100);
+                progressBar.style.width = finalWidth + '%';
+                
+                // Debug logging (remove after testing)
+                console.log('Progress:', finalWidth + '%', 'ScrollTop:', scrollTop, 'DocumentHeight:', documentHeight);
+            }
+
+            // Initial call to set progress bar
+            updateScrollProgress();
+            
+            // Initialize active section highlighting
+            initializeActiveSectionHighlighting();
+            
+            // Initialize scroll animations
+            initializeScrollAnimations();
         });
 
         // Load demos and news dynamically
@@ -287,6 +323,141 @@ const baseUrl = import.meta.env.BASE_URL;
                     console.log('Code re-highlighted for new theme');
                 }
             }, 50);
+        }
+
+        // Active section highlighting functionality
+        function initializeActiveSectionHighlighting() {
+            // Define the sections to watch and their corresponding nav links
+            const sectionConfig = [
+                { sectionId: 'statistics', navHref: '#features' }, // Statistics section maps to Features nav
+                { sectionId: 'features', navHref: '#features' },
+                { sectionId: 'examples', navHref: '#examples' },
+                { sectionId: 'plugins', navHref: '#plugins' },
+                { sectionId: 'docs', navHref: '#docs' },
+                { sectionId: 'usecases', navHref: '#usecases' },
+                { sectionId: 'spade-llm', navHref: '#spade-llm' },
+                { sectionId: 'faq', navHref: '#faq' },
+                { sectionId: 'news', navHref: '#news' },
+                { sectionId: 'interactive-demo', navHref: '#interactive-demo' }
+            ];
+
+            // Get all sections and nav links
+            const sections = sectionConfig.map(config => ({
+                element: document.getElementById(config.sectionId),
+                navLink: document.querySelector(`a[href="${config.navHref}"]`),
+                id: config.sectionId
+            })).filter(item => item.element && item.navLink);
+
+            if (sections.length === 0) {
+                console.log('No matching sections found for active highlighting');
+                return;
+            }
+
+            // Function to update active states
+            function updateActiveSection(activeId) {
+                // Remove active class from all nav links
+                sections.forEach(section => {
+                    section.navLink.classList.remove('active');
+                });
+
+                // Add active class to the current section's nav link
+                const activeSection = sections.find(section => section.id === activeId);
+                if (activeSection) {
+                    activeSection.navLink.classList.add('active');
+                    console.log('Active section:', activeId);
+                }
+            }
+
+            // Create intersection observer
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20% 0px -60% 0px', // Trigger when section is 20% visible from top
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                // Find the section that's most visible
+                let mostVisibleSection = null;
+                let maxVisibility = 0;
+
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const visibility = entry.intersectionRatio;
+                        if (visibility > maxVisibility) {
+                            maxVisibility = visibility;
+                            mostVisibleSection = entry.target.id;
+                        }
+                    }
+                });
+
+                if (mostVisibleSection) {
+                    updateActiveSection(mostVisibleSection);
+                }
+            }, observerOptions);
+
+            // Start observing all sections
+            sections.forEach(section => {
+                observer.observe(section.element);
+            });
+
+            // Initial check for which section is currently visible
+            setTimeout(() => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                let currentSection = null;
+
+                sections.forEach(section => {
+                    const rect = section.element.getBoundingClientRect();
+                    const sectionTop = rect.top + scrollTop;
+                    const sectionHeight = rect.height;
+
+                    if (scrollTop >= sectionTop - 100 && scrollTop < sectionTop + sectionHeight - 100) {
+                        currentSection = section.id;
+                    }
+                });
+
+                if (currentSection) {
+                    updateActiveSection(currentSection);
+                }
+            }, 100);
+        }
+
+        // Scroll-triggered animations functionality
+        function initializeScrollAnimations() {
+            // Find all elements that should animate on scroll
+            const animatedElements = document.querySelectorAll(
+                '.animate-on-scroll, .fade-in-up, .scale-in, .slide-in-left, .slide-in-right'
+            );
+
+            if (animatedElements.length === 0) {
+                console.log('No animated elements found');
+                return;
+            }
+
+            // Create intersection observer for animations
+            const animationObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Add the animate-in class to trigger the animation
+                        entry.target.classList.add('animate-in');
+                        
+                        // Optional: Stop observing once animated (for one-time animations)
+                        // animationObserver.unobserve(entry.target);
+                        
+                        console.log('Animating element:', entry.target.className);
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '0px 0px -100px 0px', // Trigger animation 100px before element is fully visible
+                threshold: 0.1 // Trigger when 10% of element is visible
+            });
+
+            // Start observing all animated elements
+            animatedElements.forEach(element => {
+                animationObserver.observe(element);
+            });
+
+            console.log(`Initialized scroll animations for ${animatedElements.length} elements`);
         }
 
         // Make functions available globally

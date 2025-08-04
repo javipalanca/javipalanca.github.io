@@ -1,0 +1,540 @@
+---
+import SimplePluginLayout from '../../layouts/SimplePluginLayout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<SimplePluginLayout 
+    title="SPADE PubSub - XMPP XEP-0060 Agent Communication"
+    description="Python plugin implementing XMPP Publish-Subscribe Extension for event-driven multi-agent systems with full XEP-0060 compliance."
+>
+    <Navbar />
+    
+    <section class="plugin-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="bi bi-broadcast me-3"></i>
+                        SPADE PubSub
+                    </h1>
+                    <p class="lead mb-4">
+                        XMPP XEP-0060 compliant publish-subscribe communication for SPADE agent frameworks
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="https://github.com/javipalanca/spade_pubsub" class="btn btn-primary">
+                            <i class="bi bi-github me-2"></i>View on GitHub
+                        </a>
+                        <a href="https://spade-pubsub.readthedocs.io" class="btn btn-outline-light">
+                            <i class="bi bi-book me-2"></i>Documentation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="plugin-content" style="padding-top: 4rem;">
+        <div class="container">
+            
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-1">
+                        <h2 class="mb-4">What is SPADE PubSub?</h2>
+                        <p class="lead">
+                            SPADE PubSub is a Python plugin that extends the SPADE 3+ (Smart Python Agent Development Environment) 
+                            framework with XMPP XEP-0060 Publish-Subscribe capabilities, providing agents with standardized 
+                            event-driven communication patterns for scalable multi-agent systems.
+                        </p>
+                        <p>
+                            Acting as a bridging layer between SPADE's agent-oriented architecture and XMPP's publish-subscribe 
+                            infrastructure, this plugin enables agents to create, manage, and interact with PubSub nodes on 
+                            XMPP servers. The implementation supports the full XEP-0060 specification, including node creation 
+                            and deletion, subscription management, item publication and retraction, and configurable event 
+                            notifications with callback systems for reactive agent behaviors.
+                        </p>
+                        <div class="technical-highlight mt-4 p-3">
+                            <h5><i class="bi bi-gear-fill me-2"></i>Technical Foundation</h5>
+                            <p class="mb-0">
+                                <strong>Protocol:</strong> XMPP XEP-0060 (Publish-Subscribe Extension) | 
+                                <strong>Language:</strong> Python (91.4% codebase) | 
+                                <strong>Integration:</strong> SPADE multi-agent framework | 
+                                <strong>License:</strong> MIT
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="plugin-section animate-on-scroll stagger-2">
+                        <h2 class="text-center mb-5">XMPP XEP-0060 Implementation & Core Capabilities</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-diagram-3"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Node Creation & Management</h4>
+                                        <p><strong>Comprehensive Node Operations:</strong> Create, delete, and purge PubSub nodes programmatically. Support for leaf nodes (content containers) and collection nodes (XEP-0248) for hierarchical organization. Configurable access models (Open, Authorize, Presence, Roster, Whitelist) provide granular permission control over node access and subscription management.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-send"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Subscription & Publication System</h4>
+                                        <p><strong>State-Aware Management:</strong> Handle subscription states (None, Pending, Unconfigured, Subscribed) with approval workflows. Publish items to nodes with automatic notification delivery to all subscribers. Support for item publication, retraction, and retrieval with optional payload delivery and persistent storage.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-funnel"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Event Notification Without Items</h4>
+                                        <p><strong>Flexible Messaging:</strong> Send notifications to all node subscribers without publishing specific items, ideal for alerts and signals. Supports metadata subscriptions for node configuration changes and extended subscription types including hierarchical notifications and linked item relationships.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-item fade-in-up">
+                                    <div class="feature-icon">
+                                        <i class="bi bi-lightning"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Agent-Centric Callback System</h4>
+                                        <p><strong>Reactive Event Handling:</strong> Register custom callbacks for publication, retraction, and subscription events. Asynchronous processing enables agents to react to PubSub events in real-time. Seamless integration with SPADE agent behaviors for event-driven multi-agent system architectures.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card plugin-section animate-on-scroll stagger-4">
+                        <h2 class="mb-4">Technical Architecture & Benefits</h2>
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>XMPP XEP-0060 Compliance:</strong> Full implementation of the Publish-Subscribe Extension standard with support for all node types, access models, and subscription states
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Agent-Framework Integration:</strong> Seamless bridging layer between SPADE agents and XMPP PubSub infrastructure with Python-native APIs
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Event-Driven Architecture:</strong> Asynchronous callback system enables reactive agent behaviors for publications, retractions, and subscription events
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Flexible Access Control:</strong> Support for Open, Authorize, Presence, Roster, and Whitelist access models with granular permission management
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Hierarchical Organization:</strong> Collection nodes (XEP-0248) enable sophisticated node relationships and efficient subscription management
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                <strong>Production Ready:</strong> MIT licensed, extensively documented, and compatible with any XMPP server supporting PubSub extensions
+                            </li>
+                        </ul>
+                        
+                        <div class="technical-highlight mt-4 p-3">
+                            <h5><i class="bi bi-code-square me-2"></i>Implementation Example</h5>
+                            <p class="mb-2"><strong>Basic Node Operations:</strong></p>
+                            <code class="d-block bg-light p-2 rounded mb-2">
+                                # Create and manage PubSub nodes<br>
+                                await agent.create_node("sensor_data")<br>
+                                await agent.subscribe("sensor_data", callback_function)<br>
+                                await agent.publish("sensor_data", item_data)
+                            </code>
+                            <p class="mb-0 small text-muted">Full API documentation available at the official documentation.</p>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <h5>Ready to implement event-driven agent communication?</h5>
+                            <div class="d-flex justify-content-center gap-3 flex-wrap mt-3">
+                                <a href="https://github.com/javipalanca/spade_pubsub" class="btn btn-primary">
+                                    <i class="bi bi-github me-2"></i>View Source Code
+                                </a>
+                                <a href="https://spade-pubsub.readthedocs.io" class="btn btn-outline-primary">
+                                    <i class="bi bi-book me-2"></i>Read Documentation
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <Footer />
+</SimplePluginLayout>
+
+<style>
+    /* Custom styling for SPADE PubSub page with main site theme */
+    .plugin-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+        position: relative;
+        overflow: hidden;
+        color: white !important;
+        padding: 6rem 0 7rem 0 !important;
+    }
+
+    .plugin-header * {
+        color: white !important;
+    }
+
+    .plugin-header h1,
+    .plugin-header .lead,
+    .plugin-header p,
+    .plugin-header .display-4 {
+        color: white !important;
+    }
+
+    .plugin-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="20" r="1.5" fill="rgba(255,255,255,0.08)"/><circle cx="20" cy="50" r="1" fill="rgba(255,255,255,0.06)"/></svg>') repeat;
+        opacity: 0.3;
+    }
+
+    .plugin-content {
+        background: linear-gradient(180deg, #f8fcff 0%, #ffffff 50%, #f0f9f7 100%) !important;
+    }
+
+    /* Enhanced feature items with main page theme */
+    .feature-item {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid rgba(52, 152, 219, 0.15);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
+    }
+
+    .feature-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.02));
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        border-radius: 18px;
+    }
+
+    .feature-item:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(52, 152, 219, 0.15);
+        border-color: rgba(52, 152, 219, 0.5);
+    }
+
+    .feature-item:hover::before {
+        opacity: 1;
+    }
+
+    .feature-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        margin-right: 1.5rem;
+        margin-bottom: 1rem;
+        flex-shrink: 0;
+        font-size: 1.8rem;
+        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        position: relative;
+        transition: all 0.4s ease;
+    }
+
+    .feature-item:hover .feature-icon {
+        transform: rotate(5deg) scale(1.1);
+        box-shadow: 0 12px 30px rgba(52, 152, 219, 0.4);
+    }
+
+    .feature-icon::after {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 22px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .feature-item:hover .feature-icon::after {
+        opacity: 1;
+    }
+
+    /* Enhanced use case items */
+    .use-case-item {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border-left: 6px solid var(--primary-color);
+        border-radius: 0 15px 15px 0;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .use-case-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+        border-radius: 3px;
+    }
+
+    .use-case-item::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 0;
+        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.02));
+        transition: width 0.4s ease;
+    }
+
+    .use-case-item:hover {
+        transform: translateX(15px) scale(1.02);
+        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.15);
+    }
+
+    .use-case-item:hover::after {
+        width: 100%;
+    }
+
+    .use-case-item h4 {
+        color: #2c3e50;
+        position: relative;
+        z-index: 2;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .use-case-item p {
+        color: #5a6c7d;
+        position: relative;
+        z-index: 2;
+        line-height: 1.6;
+    }
+
+    /* Enhanced info cards */
+    .info-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
+        border: 2px solid rgba(52, 152, 219, 0.25);
+        border-radius: 25px;
+        padding: 3rem;
+        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.08);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .info-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 25px 25px 0 0;
+    }
+
+    .info-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(52, 152, 219, 0.12);
+        border-color: rgba(52, 152, 219, 0.4);
+    }
+
+    /* Enhanced buttons */
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border: none;
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #2980b9, var(--secondary-color));
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(52, 152, 219, 0.4);
+    }
+
+    .btn-outline-primary {
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-primary:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+    }
+
+    .btn-outline-light {
+        border: 2px solid rgba(255, 255, 255, 0.6);
+        color: white;
+        border-radius: 25px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-light:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Success icons with main theme */
+    .text-success {
+        color: var(--primary-color) !important;
+        font-size: 1.2rem;
+    }
+
+    /* Typography enhancements */
+    .plugin-content h2 {
+        color: #2c3e50;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .plugin-content h2::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 2px;
+    }
+
+    .feature-item h4 {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .feature-item p {
+        color: #5a6c7d;
+        line-height: 1.6;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .feature-item {
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+
+        .use-case-item {
+            padding: 2rem;
+        }
+
+        .info-card {
+            padding: 2rem;
+        }
+    }
+
+    /* Code example styling */
+    .technical-highlight {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border: 2px solid rgba(52, 152, 219, 0.3);
+        border-radius: 15px;
+    }
+
+    .technical-highlight code {
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        color: #2c3e50;
+        background: #ffffff !important;
+        border: 1px solid rgba(52, 152, 219, 0.25);
+    }
+
+    /* Dark mode support */
+    :global(body.dark-mode) .feature-item {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+
+    :global(body.dark-mode) .use-case-item {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+    }
+
+    :global(body.dark-mode) .info-card {
+        background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
+    }
+
+    :global(body.dark-mode) .plugin-content {
+        background: linear-gradient(180deg, var(--dark-bg) 0%, #1a1a1a 50%, #0f1a21 100%) !important;
+    }
+
+    :global(body.dark-mode) .technical-highlight {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        border-color: rgba(52, 152, 219, 0.3);
+    }
+
+    :global(body.dark-mode) .technical-highlight code {
+        background: #1a252f !important;
+        color: #ecf0f1;
+        border-color: rgba(52, 152, 219, 0.2);
+    }
+</style>

@@ -7,6 +7,8 @@ export interface Props {
         icon: string;
         githubUrl: string;
         docsUrl: string;
+        pluginUrl: string;
+        featured?: boolean;
     }>;
 }
 
@@ -16,22 +18,25 @@ import PluginCard from './PluginCard.astro';
 
 <section id="plugins" class="plugins-section py-5">
     <div class="container">
-        <div class="text-center mb-5">
+        <div class="text-center mb-5 fade-in-up">
             <h2 class="fw-bold">Extend SPADE with Plugins</h2>
             <p class="lead text-muted">Enhance your agent platform with specialized capabilities</p>
         </div>
         <div class="row g-4">
-            {plugins.map((plugin) => (
-                <div class="col-md-6 col-lg-4">
+            {plugins.map((plugin, index) => (
+                <div class={`col-md-6 col-lg-4 scale-in stagger-${index + 1}`}>
                     <PluginCard plugin={plugin} />
                 </div>
             ))}
             <div class="col-md-6 col-lg-4">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="card-body">
-                        <h5 class="card-title">More Coming Soon</h5>
-                        <p class="card-text">The SPADE ecosystem is constantly growing with new plugins and extensions.</p>
+                        <h5 class="card-title">Explore All Plugins</h5>
+                        <p class="card-text">Discover the complete SPADE plugin ecosystem with detailed documentation and examples.</p>
                         <div class="d-flex justify-content-between align-items-center">
+                            <a href="/plugins" class="btn btn-sm btn-primary">
+                                <i class="bi bi-collection me-1"></i>Browse All
+                            </a>
                             <a href="https://github.com/javipalanca/spade/discussions" class="btn btn-sm btn-outline-primary">Suggest Ideas</a>
                         </div>
                     </div>

@@ -6,6 +6,7 @@ export interface Plugin {
   icon: string;
   githubUrl: string;
   docsUrl: string;
+  pluginUrl: string;
   featured?: boolean;
 }
 
@@ -29,11 +30,11 @@ const { plugin } = Astro.props;
         </h5>
         <p class="card-text">{plugin.description}</p>
         <div class="plugin-actions">
-            <a href={plugin.githubUrl} class={`btn btn-sm ${plugin.featured ? 'btn-llm' : 'btn-outline-primary'}`}>
-                <i class="bi bi-github me-1"></i>GitHub
+            <a href={plugin.pluginUrl} class={`btn btn-sm ${plugin.featured ? 'btn-llm' : 'btn-primary'}`}>
+                <i class="bi bi-info-circle me-1"></i>Learn More
             </a>
-            <a href={plugin.docsUrl} class={`btn btn-sm ${plugin.featured ? 'btn-outline-purple' : 'btn-outline-secondary'}`}>
-                <i class="bi bi-book me-1"></i>Docs
+            <a href={plugin.githubUrl} class={`btn btn-sm ${plugin.featured ? 'btn-outline-purple' : 'btn-outline-primary'}`}>
+                <i class="bi bi-github me-1"></i>GitHub
             </a>
         </div>
     </div>

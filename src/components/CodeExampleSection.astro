@@ -5,12 +5,12 @@ import PythonCodeBlock from './PythonCodeBlock.astro';
 
 <section id="examples" class="py-5 bg-light">
     <div class="container">
-        <div class="text-center mb-5">
+        <div class="text-center mb-5 fade-in-up">
             <h2 class="fw-bold">See SPADE in Action</h2>
             <p class="lead text-muted">Creating intelligent agents has never been easier</p>
         </div>
         <div class="row align-items-center">
-            <div class="col-lg-6">
+            <div class="col-lg-6 slide-in-left">
                 <PythonCodeBlock 
                     filename="agent_example.py"
                     showCopyButton={true}
@@ -41,11 +41,16 @@ if __name__ == "__main__":
     spade.run(main())`}
                 />
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 slide-in-right">
                 <h3 class="mb-4">Simple & Intuitive API</h3>
                 <p>SPADE provides a clean, object-oriented API that makes it easy to create powerful multi-agent systems. Define your agents, their behaviors, and how they communicate with just a few lines of code.</p>
                 <p>This example shows a basic agent that can receive messages and automatically reply to them. SPADE handles all the underlying communication details for you.</p>
-                <a href="https://spade-mas.readthedocs.io/en/latest/usage.html" class="btn btn-primary">View More Examples</a>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="/spade" class="btn btn-primary">
+                        <i class="bi bi-cpu me-2"></i>Explore SPADE Framework
+                    </a>
+                    <a href="https://spade-mas.readthedocs.io/en/latest/usage.html" class="btn btn-outline-primary">View More Examples</a>
+                </div>
             </div>
         </div>
     </div>
