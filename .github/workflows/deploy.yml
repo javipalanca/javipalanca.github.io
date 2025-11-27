@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main, master]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -11,16 +11,24 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Astro (main site)
         uses: actions/checkout@v4
+      
+      - name: Checkout SPADE LLM Docs
+        uses: actions/checkout@v4
+        with:
+          repository: javipalanca/spade_llm
+          ref: gh-pages
+          path: tmp/docs/spade_llm
 
+      # Build Astro (main site)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -37,6 +45,12 @@ jobs:
 
       - name: Build with Astro
         run: npm run build
+      
+      - name: Inject SPADE LLM Docs
+        run: |
+          mkdir -p dist/docs/spade_llm
+          cp -r tmp/docs/spade_llm/* dist/docs/spade_llm/
+          rm -rf dist/docs/spade_llm/.git
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
