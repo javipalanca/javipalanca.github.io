@@ -1,8 +1,8 @@
-name: Deploy to GitHub Pages
+name: Test Build Integration GitHub Pages
 
 on:
   push:
-    branches: [main, master]
+    branches: "test-integration"
   workflow_dispatch:
 
 permissions:
@@ -21,6 +21,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Checkout SPADE LLM Docs
+        uses: actions/checkout@v4
+        with:
+          repository: javipalanca/spade_llm
+          ref: gh-pages-test
+          path: tmp/docs/spade_llm
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -37,19 +44,27 @@ jobs:
 
       - name: Build with Astro
         run: npm run build
+      
+      - name: Copy SPADE LLM Docs
+        run: |
+          mkdir -p ./dist/docs/spade_llm/
+          cp -r tmp/docs/spade_llm/* dist/docs/spade_llm/
+          rm -rf dist/docs/spade_llm/.git
+          echo "Copied SPADE LLM docs to dist/docs/spade_llm/, listing contents:"
+          ls -la dist/docs/spade_llm/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+  # deploy:
+  #   environment:
+  #     name: github-pages
+  #     url: ${{ steps.deployment.outputs.page_url }}
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   steps:
+  #     - name: Deploy to GitHub Pages
+  #       id: deployment
+  #       uses: actions/deploy-pages@v4
