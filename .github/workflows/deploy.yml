@@ -51,8 +51,9 @@ jobs:
       - name: Inject SPADE LLM Docs
         run: |
           mkdir -p dist/docs/spade_llm
-          cp -r tmp/docs/spade_llm/* dist/docs/spade_llm/
+          cp -a tmp/docs/spade_llm/. dist/docs/spade_llm/
           rm -rf dist/docs/spade_llm/.git
+          touch dist/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
