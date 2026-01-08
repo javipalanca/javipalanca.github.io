@@ -7,13 +7,13 @@
         <div class="row text-center">
             <div class="col-md-3">
                 <div class="stat-item scale-in stagger-1">
-                    <div class="stat-number" data-target="200000" data-suffix="K+">0</div>
+                    <div class="stat-number" data-target="260000" data-suffix="+">0</div>
                     <div class="stat-label">Downloads</div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-item scale-in stagger-2">
-                    <div class="stat-number" data-target="250" data-suffix="+">0</div>
+                    <div class="stat-number" data-target="300" data-suffix="+">0</div>
                     <div class="stat-label">Stars</div>
                 </div>
             </div>
@@ -99,9 +99,9 @@
             // Format the number based on target value
             let displayValue;
             if (target >= 150000) {
-                // For downloads, show as "200K+"
+                // For large values (downloads), show in thousands as "260K+"
                 displayValue = Math.floor(current / 1000);
-                element.textContent = displayValue + 'K+';
+                element.textContent = displayValue + 'K' + suffix;
             } else {
                 element.textContent = current + suffix;
             }
@@ -112,7 +112,7 @@
                 element.classList.remove('animating');
                 // Ensure final value is correct
                 if (target >= 150000) {
-                    element.textContent = '200K+';
+                    element.textContent = Math.floor(target / 1000) + 'K' + suffix;
                 } else {
                     element.textContent = target + suffix;
                 }

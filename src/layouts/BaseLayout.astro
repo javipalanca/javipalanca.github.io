@@ -94,8 +94,7 @@ const baseUrl = import.meta.env.BASE_URL;
     </script>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href={`${baseUrl}img/favicon-spade-new.svg`}>
-    <link rel="icon" type="image/png" href={`${baseUrl}img/spade_friend.png`}>
+    <link rel="icon" type="image/png" href={`${baseUrl}img/isotipo_spade.png`}>
     
     <!-- Open Graph / Social Media Meta Tags -->
     <meta property="og:title" content={title}>
@@ -349,7 +348,8 @@ const baseUrl = import.meta.env.BASE_URL;
                 const news = newsData.news || [];
                 const container = document.getElementById('news-container');
                 if (container && news.length > 0) {
-                    const newsCards = news.slice(0, 3).map((item) => `
+                    // Show max 4 news items
+                    const newsCards = news.slice(0, 2).map((item) => `
                         <div class="col-md-4 mb-4">
                             <div class="card h-100">
                                 <div class="card-body">
@@ -360,17 +360,99 @@ const baseUrl = import.meta.env.BASE_URL;
                             </div>
                         </div>
                     `).join('');
-                    container.innerHTML = newsCards;
+                    
+                    // Always add "View All News" card
+                    let newsUrl = baseUrl.replace(/\/$/, '') + '/news';
+                    if (!newsUrl.startsWith('http')) {
+                        if (!newsUrl.startsWith('/')) newsUrl = '/' + newsUrl;
+                    }
+                    
+                    const allNewsCard = `
+                        <div class="col-md-4 mb-4">
+                            <a href="${newsUrl}" style="text-decoration: none; color: inherit; display: block; height: 100%;">
+                                <div class="card h-100" style="display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px dashed #999; transition: all 0.3s ease; background: #f8f9fa;">
+                                    <div class="card-body text-center">
+                                        <div style="font-size: 2.5em; margin-bottom: 1rem;">📰</div>
+                                        <h6 class="card-title" style="font-size: 1.1em;">View All News</h6>
+                                        <p class="card-text small" style="color: #666;">See our complete archive of announcements and releases</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    `;
+                    
+                    container.innerHTML = newsCards + allNewsCard;
                 }
             } catch (error) {
                 console.log('News not available:', error);
             }
         }
 
+        // Load news with images from JSON
+        function loadNewsFromJSON() {
+            console.log('loadNewsFromJSON called');
+            try {
+                const baseUrl = document.querySelector('meta[name="astro-base-url"]')?.getAttribute('content') || '/';
+                console.log('Loading news from:', `${baseUrl}json/news.json`);
+                fetch(`${baseUrl}json/news.json`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('News data received:', data);
+                        const news = data.news || [];
+                        const container = document.getElementById('news-container');
+                        console.log('News container:', container);
+                        if (container && news.length > 0) {
+                            container.innerHTML = '';
+                            
+                            // Add first 5 news items
+                            news.slice(0, 5).forEach(item => {
+                                const newsCard = document.createElement('div');
+                                newsCard.className = 'col-md-4 mb-4';
+                                newsCard.innerHTML = `
+                                    <div class="card h-100 border-0 shadow-sm">
+                                        <img src="${item.image}" class="card-img-top" alt="${item.title}">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <span class="badge ${item.categoryClass}">${item.category}</span>
+                                                <small class="text-muted">${item.date}</small>
+                                            </div>
+                                            <h5 class="card-title">${item.title}</h5>
+                                            <p class="card-text">${item.description}</p>
+                                            <a href="${item.link}" class="btn btn-sm btn-outline-primary" target="_blank">Read More</a>
+                                        </div>
+                                    </div>
+                                `;
+                                container.appendChild(newsCard);
+                            });
+                            
+                            // Add "View All News" card
+                            const viewAllCard = document.createElement('div');
+                            viewAllCard.className = 'col-md-4 mb-4';
+                            viewAllCard.innerHTML = `
+                                <a href="${baseUrl}news" style="text-decoration: none; color: inherit;">
+                                    <div class="card h-100 border-0 shadow-sm" style="border: 2px dashed #999 !important; background: #f8f9fa; min-height: 450px; display: flex; align-items: center; justify-content: center;">
+                                        <div class="card-body text-center">
+                                            <div style="font-size: 3em; margin-bottom: 1rem;">📰</div>
+                                            <h5 class="card-title">View All News</h5>
+                                            <p class="card-text">See our complete archive</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            `;
+                            container.appendChild(viewAllCard);
+                            console.log('News loaded successfully with View All News card');
+                        }
+                    })
+                    .catch(error => console.error('Error loading news:', error));
+            } catch (error) {
+                console.error('Error in loadNewsFromJSON:', error);
+            }
+        }
+
         // Load dynamic content
         function loadDynamicContent() {
             loadDemos();
-            loadNews();
+            // News are loaded by scripts.js after DOM is fully ready
             
             // Initialize Prism.js syntax highlighting with delay
             setTimeout(() => {

@@ -2,6 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM Content Loaded - Initializing SPADE landing page");
+  console.log("scripts.js loaded and executing");
 
   // 1. SMOOTH SCROLLING
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
@@ -21,25 +22,38 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // 2. NEWS LOADING
-  const newsContainer = document.getElementById("news-container");
-  if (newsContainer) {
-    console.log("Loading news from JSON...");
-    fetch("json/news.json")
-      .then((response) => {
-        console.log("News response status:", response.status);
-        return response.json();
-      })
-      .then((data) => {
-        console.log("News data loaded:", data);
-        // Clear loading spinner
-        newsContainer.innerHTML = "";
+  // 2. NEWS LOADING (homepage only)
+  // Only run on pages that include the News section
+  const newsSection = document.getElementById("news");
+  if (!newsSection) {
+    console.log("News section not present; skipping homepage news load");
+  } else {
+    // Retry mechanism to find news container (to handle late rendering)
+    function loadNewsWithRetry(attempts = 0, maxAttempts = 10) {
+      const newsContainer = document.getElementById("news-container");
+      console.log(
+        `Attempt ${attempts + 1}: newsContainer element:`,
+        newsContainer
+      );
 
-        // Populate news items
-        data.news.forEach((item) => {
-          const newsCard = document.createElement("div");
-          newsCard.className = "col-md-4";
-          newsCard.innerHTML = `
+      if (newsContainer) {
+        console.log("Loading news from JSON...");
+        fetch("json/news.json")
+          .then((response) => {
+            console.log("News response status:", response.status);
+            return response.json();
+          })
+          .then((data) => {
+            console.log("News data loaded:", data);
+            // Clear loading spinner
+            newsContainer.innerHTML = "";
+
+            // Populate first 5 news items only
+            const newsToShow = data.news.slice(0, 5);
+            newsToShow.forEach((item) => {
+              const newsCard = document.createElement("div");
+              newsCard.className = "col-md-4 mb-4";
+              newsCard.innerHTML = `
                         <div class="card h-100 border-0 shadow-sm">
                             <img src="${item.image}" class="card-img-top" alt="${item.title}">
                             <div class="card-body">
@@ -49,37 +63,69 @@ document.addEventListener("DOMContentLoaded", function () {
                                 </div>
                                 <h5 class="card-title">${item.title}</h5>
                                 <p class="card-text">${item.description}</p>
-                                <a href="${item.link}" class="btn btn-sm btn-outline-primary">Read More</a>
+                                <a href="${item.link}" class="btn btn-sm btn-outline-primary" target="_blank">Read More</a>
                             </div>
                         </div>
                     `;
-          newsContainer.appendChild(newsCard);
-        });
-        console.log(`Added ${data.news.length} news items`);
-      })
-      .catch((error) => {
-        console.error("Error loading news:", error);
-        newsContainer.innerHTML = `
-                    <div class="col-12 text-center">
-                        <p class="text-danger">Error loading news. Please try again later.</p>
-                    </div>
+              newsContainer.appendChild(newsCard);
+            });
+
+            // Add "View All News" card
+            console.log("Adding View All News card...");
+            const viewAllCard = document.createElement("div");
+            viewAllCard.className = "col-md-4 mb-4";
+            viewAllCard.innerHTML = `
+                    <a href="/news" style="text-decoration: none; color: inherit;">
+                        <div class="card h-100 border-0 shadow-sm" style="border: 2px dashed #999 !important; background: #f8f9fa; min-height: 450px; display: flex; align-items: center; justify-content: center;">
+                            <div class="card-body text-center">
+                                <div style="font-size: 3em; margin-bottom: 1rem;">📰</div>
+                                <h5 class="card-title">View All News</h5>
+                                <p class="card-text">See our complete archive of announcements and releases</p>
+                            </div>
+                        </div>
+                    </a>
                 `;
-      });
+            newsContainer.appendChild(viewAllCard);
+            console.log("View All News card added successfully");
+
+            console.log(
+              `Added ${newsToShow.length} news items + View All News card`
+            );
+          })
+          .catch((error) => {
+            console.error("Error loading news:", error);
+          });
+      } else if (attempts < maxAttempts) {
+        // Retry after a short delay
+        setTimeout(() => loadNewsWithRetry(attempts + 1, maxAttempts), 100);
+      } else {
+        console.log(
+          "newsContainer not found in DOM after",
+          maxAttempts,
+          "attempts"
+        );
+      }
+    }
+
+    // Start loading news
+    loadNewsWithRetry();
   }
 
   // 3. NAVBAR SCROLL EFFECTS
   const navbar = document.querySelector(".navbar");
 
   function handleScroll() {
-    if (window.scrollY > 50) {
+    if (navbar && window.scrollY > 50) {
       navbar.classList.add("scrolled", "bg-white", "shadow-sm");
-    } else {
+    } else if (navbar) {
       navbar.classList.remove("scrolled", "bg-white", "shadow-sm");
     }
   }
 
-  window.addEventListener("scroll", handleScroll);
-  handleScroll(); // Initial check
+  if (navbar) {
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Initial check
+  }
 
   // 4. FEATURE CARDS ANIMATION
   const observerOptions = {
@@ -131,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 6. LOGO UPDATES FOR DARK/LIGHT MODE
   // Update logos based on dark/light mode (excluding hero image)
-  window.updateLogos = function(isDarkMode) {
+  window.updateLogos = function (isDarkMode) {
     // Select only logo images in navbar and footer, NOT the hero image
     const logoImages = document.querySelectorAll(
       ".navbar-brand img, .footer img"
@@ -142,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ? "img/spade-darkmode-fixed.svg"
         : "img/spade-agent-network-fixed.svg";
     });
-  }
+  };
 
   // 7. AGENT DEMO
   // NOTE: The Agent Demo functionality has been refactored and moved to demos.js (May 25, 2025)
