@@ -15,6 +15,9 @@ on:
   repository_dispatch:
     types: [update-spade-llm-docs-event]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 permissions:
   contents: read
   pages: write
@@ -40,7 +43,7 @@ jobs:
 
       # Build Astro (main site)
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "18"
           cache: "npm"
@@ -48,7 +51,7 @@ jobs:
 
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Install dependencies
         run: npm ci
@@ -63,7 +66,7 @@ jobs:
           rm -rf dist/docs/spade_llm/.git
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./dist
 
