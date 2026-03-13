@@ -182,6 +182,6 @@ To deploy:
 
 ## 👀 Want to learn more?
 
-- [SPADE Documentation](https://spade-mas.readthedocs.io)
+- [SPADE Documentation](https://spadeagents.eu/docs/spade)
 - [SPADE GitHub Repository](https://github.com/javipalanca/spade)
 - [Astro Documentation](https://docs.astro.build)
