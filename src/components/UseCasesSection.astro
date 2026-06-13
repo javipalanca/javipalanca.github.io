@@ -57,27 +57,76 @@
 
 <style>
     .use-case-card {
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border-radius: var(--radius-lg, 22px);
+        border: 1px solid var(--border-color, rgba(15, 23, 42, 0.08));
+        box-shadow: var(--shadow-sm, 0 5px 15px rgba(0, 0, 0, 0.08));
         transition:
-            transform 0.3s,
-            box-shadow 0.3s;
+            transform 0.5s var(--ease-spring, ease),
+            box-shadow 0.5s ease,
+            border-color 0.5s ease;
         text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .use-case-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--gradient-brand, linear-gradient(135deg, #2f6bff, #10b981));
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.5s var(--ease-spring, ease);
     }
 
     .use-case-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-lift, 0 15px 30px rgba(0, 0, 0, 0.2));
+        border-color: rgba(47, 107, 255, 0.25);
+    }
+
+    .use-case-card:hover::after {
+        transform: scaleX(1);
     }
 
     .use-case-icon {
         font-size: 3rem;
         margin-bottom: 1rem;
+        display: inline-block;
+        transition: transform 0.5s var(--ease-bounce, ease);
+        filter: drop-shadow(0 8px 16px rgba(15, 23, 42, 0.15));
+    }
+
+    .use-case-card:hover .use-case-icon {
+        transform: translateY(-6px) scale(1.15);
+    }
+
+    .use-case-card h4 {
+        font-size: 1.2rem;
+    }
+
+    .use-case-card p {
+        color: var(--text-muted-color, #6c757d);
+        font-size: 0.97rem;
+        line-height: 1.65;
+        margin-bottom: 0;
     }
 
     /* Dark mode styles */
     :global(body.dark-mode) .use-case-card {
         background-color: var(--dark-card-bg) !important;
         color: var(--dark-text) !important;
+        border-color: var(--dark-border) !important;
+    }
+
+    :global(body.dark-mode) .use-case-card p {
+        color: var(--dark-text-muted);
+    }
+
+    :global(body.dark-mode) .use-case-card:hover {
+        box-shadow: 0 24px 60px -12px rgba(47, 107, 255, 0.3);
     }
 </style>

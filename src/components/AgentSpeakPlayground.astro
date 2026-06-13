@@ -1,0 +1,860 @@
+---
+// AgentSpeak(L) explainer + online interpreter for the SPADE BDI plugin.
+// The interpreter implements a didactic subset of AgentSpeak: beliefs, initial
+// goals, plans with context & unification, belief add/del events, subgoals,
+// negation as failure, comparisons and the .print / .send internal actions.
+---
+
+<div class="row mb-5" id="agentspeak-playground">
+    <div class="col-lg-10 mx-auto">
+        <div class="info-card plugin-section animate-on-scroll">
+            <h2 class="mb-3 text-center">Learn AgentSpeak — Try It Online</h2>
+            <p class="lead text-center mb-4">
+                AgentSpeak programs are made of three ingredients: <strong>beliefs</strong> (what the agent knows),
+                <strong>goals</strong> (what it wants to achieve) and <strong>plans</strong> (how it achieves them).
+                The reasoning cycle reacts to <em>events</em> — a new belief, a new goal — by selecting an applicable
+                plan and executing it.
+            </p>
+
+            <!-- Anatomy of a plan -->
+            <div class="asl-anatomy mb-4">
+                <div class="asl-anatomy-code">
+                    <span class="asl-part asl-part-trigger" data-label="triggering event">+!stay_cool</span>
+                    <span class="asl-sep"> : </span>
+                    <span class="asl-part asl-part-context" data-label="context (guard)">temperature(T) &amp; T &gt; 25</span>
+                    <span class="asl-sep"> &lt;- </span>
+                    <span class="asl-part asl-part-body" data-label="plan body">!find_shade; !drink_water.</span>
+                </div>
+                <div class="asl-anatomy-legend">
+                    <span><i class="asl-chip asl-chip-trigger"></i><strong>Trigger</strong> — <code>+!g</code> new goal, <code>+b</code> belief added, <code>-b</code> belief removed</span>
+                    <span><i class="asl-chip asl-chip-context"></i><strong>Context</strong> — conditions checked against the belief base with Prolog-style unification</span>
+                    <span><i class="asl-chip asl-chip-body"></i><strong>Body</strong> — actions, subgoals (<code>!g</code>), belief updates (<code>+b</code>/<code>-b</code>), internal actions (<code>.print</code>, <code>.send</code>)</span>
+                </div>
+            </div>
+
+            <!-- Playground -->
+            <div class="asl-playground">
+                <div class="asl-toolbar">
+                    <div class="asl-toolbar-left">
+                        <span class="asl-dot-r"></span><span class="asl-dot-y"></span><span class="asl-dot-g"></span>
+                        <span class="asl-filename">agent_program.asl</span>
+                    </div>
+                    <div class="asl-toolbar-right">
+                        <select id="asl-example" class="asl-select" aria-label="Load example program">
+                            <option value="greeter">Example: Greeter agent</option>
+                            <option value="thermostat">Example: Thermostat</option>
+                            <option value="patrol">Example: Patrol robot</option>
+                        </select>
+                        <button id="asl-run" class="btn btn-sm asl-btn-run" type="button">
+                            <i class="bi bi-play-fill me-1"></i>Run
+                        </button>
+                        <button id="asl-clear" class="btn btn-sm asl-btn-clear" type="button" title="Clear output">
+                            <i class="bi bi-eraser"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="asl-panes">
+                    <textarea id="asl-editor" class="asl-editor" spellcheck="false" aria-label="AgentSpeak program editor"></textarea>
+                    <div class="asl-console-wrap">
+                        <div class="asl-console-header">Reasoning trace</div>
+                        <div id="asl-console" class="asl-console" aria-live="polite"></div>
+                        <div class="asl-beliefs-header">Final belief base</div>
+                        <div id="asl-beliefs" class="asl-beliefs"></div>
+                    </div>
+                </div>
+            </div>
+            <p class="asl-disclaimer mt-3">
+                <i class="bi bi-info-circle me-1"></i>
+                This playground runs a didactic subset of AgentSpeak(L) in your browser. The real
+                <a href="/plugins/spade-bdi">SPADE BDI</a> plugin embeds a full AgentSpeak
+                interpreter (based on <code>agentspeak-python</code>) with KQML communication between distributed
+                XMPP agents — install it with <code>uv add spade_bdi</code>.
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* ---- Anatomy diagram ---- */
+    .asl-anatomy {
+        background: #0a101f;
+        border: 1px solid rgba(122, 167, 255, 0.18);
+        border-radius: 16px;
+        padding: 2.4rem 1.5rem 1.5rem;
+    }
+
+    .asl-anatomy-code {
+        font-family: var(--font-mono, monospace);
+        font-size: clamp(0.78rem, 0.6rem + 0.8vw, 1.05rem);
+        text-align: center;
+        color: #cbd5e1;
+        margin-bottom: 1.5rem;
+        line-height: 2.6;
+    }
+
+    .asl-part {
+        position: relative;
+        padding: 0.35rem 0.5rem;
+        border-radius: 8px;
+        white-space: nowrap;
+    }
+
+    .asl-part::after {
+        content: attr(data-label);
+        position: absolute;
+        top: -1.45em;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: var(--font-body, sans-serif);
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .asl-part-trigger { background: rgba(47, 107, 255, 0.16); color: #93c5fd; }
+    .asl-part-trigger::after { color: #93c5fd; }
+    .asl-part-context { background: rgba(16, 185, 129, 0.14); color: #6ee7b7; }
+    .asl-part-context::after { color: #6ee7b7; }
+    .asl-part-body { background: rgba(139, 92, 246, 0.16); color: #c4b5fd; }
+    .asl-part-body::after { color: #c4b5fd; }
+    .asl-sep { color: #64748b; }
+
+    .asl-anatomy-legend {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        font-size: 0.88rem;
+        color: #93a1b8;
+    }
+
+    .asl-anatomy-legend strong { color: #e6ecf7; }
+    .asl-anatomy-legend code {
+        background: rgba(255, 255, 255, 0.07) !important;
+        color: #cbd5e1 !important;
+        padding: 0.05rem 0.35rem;
+        border-radius: 5px;
+        font-size: 0.8rem;
+    }
+
+    .asl-chip {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+        margin-right: 0.5rem;
+    }
+    .asl-chip-trigger { background: #2f6bff; }
+    .asl-chip-context { background: #10b981; }
+    .asl-chip-body { background: #8b5cf6; }
+
+    /* ---- Playground ---- */
+    .asl-playground {
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(122, 167, 255, 0.2);
+        box-shadow: 0 24px 60px -20px rgba(7, 11, 22, 0.7);
+        background: #0a101f;
+    }
+
+    .asl-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.65rem 1rem;
+        background: #0e1526;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .asl-toolbar-left {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+    }
+
+    .asl-dot-r, .asl-dot-y, .asl-dot-g {
+        width: 11px; height: 11px; border-radius: 50%;
+    }
+    .asl-dot-r { background: #ff5f57; }
+    .asl-dot-y { background: #febc2e; }
+    .asl-dot-g { background: #28c840; }
+
+    .asl-filename {
+        margin-left: 0.6rem;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.8rem;
+        color: #93a1b8;
+    }
+
+    .asl-toolbar-right {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .asl-select {
+        background: #0a101f;
+        color: #cbd5e1;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        font-size: 0.8rem;
+        padding: 0.35rem 0.5rem;
+    }
+
+    .asl-btn-run {
+        background: linear-gradient(135deg, #10b981, #06b6d4) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 50rem !important;
+        font-weight: 700;
+        padding: 0.35rem 1.1rem !important;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .asl-btn-run:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px -8px rgba(16, 185, 129, 0.6);
+    }
+
+    .asl-btn-clear {
+        background: transparent !important;
+        color: #93a1b8 !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        border-radius: 50rem !important;
+    }
+
+    .asl-panes {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 430px;
+    }
+
+    @media (max-width: 900px) {
+        .asl-panes { grid-template-columns: 1fr; }
+    }
+
+    .asl-editor {
+        background: #0a101f;
+        color: #d7e2f5;
+        border: none;
+        border-right: 1px solid rgba(255, 255, 255, 0.07);
+        resize: vertical;
+        padding: 1.1rem 1.2rem;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.84rem;
+        line-height: 1.65;
+        min-height: 430px;
+        outline: none;
+        tab-size: 4;
+    }
+
+    .asl-editor:focus {
+        box-shadow: inset 0 0 0 1px rgba(47, 107, 255, 0.4);
+    }
+
+    .asl-console-wrap {
+        display: flex;
+        flex-direction: column;
+        background: #070b16;
+    }
+
+    .asl-console-header,
+    .asl-beliefs-header {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #64748b;
+        padding: 0.55rem 1.1rem 0.3rem;
+    }
+
+    .asl-console {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0.3rem 1.1rem 0.8rem;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.78rem;
+        line-height: 1.7;
+        min-height: 220px;
+        max-height: 330px;
+    }
+
+    .asl-console:empty::before {
+        content: 'Press ▶ Run to start the reasoning cycle…';
+        color: #475569;
+    }
+
+    .asl-beliefs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        padding: 0.2rem 1.1rem 1rem;
+        min-height: 44px;
+    }
+
+    .asl-disclaimer {
+        font-size: 0.85rem;
+        color: var(--text-muted-color, #6c757d);
+    }
+
+    /* Dark-mode page context: the playground is already dark, keep as-is */
+    :global(body.dark-mode) .asl-disclaimer { color: var(--dark-text-muted); }
+</style>
+
+<!-- Trace lines and belief chips are created dynamically by the script below.
+     Astro's scoped styles only match elements that carry the component's scope
+     attribute, which JS-created nodes do not — so these rules must be global. -->
+<style is:global>
+    .asl-line {
+        display: block;
+        white-space: pre-wrap;
+        word-break: break-word;
+        animation: aslIn 0.25s ease both;
+    }
+
+    @keyframes aslIn {
+        from { opacity: 0; transform: translateX(-6px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    .asl-line-event { color: #fbbf24; }
+    .asl-line-plan { color: #93c5fd; }
+    .asl-line-print { color: #e6ecf7; }
+    .asl-line-action { color: #67e8f9; }
+    .asl-line-belief { color: #6ee7b7; }
+    .asl-line-send { color: #c4b5fd; }
+    .asl-line-error { color: #fda4af; }
+    .asl-line-muted { color: #64748b; }
+
+    .asl-belief-chip {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.72rem;
+        color: #6ee7b7;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        border-radius: 50rem;
+        padding: 0.18rem 0.65rem;
+        animation: aslIn 0.3s ease both;
+    }
+</style>
+
+<script>
+    (() => {
+        /* =====================================================
+           Mini AgentSpeak(L) interpreter — didactic subset
+           ===================================================== */
+
+        // ---------- Tokenizer ----------
+        function tokenize(src) {
+            src = src.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\/\/[^\n]*/g, ' ');
+            const tokens = [];
+            let i = 0;
+            const isW = (c) => /\s/.test(c);
+            const isDigit = (c) => c >= '0' && c <= '9';
+            const isIdent = (c) => /[A-Za-z0-9_]/.test(c);
+            while (i < src.length) {
+                const c = src[i];
+                if (isW(c)) { i++; continue; }
+                if (c === '"') {
+                    let j = i + 1, s = '';
+                    while (j < src.length && src[j] !== '"') { s += src[j]; j++; }
+                    tokens.push({ t: 'str', v: s }); i = j + 1; continue;
+                }
+                if (isDigit(c) || (c === '-' && isDigit(src[i + 1]) && ['(', ',', ''].includes(tokens.at(-1)?.t === 'punc' ? tokens.at(-1).v : ''))) {
+                    let j = i, n = '';
+                    if (src[j] === '-') { n = '-'; j++; }
+                    while (j < src.length && (isDigit(src[j]) || src[j] === '.')) {
+                        if (src[j] === '.' && !isDigit(src[j + 1])) break;
+                        n += src[j]; j++;
+                    }
+                    tokens.push({ t: 'num', v: parseFloat(n) }); i = j; continue;
+                }
+                if (c === '.' && /[a-z]/.test(src[i + 1] || '')) {
+                    let j = i + 1, s = '';
+                    while (j < src.length && isIdent(src[j])) { s += src[j]; j++; }
+                    tokens.push({ t: 'internal', v: s }); i = j; continue;
+                }
+                if (/[a-z]/.test(c)) {
+                    let j = i, s = '';
+                    while (j < src.length && isIdent(src[j])) { s += src[j]; j++; }
+                    tokens.push({ t: s === 'not' ? 'not' : 'atom', v: s }); i = j; continue;
+                }
+                if (/[A-Z_]/.test(c)) {
+                    let j = i, s = '';
+                    while (j < src.length && isIdent(src[j])) { s += src[j]; j++; }
+                    tokens.push({ t: 'var', v: s }); i = j; continue;
+                }
+                // multi-char operators
+                const three = src.slice(i, i + 3);
+                const two = src.slice(i, i + 2);
+                if (three === '\\==') { tokens.push({ t: 'op', v: '\\==' }); i += 3; continue; }
+                if (['<-', '<=', '>=', '=='].includes(two)) {
+                    tokens.push({ t: two === '<-' ? 'arrow' : 'op', v: two }); i += 2; continue;
+                }
+                if ('()+-!?:;,&|<>=*/'.includes(c)) {
+                    const type = '<>='.includes(c) ? 'op' : 'punc';
+                    tokens.push({ t: type, v: c }); i++; continue;
+                }
+                if (c === '.') { tokens.push({ t: 'dot', v: '.' }); i++; continue; }
+                throw new Error(`Unexpected character "${c}"`);
+            }
+            return tokens;
+        }
+
+        // ---------- Parser ----------
+        function parse(src) {
+            const tk = tokenize(src);
+            let p = 0;
+            const peek = () => tk[p];
+            const next = () => tk[p++];
+            const expect = (t, v) => {
+                const x = next();
+                if (!x || x.t !== t || (v !== undefined && x.v !== v))
+                    throw new Error(`Expected ${v || t} near token ${p}`);
+                return x;
+            };
+
+            function parseTerm() {
+                const x = next();
+                if (!x) throw new Error('Unexpected end of program');
+                if (x.t === 'num') return { k: 'num', v: x.v };
+                if (x.t === 'str') return { k: 'str', v: x.v };
+                if (x.t === 'var') return { k: 'var', v: x.v };
+                if (x.t === 'atom') {
+                    if (peek() && peek().t === 'punc' && peek().v === '(') {
+                        next();
+                        const args = [];
+                        if (!(peek().t === 'punc' && peek().v === ')')) {
+                            args.push(parseExpr());
+                            while (peek() && peek().t === 'punc' && peek().v === ',') { next(); args.push(parseExpr()); }
+                        }
+                        expect('punc', ')');
+                        return { k: 'struct', f: x.v, args };
+                    }
+                    return { k: 'struct', f: x.v, args: [] };
+                }
+                if (x.t === 'punc' && x.v === '(') {
+                    const e = parseExpr();
+                    expect('punc', ')');
+                    return e;
+                }
+                throw new Error(`Unexpected token "${x.v}"`);
+            }
+
+            // arithmetic expressions (for contexts/args): term (op term)*
+            function parseExpr() {
+                let left = parseTerm();
+                while (peek() && ((peek().t === 'punc' && ['+', '-', '*', '/'].includes(peek().v)))) {
+                    const op = next().v;
+                    const right = parseTerm();
+                    left = { k: 'arith', op, l: left, r: right };
+                }
+                return left;
+            }
+
+            function parseCondition() {
+                if (peek() && peek().t === 'not') {
+                    next();
+                    return { k: 'not', c: parseCondition() };
+                }
+                const left = parseExpr();
+                if (peek() && peek().t === 'op') {
+                    const op = next().v;
+                    const right = parseExpr();
+                    return { k: 'cmp', op, l: left, r: right };
+                }
+                return { k: 'lit', t: left };
+            }
+
+            function parseContext() {
+                const conds = [parseCondition()];
+                while (peek() && peek().t === 'punc' && peek().v === '&') { next(); conds.push(parseCondition()); }
+                return conds;
+            }
+
+            function parseBodyFormula() {
+                const x = peek();
+                if (x.t === 'punc' && x.v === '!') { next(); return { k: 'achieve', t: parseTerm() }; }
+                if (x.t === 'punc' && x.v === '+') { next(); return { k: 'addB', t: parseTerm() }; }
+                if (x.t === 'punc' && x.v === '-') { next(); return { k: 'delB', t: parseTerm() }; }
+                if (x.t === 'internal') {
+                    const name = next().v;
+                    const args = [];
+                    if (peek() && peek().t === 'punc' && peek().v === '(') {
+                        next();
+                        if (!(peek().t === 'punc' && peek().v === ')')) {
+                            args.push(parseExpr());
+                            while (peek() && peek().t === 'punc' && peek().v === ',') {
+                                next();
+                                if (peek().t === 'punc' && peek().v === '!') { next(); args.push({ k: 'goalref', t: parseTerm() }); }
+                                else args.push(parseExpr());
+                            }
+                        }
+                        expect('punc', ')');
+                    }
+                    return { k: 'internal', name, args };
+                }
+                return { k: 'action', t: parseTerm() };
+            }
+
+            function parseBody() {
+                const fs = [parseBodyFormula()];
+                while (peek() && peek().t === 'punc' && peek().v === ';') { next(); fs.push(parseBodyFormula()); }
+                return fs;
+            }
+
+            const beliefs = [], goals = [], plans = [];
+            while (p < tk.length) {
+                const x = peek();
+                if (x.t === 'punc' && (x.v === '+' || x.v === '-')) {
+                    // plan
+                    const sign = next().v;
+                    let goal = false;
+                    if (peek().t === 'punc' && peek().v === '!') { next(); goal = true; }
+                    const head = parseTerm();
+                    let context = [{ k: 'lit', t: { k: 'struct', f: 'true', args: [] } }];
+                    let body = [];
+                    if (peek() && peek().t === 'punc' && peek().v === ':') { next(); context = parseContext(); }
+                    if (peek() && peek().t === 'arrow') { next(); body = parseBody(); }
+                    expect('dot');
+                    plans.push({ sign, goal, head, context, body });
+                } else if (x.t === 'punc' && x.v === '!') {
+                    next();
+                    const g = parseTerm();
+                    expect('dot');
+                    goals.push(g);
+                } else {
+                    const b = parseTerm();
+                    expect('dot');
+                    beliefs.push(b);
+                }
+            }
+            return { beliefs, goals, plans };
+        }
+
+        // ---------- Unification ----------
+        function walk(t, s) {
+            while (t && t.k === 'var' && s.has(t.v)) t = s.get(t.v);
+            return t;
+        }
+
+        function unify(a, b, s) {
+            a = walk(a, s); b = walk(b, s);
+            if (a.k === 'var') { const s2 = new Map(s); s2.set(a.v, b); return s2; }
+            if (b.k === 'var') { const s2 = new Map(s); s2.set(b.v, a); return s2; }
+            if (a.k === 'num' && b.k === 'num') return a.v === b.v ? s : null;
+            if (a.k === 'str' && b.k === 'str') return a.v === b.v ? s : null;
+            if (a.k === 'struct' && b.k === 'struct') {
+                if (a.f !== b.f || a.args.length !== b.args.length) return null;
+                let cur = s;
+                for (let i = 0; i < a.args.length; i++) {
+                    cur = unify(a.args[i], b.args[i], cur);
+                    if (!cur) return null;
+                }
+                return cur;
+            }
+            return null;
+        }
+
+        function evalArith(t, s) {
+            t = walk(t, s);
+            if (t.k === 'num') return t.v;
+            if (t.k === 'arith') {
+                const l = evalArith(t.l, s), r = evalArith(t.r, s);
+                if (l === null || r === null) return null;
+                switch (t.op) {
+                    case '+': return l + r;
+                    case '-': return l - r;
+                    case '*': return l * r;
+                    case '/': return r === 0 ? null : l / r;
+                }
+            }
+            return null;
+        }
+
+        function fmt(t, s) {
+            t = walk(t, s || new Map());
+            if (!t) return '?';
+            if (t.k === 'num') return String(t.v);
+            if (t.k === 'str') return t.v;
+            if (t.k === 'var') return t.v;
+            if (t.k === 'arith') { const v = evalArith(t, s || new Map()); return v === null ? '?' : String(v); }
+            if (t.k === 'goalref') return '!' + fmt(t.t, s);
+            if (t.k === 'struct') return t.args.length ? `${t.f}(${t.args.map((a) => fmt(a, s)).join(', ')})` : t.f;
+            return '?';
+        }
+
+        // ---------- Engine ----------
+        function run(src, log) {
+            const { beliefs, goals, plans } = parse(src);
+            const bb = []; // belief base (ground structs)
+            let steps = 0;
+            const MAX = 600;
+            const tick = () => { if (++steps > MAX) throw new Error(`Step limit reached (${MAX}) — possible infinite recursion`); };
+
+            function* solve(conds, idx, s) {
+                if (idx >= conds.length) { yield s; return; }
+                const c = conds[idx];
+                tick();
+                if (c.k === 'lit') {
+                    const lit = walk(c.t, s);
+                    if (lit.k === 'struct' && lit.f === 'true' && !lit.args.length) {
+                        yield* solve(conds, idx + 1, s);
+                        return;
+                    }
+                    for (const b of bb) {
+                        const s2 = unify(c.t, b, s);
+                        if (s2) yield* solve(conds, idx + 1, s2);
+                    }
+                } else if (c.k === 'cmp') {
+                    const l = evalArith(c.l, s), r = evalArith(c.r, s);
+                    let ok = false;
+                    if (l !== null && r !== null) {
+                        switch (c.op) {
+                            case '>': ok = l > r; break;
+                            case '<': ok = l < r; break;
+                            case '>=': ok = l >= r; break;
+                            case '<=': ok = l <= r; break;
+                            case '==': ok = l === r; break;
+                            case '\\==': ok = l !== r; break;
+                            case '=': { const s2 = unify(c.l, c.r, s); if (s2) yield* solve(conds, idx + 1, s2); return; }
+                        }
+                    } else if (c.op === '=') {
+                        const s2 = unify(c.l, c.r, s);
+                        if (s2) yield* solve(conds, idx + 1, s2);
+                        return;
+                    } else if (c.op === '==' || c.op === '\\==') {
+                        const eq = fmt(c.l, s) === fmt(c.r, s);
+                        ok = c.op === '==' ? eq : !eq;
+                    }
+                    if (ok) yield* solve(conds, idx + 1, s);
+                } else if (c.k === 'not') {
+                    let found = false;
+                    for (const _ of solve([c.c], 0, s)) { found = true; break; }
+                    if (!found) yield* solve(conds, idx + 1, s);
+                }
+            }
+
+            function ground(t, s) {
+                t = walk(t, s);
+                if (t.k === 'arith') { const v = evalArith(t, s); return v === null ? t : { k: 'num', v }; }
+                if (t.k === 'struct') return { k: 'struct', f: t.f, args: t.args.map((a) => ground(a, s)) };
+                return t;
+            }
+
+            function addBelief(t, s, depth) {
+                const g = ground(t, s);
+                if (!bb.some((b) => unify(b, g, new Map()) && fmt(b) === fmt(g))) {
+                    bb.push(g);
+                    log('belief', `+ belief added: ${fmt(g)}`);
+                    handleEvent({ sign: '+', goal: false, t: g }, depth + 1);
+                } else {
+                    log('muted', `· belief already present: ${fmt(g)}`);
+                }
+            }
+
+            function delBelief(t, s, depth) {
+                const q = ground(t, s);
+                const i = bb.findIndex((b) => unify(q, b, new Map()));
+                if (i >= 0) {
+                    const removed = bb.splice(i, 1)[0];
+                    log('belief', `- belief removed: ${fmt(removed)}`);
+                    handleEvent({ sign: '-', goal: false, t: removed }, depth + 1);
+                } else {
+                    log('muted', `· no belief matches ${fmt(q)}`);
+                }
+            }
+
+            function execBody(body, s, depth) {
+                for (const f of body) {
+                    tick();
+                    if (f.k === 'achieve') {
+                        const g = ground(f.t, s);
+                        log('event', `${'  '.repeat(depth)}! new goal: !${fmt(g)}`);
+                        handleEvent({ sign: '+', goal: true, t: g }, depth + 1);
+                    } else if (f.k === 'addB') {
+                        addBelief(f.t, s, depth);
+                    } else if (f.k === 'delB') {
+                        delBelief(f.t, s, depth);
+                    } else if (f.k === 'internal') {
+                        if (f.name === 'print') {
+                            log('print', `${'  '.repeat(depth)}» ${f.args.map((a) => fmt(a, s)).join(' ')}`);
+                        } else if (f.name === 'send') {
+                            const [to, perf, ...rest] = f.args;
+                            log('send', `${'  '.repeat(depth)}✉ .send → ${fmt(to, s)} [${fmt(perf, s)}] ${rest.map((a) => fmt(a, s)).join(' ')}`);
+                        } else if (f.name === 'wait') {
+                            log('muted', `${'  '.repeat(depth)}… .wait`);
+                        } else {
+                            log('muted', `${'  '.repeat(depth)}· internal action .${f.name} (no-op here)`);
+                        }
+                    } else if (f.k === 'action') {
+                        log('action', `${'  '.repeat(depth)}⚙ action executed: ${fmt(f.t, s)}`);
+                    }
+                }
+            }
+
+            function handleEvent(ev, depth) {
+                if (depth > 24) throw new Error('Recursion too deep');
+                const kind = `${ev.sign}${ev.goal ? '!' : ''}`;
+                const candidates = plans.filter((pl) => pl.sign === ev.sign && pl.goal === ev.goal);
+                for (const pl of candidates) {
+                    const s0 = unify(pl.head, ev.t, new Map());
+                    if (!s0) continue;
+                    for (const s of solve(pl.context, 0, s0)) {
+                        log('plan', `${'  '.repeat(Math.max(0, depth - 1))}▶ plan selected: ${kind}${fmt(pl.head)}${contextStr(pl)}`);
+                        execBody(pl.body, s, depth);
+                        return true;
+                    }
+                }
+                if (ev.goal) log('error', `✗ no applicable plan for ${kind}${fmt(ev.t)}`);
+                return false;
+            }
+
+            function contextStr(pl) {
+                const c = pl.context;
+                if (c.length === 1 && c[0].k === 'lit' && c[0].t.f === 'true') return '';
+                return '  (context ok)';
+            }
+
+            // boot: initial beliefs, then initial goals
+            log('muted', '— SPADE BDI reasoning cycle started —');
+            beliefs.forEach((b) => {
+                bb.push(b);
+                log('belief', `+ initial belief: ${fmt(b)}`);
+            });
+            beliefs.forEach((b) => handleEvent({ sign: '+', goal: false, t: b }, 1));
+            goals.forEach((g) => {
+                log('event', `! initial goal: !${fmt(g)}`);
+                handleEvent({ sign: '+', goal: true, t: g }, 1);
+            });
+            log('muted', `— idle: no pending events (${steps} steps) —`);
+            return bb;
+        }
+
+        /* ---------- Examples ---------- */
+        const EXAMPLES = {
+            greeter: `// A polite agent: beliefs + parametrised plans
+likes(alice, coffee).
+likes(bob, tea).
+
+!greet_all.
+
++!greet_all : true <-
+    .print("Looking for friends...");
+    !greet(alice);
+    !greet(bob);
+    .send(alice, tell, party(saturday)).
+
++!greet(Who) : likes(Who, Drink) <-
+    .print("Hello", Who, "- I know you like", Drink).
+
++!greet(Who) : not likes(Who, _) <-
+    .print("Hi", Who, "- nice to meet you!").`,
+
+            thermostat: `// Reactive belief-triggered plans + belief updates
+threshold(25).
+temperature(31).
+
+!check.
+
++!check : temperature(T) & threshold(M) & T > M <-
+    .print("Too hot:", T, "degrees");
+    turn_on_ac;
+    -temperature(T);
+    +temperature(24).
+
++!check : temperature(T) & threshold(M) & T <= M <-
+    .print("Comfortable:", T, "degrees").
+
+// React to ANY new temperature reading
++temperature(T) : threshold(M) & T <= M <-
+    .print("New reading", T, "is fine. AC off");
+    turn_off_ac.`,
+
+            patrol: `// Sequential subgoals over a belief base
+checkpoint(gate).
+checkpoint(warehouse).
+checkpoint(lab).
+battery(80).
+
+!patrol.
+
++!patrol : battery(B) & B > 20 <-
+    .print("Patrol started. Battery:", B);
+    !visit(gate);
+    !visit(warehouse);
+    !visit(lab);
+    .print("Patrol finished");
+    .send(base, tell, patrol_done).
+
++!patrol : battery(B) & B <= 20 <-
+    .print("Battery too low:", B);
+    !recharge.
+
++!visit(P) : checkpoint(P) <-
+    move_to(P);
+    .print("Checkpoint", P, "secured").
+
++!visit(P) : not checkpoint(P) <-
+    .print("Unknown checkpoint:", P).`,
+        };
+
+        /* ---------- UI wiring ---------- */
+        const editor = document.getElementById('asl-editor');
+        const consoleEl = document.getElementById('asl-console');
+        const beliefsEl = document.getElementById('asl-beliefs');
+        const runBtn = document.getElementById('asl-run');
+        const clearBtn = document.getElementById('asl-clear');
+        const exampleSel = document.getElementById('asl-example');
+        if (!editor || !consoleEl || !runBtn) return;
+
+        editor.value = EXAMPLES.greeter;
+
+        exampleSel.addEventListener('change', () => {
+            editor.value = EXAMPLES[exampleSel.value] || '';
+            consoleEl.innerHTML = '';
+            beliefsEl.innerHTML = '';
+        });
+
+        clearBtn.addEventListener('click', () => {
+            consoleEl.innerHTML = '';
+            beliefsEl.innerHTML = '';
+        });
+
+        runBtn.addEventListener('click', () => {
+            consoleEl.innerHTML = '';
+            beliefsEl.innerHTML = '';
+            const lines = [];
+            const log = (type, msg) => lines.push({ type, msg });
+            let finalBB = [];
+            try {
+                finalBB = run(editor.value, log);
+            } catch (err) {
+                lines.push({ type: 'error', msg: `✗ ${err.message}` });
+            }
+            // animate the trace line by line
+            lines.forEach((l, i) => {
+                setTimeout(() => {
+                    const span = document.createElement('span');
+                    span.className = `asl-line asl-line-${l.type}`;
+                    span.textContent = l.msg;
+                    consoleEl.appendChild(span);
+                    consoleEl.scrollTop = consoleEl.scrollHeight;
+                }, i * 70);
+            });
+            setTimeout(() => {
+                finalBB.forEach((b, i) => {
+                    setTimeout(() => {
+                        const chip = document.createElement('span');
+                        chip.className = 'asl-belief-chip';
+                        chip.textContent = fmt(b);
+                        beliefsEl.appendChild(chip);
+                    }, i * 60);
+                });
+            }, lines.length * 70 + 100);
+        });
+    })();
+</script>

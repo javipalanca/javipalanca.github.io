@@ -42,10 +42,11 @@ const { plugin } = Astro.props;
 
 <style>
     .featured-plugin {
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        border: 2px solid #8e44ad !important;
+        background: linear-gradient(160deg, #faf8ff, #f1ecfe);
+        border: 1px solid rgba(139, 92, 246, 0.4) !important;
         position: relative;
         overflow: hidden;
+        box-shadow: 0 12px 36px -10px rgba(139, 92, 246, 0.35) !important;
     }
 
     .featured-plugin::before {
@@ -55,25 +56,40 @@ const { plugin } = Astro.props;
         left: 0;
         right: 0;
         height: 3px;
-        background: linear-gradient(135deg, #8e44ad, #9b59b6);
+        background: linear-gradient(90deg, #8b5cf6, #d946ef, #8b5cf6);
+        background-size: 200% 100%;
+        animation: featuredSlide 3s linear infinite;
         z-index: 1;
+    }
+
+    @keyframes featuredSlide {
+        to { background-position: 200% 0; }
+    }
+
+    .featured-plugin:hover {
+        box-shadow: 0 24px 60px -12px rgba(139, 92, 246, 0.5) !important;
+        border-color: rgba(139, 92, 246, 0.7) !important;
     }
 
     .featured-badge {
         position: absolute;
         top: 15px;
         right: 15px;
-        background: linear-gradient(135deg, #8e44ad, #9b59b6);
+        background: linear-gradient(135deg, #8b5cf6, #d946ef);
         color: white;
-        padding: 0.25rem 0.75rem;
-        border-radius: 15px;
-        font-size: 0.75rem;
-        font-weight: 600;
+        padding: 0.3rem 0.8rem;
+        border-radius: 50rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
         z-index: 2;
+        box-shadow: 0 6px 16px -4px rgba(139, 92, 246, 0.5);
+        animation: floatY 4s ease-in-out infinite;
     }
 
     .featured-title {
-        background: linear-gradient(135deg, #8e44ad, #9b59b6);
+        background: linear-gradient(135deg, #7c3aed, #d946ef);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -87,48 +103,53 @@ const { plugin } = Astro.props;
     }
 
     .btn-llm {
-        background: linear-gradient(135deg, #8e44ad, #9b59b6);
+        background: linear-gradient(135deg, #8b5cf6, #d946ef);
+        background-size: 160% auto;
         color: white;
         border: none;
-        transition: all 0.3s ease;
+        border-radius: 50rem;
+        padding: 8px 20px;
+        transition: all 0.35s var(--ease-spring, ease);
     }
 
     .btn-llm:hover {
-        background: linear-gradient(135deg, #7d3c98, #8e44ad);
+        background-position: right center;
         color: white;
-        transform: translateY(-1px);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px -8px rgba(139, 92, 246, 0.6);
     }
 
     .btn-outline-purple {
-        border-color: #8e44ad;
-        color: #8e44ad;
-        transition: all 0.3s ease;
+        border: 2px solid #8b5cf6;
+        color: #8b5cf6;
+        border-radius: 50rem;
+        padding: 7px 18px;
+        transition: all 0.35s var(--ease-spring, ease);
     }
 
     .btn-outline-purple:hover {
-        background: #8e44ad;
+        background: #8b5cf6;
+        border-color: #8b5cf6;
         color: white;
-        transform: translateY(-1px);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px -8px rgba(139, 92, 246, 0.5);
     }
 
     /* Dark mode adjustments */
     :global(body.dark-mode) .featured-plugin {
-        background: linear-gradient(135deg, var(--dark-card-bg), var(--dark-border));
-        border-color: #a569bd !important;
-    }
-
-    :global(body.dark-mode) .featured-plugin::before {
-        background: linear-gradient(135deg, #a569bd, #bb8fce);
-    }
-
-    :global(body.dark-mode) .featured-badge {
-        background: linear-gradient(135deg, #a569bd, #bb8fce);
+        background: linear-gradient(160deg, #151028, #1c1438);
+        border-color: rgba(167, 139, 250, 0.45) !important;
     }
 
     :global(body.dark-mode) .featured-title {
-        background: linear-gradient(135deg, #a569bd, #bb8fce);
+        background: linear-gradient(135deg, #a78bfa, #e879f9);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+    }
+
+    :global(body.dark-mode) .btn-outline-purple {
+        border-color: #a78bfa;
+        color: #a78bfa;
     }
 </style>

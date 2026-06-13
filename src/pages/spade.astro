@@ -18,9 +18,13 @@ import Breadcrumb from '../components/Breadcrumb.astro';
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 mx-auto text-center">
+                    <div class="plugin-kicker">
+                        <span class="plugin-kicker-dot"></span>
+                        Multi-Agent Systems · Python · XMPP
+                    </div>
                     <h1 class="display-4 fw-bold mb-4">
                         <i class="bi bi-cpu-fill me-3"></i>
-                        SPADE Framework
+                        SPADE <span class="hero-gradient-text">Framework</span>
                     </h1>
                     <p class="lead mb-4">
                         Smart Python Agent Development Environment - A  multi-agent systems framework powered by XMPP messaging, enabling intelligent agents to communicate with each other and humans.
@@ -56,12 +60,12 @@ import Breadcrumb from '../components/Breadcrumb.astro';
                         <p>
                             Built with modern Python's asyncio architecture, SPADE provides a behavior-based agent model that supports 
                             real-time presence notifications, FIPA metadata handling, and includes a built-in web interface for monitoring 
-                            and interaction. Compatible with Python ≥3.9 and works across Windows, macOS, and Linux platforms.
+                            and interaction. Compatible with Python ≥3.10 and works across Windows, macOS, and Linux platforms.
                         </p>
                         <div class="mt-4 p-4 bg-light rounded">
                             <h5><i class="bi bi-gear me-2"></i>Technical Specifications</h5>
                             <ul class="mb-0">
-                                <li><strong>Language:</strong> Python ≥3.9</li>
+                                <li><strong>Language:</strong> Python ≥3.10</li>
                                 <li><strong>Protocol:</strong> XMPP (Extensible Messaging and Presence Protocol)</li>
                                 <li><strong>Architecture:</strong> Asyncio-based for concurrent operations</li>
                                 <li><strong>License:</strong> MIT Open Source</li>
@@ -155,14 +159,14 @@ import Breadcrumb from '../components/Breadcrumb.astro';
                             <div class="col-lg-6">
                                 <div class="info-card">
                                     <h4><i class="bi bi-download me-2"></i>Installation</h4>
-                                    <p>Install SPADE using pip and create your first agent in minutes.</p>
+                                    <p>Install SPADE with <strong>uv</strong> (or pip) and create your first agent in minutes.</p>
                                     <div class="code-example">
                                         <div class="code-header">Terminal</div>
                                         <div class="code-body">
-                                            <pre><code class="language-bash">pip install spade</code></pre>
+                                            <pre><code class="language-bash">uv add spade</code></pre>
                                         </div>
                                     </div>
-                                    <p><small>Requirements: Python ≥3.9, works on Windows, macOS, and Linux.</small></p>
+                                    <p><small>Requirements: Python ≥3.10, works on Windows, macOS, and Linux.</small></p>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -328,13 +332,13 @@ if __name__ == "__main__":
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" />
 
 <style>
-    /* Custom styling for SPADE Framework page with main site theme */
+    /* Immersive dark hero — mirrors the redesigned homepage hero */
     .plugin-header {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+        background: var(--gradient-hero) !important;
         position: relative;
         overflow: hidden;
         color: white !important;
-        padding: 6rem 0 7rem 0 !important;
+        padding: 7rem 0 8rem 0 !important;
     }
 
     .plugin-header * {
@@ -348,6 +352,7 @@ if __name__ == "__main__":
         color: white !important;
     }
 
+    /* Dotted constellation texture */
     .plugin-header::before {
         content: '';
         position: absolute;
@@ -356,7 +361,67 @@ if __name__ == "__main__":
         right: 0;
         bottom: 0;
         background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="50" cy="20" r="1.5" fill="rgba(255,255,255,0.08)"/><circle cx="20" cy="50" r="1" fill="rgba(255,255,255,0.06)"/></svg>') repeat;
-        opacity: 0.3;
+        opacity: 0.4;
+    }
+
+    /* Brand glow blooms behind the headline */
+    .plugin-header::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+            radial-gradient(ellipse 50% 60% at 18% 0%, rgba(47, 107, 255, 0.45), transparent 60%),
+            radial-gradient(ellipse 45% 70% at 88% 100%, rgba(139, 92, 246, 0.4), transparent 60%);
+    }
+
+    .plugin-header .container {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Mono kicker, like the homepage hero */
+    .plugin-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.74rem;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(230, 236, 247, 0.85) !important;
+        padding: 0.5rem 1.1rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(8px);
+        margin-bottom: 1.6rem;
+    }
+
+    .plugin-kicker-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--secondary-color);
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.25);
+        animation: pluginPulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes pluginPulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.25); opacity: 0.7; }
+    }
+
+    /* Gradient headline accent — exempt from the white-force above */
+    .plugin-header .hero-gradient-text {
+        background: linear-gradient(120deg, #5b8cff 0%, #06b6d4 50%, #10b981 100%);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent !important;
+        animation: gradientSlide 6s linear infinite;
     }
 
     .plugin-content {
@@ -366,14 +431,14 @@ if __name__ == "__main__":
     /* Enhanced feature items with main page theme */
     .feature-item {
         background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
-        border: 2px solid rgba(52, 152, 219, 0.15);
+        border: 2px solid rgba(47, 107, 255, 0.15);
         border-radius: 20px;
         padding: 2rem;
         margin-bottom: 2rem;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
-        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.08);
+        box-shadow: 0 8px 25px rgba(47, 107, 255, 0.08);
     }
 
     .feature-item::before {
@@ -383,7 +448,7 @@ if __name__ == "__main__":
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.02));
+        background: linear-gradient(135deg, rgba(47, 107, 255, 0.05), rgba(46, 204, 113, 0.02));
         opacity: 0;
         transition: opacity 0.4s ease;
         border-radius: 18px;
@@ -391,8 +456,8 @@ if __name__ == "__main__":
 
     .feature-item:hover {
         transform: translateY(-10px) scale(1.02);
-        box-shadow: 0 20px 40px rgba(52, 152, 219, 0.15);
-        border-color: rgba(52, 152, 219, 0.5);
+        box-shadow: 0 20px 40px rgba(47, 107, 255, 0.15);
+        border-color: rgba(47, 107, 255, 0.5);
     }
 
     .feature-item:hover::before {
@@ -412,14 +477,14 @@ if __name__ == "__main__":
         margin-bottom: 1rem;
         flex-shrink: 0;
         font-size: 1.8rem;
-        box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        box-shadow: 0 8px 20px rgba(47, 107, 255, 0.3);
         position: relative;
         transition: all 0.4s ease;
     }
 
     .feature-item:hover .feature-icon {
         transform: rotate(5deg) scale(1.1);
-        box-shadow: 0 12px 30px rgba(52, 152, 219, 0.4);
+        box-shadow: 0 12px 30px rgba(47, 107, 255, 0.4);
     }
 
     .feature-icon::after {
@@ -443,10 +508,10 @@ if __name__ == "__main__":
     /* Enhanced info cards */
     .info-card {
         background: linear-gradient(135deg, #ffffff 0%, #f8fcff 100%);
-        border: 2px solid rgba(52, 152, 219, 0.25);
+        border: 2px solid rgba(47, 107, 255, 0.25);
         border-radius: 25px;
         padding: 3rem;
-        box-shadow: 0 15px 35px rgba(52, 152, 219, 0.08);
+        box-shadow: 0 15px 35px rgba(47, 107, 255, 0.08);
         position: relative;
         overflow: hidden;
     }
@@ -464,8 +529,8 @@ if __name__ == "__main__":
 
     .info-card:hover {
         transform: translateY(-8px);
-        box-shadow: 0 25px 50px rgba(52, 152, 219, 0.12);
-        border-color: rgba(52, 152, 219, 0.4);
+        box-shadow: 0 25px 50px rgba(47, 107, 255, 0.12);
+        border-color: rgba(47, 107, 255, 0.4);
     }
 
     /* Code styling */
@@ -504,7 +569,7 @@ if __name__ == "__main__":
     /* Resource items */
     .resource-item {
         padding: 1.5rem;
-        background: linear-gradient(135deg, rgba(52, 152, 219, 0.05), rgba(46, 204, 113, 0.02));
+        background: linear-gradient(135deg, rgba(47, 107, 255, 0.05), rgba(46, 204, 113, 0.02));
         border-radius: 15px;
         height: 100%;
     }
@@ -526,25 +591,26 @@ if __name__ == "__main__":
 
     /* Enhanced buttons */
     .btn-primary {
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        background: var(--gradient-brand);
+        background-size: 150% auto;
         border: none;
-        border-radius: 25px;
+        border-radius: 999px;
         padding: 0.8rem 2.5rem;
         font-weight: 600;
-        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
-        transition: all 0.3s ease;
+        box-shadow: var(--shadow-glow);
+        transition: all 0.3s var(--ease-spring, ease);
     }
 
     .btn-primary:hover {
-        background: linear-gradient(135deg, #2980b9, var(--secondary-color));
+        background-position: right center;
         transform: translateY(-3px);
-        box-shadow: 0 10px 30px rgba(52, 152, 219, 0.4);
+        box-shadow: 0 18px 40px -8px rgba(47, 107, 255, 0.55);
     }
 
     .btn-outline-primary {
         border: 2px solid var(--primary-color);
         color: var(--primary-color);
-        border-radius: 25px;
+        border-radius: 999px;
         padding: 0.8rem 2.5rem;
         font-weight: 600;
         transition: all 0.3s ease;
@@ -554,13 +620,13 @@ if __name__ == "__main__":
         background: var(--primary-color);
         color: white;
         transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+        box-shadow: 0 8px 25px rgba(47, 107, 255, 0.3);
     }
 
     .btn-outline-light {
         border: 2px solid rgba(255, 255, 255, 0.6);
         color: white;
-        border-radius: 25px;
+        border-radius: 999px;
         padding: 0.8rem 2.5rem;
         font-weight: 600;
         backdrop-filter: blur(10px);
@@ -626,7 +692,7 @@ if __name__ == "__main__":
     /* Dark mode support */
     :global(body.dark-mode) .feature-item {
         background: linear-gradient(135deg, var(--dark-card-bg) 0%, #1a2738 100%);
-        border-color: rgba(52, 152, 219, 0.2);
+        border-color: rgba(47, 107, 255, 0.2);
     }
 
     :global(body.dark-mode) .info-card {
@@ -659,6 +725,6 @@ if __name__ == "__main__":
     }
 
     :global(body.dark-mode) .resource-item {
-        background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(46, 204, 113, 0.05));
+        background: linear-gradient(135deg, rgba(47, 107, 255, 0.1), rgba(46, 204, 113, 0.05));
     }
 </style>

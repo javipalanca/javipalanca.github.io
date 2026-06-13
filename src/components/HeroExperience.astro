@@ -1,0 +1,862 @@
+---
+// Hero + scroll-controlled 3D experience.
+// A custom 3D engine (perspective projection on a 2D canvas, zero dependencies)
+// renders a living SPADE multi-agent network as the hero background. Scrolling
+// drives the camera flight and the narrative: hero → presence → behaviours →
+// messaging → intelligence.
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<section id="hero-experience" class="hxp" aria-label="SPADE — Smart Python Agent Development Environment">
+    <div class="hxp-sticky">
+        <canvas class="hxp-canvas" aria-hidden="true"></canvas>
+        <div class="hxp-vignette" aria-hidden="true"></div>
+
+        <!-- Stage 0: hero -->
+        <div class="hxp-hero" data-stage="hero">
+            <!-- SPADE mascot: the hero agent the network revolves around.
+                 Lives inside .hxp-hero so it fades out with the headline on scroll,
+                 letting the 3D network take the stage. -->
+            <img src={`${baseUrl}img/as1bg.png`} alt="SPADE — the spade agent mascot" class="hxp-mascot" aria-hidden="true">
+            <div class="container">
+                <div class="hxp-hero-inner">
+                    <div class="hxp-kicker hxp-rise" style="--d: 0s">
+                        <span class="hxp-kicker-dot"></span>
+                        Multi-Agent Systems &middot; Python &middot; XMPP
+                    </div>
+                    <h1 class="hxp-title hxp-rise" style="--d: 0.1s">
+                        Smart Python <span class="hxp-title-gradient">Agent Development</span> Environment
+                    </h1>
+                    <p class="hxp-lead hxp-rise" style="--d: 0.22s">
+                        The open-source platform for building <strong>intelligent multi-agent systems</strong> in Python.
+                        Agents that talk over XMPP, organize their work in behaviours, know who is online —
+                        and, with <strong>SPADE-LLM</strong> and <strong>SPADE BDI</strong>, reason with large language
+                        models and AgentSpeak.
+                    </p>
+                    <div class="hxp-actions hxp-rise" style="--d: 0.34s">
+                        <a href="/spade" class="btn btn-light btn-lg px-4">Get Started</a>
+                        <a href="#spade-llm" class="btn btn-ai btn-lg px-4"><i class="bi bi-stars me-2"></i>SPADE-LLM</a>
+                        <a href="/agentspeak" class="btn btn-outline-light btn-lg px-4"><i class="bi bi-braces me-2"></i>Try AgentSpeak</a>
+                    </div>
+                    <button type="button" class="hxp-pip hxp-rise" style="--d: 0.46s" id="hxp-pip" title="Copy to clipboard" aria-label="Copy uv add spade to clipboard">
+                        <span class="hxp-pip-prompt">$</span> uv add spade
+                        <i class="bi bi-clipboard hxp-pip-icon" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="hxp-hint" aria-hidden="true">
+                <span class="hxp-hint-mouse"><span class="hxp-hint-wheel"></span></span>
+                Scroll to see how it works
+            </div>
+        </div>
+
+        <!-- Stage captions -->
+        <div class="hxp-caption" data-stage="0">
+            <div class="hxp-cap-kicker">01 · Presence</div>
+            <h2>Agents come online</h2>
+            <p>Every SPADE agent is a first-class <strong>XMPP client</strong> with its own JID. When it starts, it connects, announces its presence and becomes instantly reachable — by agents and by humans.</p>
+            <code>agent = MyAgent("agent@server", "passwd")<br/>await agent.start()</code>
+        </div>
+
+        <div class="hxp-caption hxp-caption-right" data-stage="1">
+            <div class="hxp-cap-kicker">02 · Behaviours</div>
+            <h2>Behaviours drive them</h2>
+            <p>Agents think in <strong>behaviours</strong>: cyclic, periodic, one-shot, timeout and finite-state machines — all running concurrently on Python's <strong>asyncio</strong> event loop.</p>
+            <code>self.add_behaviour(ReceiverBehaviour(),<br/>&nbsp;&nbsp;Template(metadata=&#123;"performative": "inform"&#125;))</code>
+        </div>
+
+        <div class="hxp-caption" data-stage="2">
+            <div class="hxp-cap-kicker">03 · Messaging</div>
+            <h2>Messages flow over XMPP</h2>
+            <p>Agents exchange <strong>FIPA-style messages</strong> with performatives, templates and presence awareness — real-time, standardized and secure, with no extra infrastructure to build.</p>
+            <code>msg = await self.receive(timeout=10)<br/>await self.send(reply)</code>
+        </div>
+
+        <div class="hxp-caption hxp-caption-right" data-stage="3">
+            <div class="hxp-cap-kicker">04 · Intelligence</div>
+            <h2>Reasoning joins the network</h2>
+            <p>Plug cognition into any agent: <strong>SPADE-LLM</strong> connects Large Language Models with tools, guardrails and memory, while <strong>SPADE BDI</strong> adds <a href="/agentspeak">AgentSpeak</a> reasoning with beliefs, desires and intentions.</p>
+            <code>agent = LLMAgent("llm@server", "passwd",<br/>&nbsp;&nbsp;provider=LLMProvider.create_openai(...))</code>
+        </div>
+
+        <!-- Stage dots -->
+        <div class="hxp-dots" aria-hidden="true">
+            <span class="hxp-dot" data-dot="hero"></span>
+            <span class="hxp-dot" data-dot="0"></span>
+            <span class="hxp-dot" data-dot="1"></span>
+            <span class="hxp-dot" data-dot="2"></span>
+            <span class="hxp-dot" data-dot="3"></span>
+        </div>
+    </div>
+</section>
+
+<style>
+    .hxp {
+        position: relative;
+        height: 560vh;
+        background: #060a18;
+        margin-top: -76px; /* canvas runs under the glass navbar */
+    }
+
+    .hxp-sticky {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .hxp-canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    .hxp-vignette {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(ellipse 95% 85% at 50% 50%, transparent 55%, rgba(3, 5, 12, 0.75) 100%);
+    }
+
+    /* ---- Hero overlay ---- */
+    .hxp-hero {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        z-index: 3;
+    }
+
+    .hxp-hero-inner {
+        max-width: 760px;
+        color: #fff;
+    }
+
+    .hxp-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: rgba(230, 236, 247, 0.8);
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        padding: 0.45rem 1.1rem;
+        border-radius: 50rem;
+        margin-bottom: 1.6rem;
+        backdrop-filter: blur(8px);
+    }
+
+    .hxp-kicker-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #34d399;
+        box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7);
+        animation: hxpPulse 2.4s ease-out infinite;
+    }
+
+    @keyframes hxpPulse {
+        0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
+        70% { box-shadow: 0 0 0 8px rgba(52, 211, 153, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+    }
+
+    .hxp-title {
+        font-size: clamp(2.4rem, 1.5rem + 3.6vw, 4.1rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1.12;
+        margin-bottom: 1.4rem;
+        text-wrap: balance;
+    }
+
+    .hxp-title-gradient {
+        background: linear-gradient(90deg, #7cc0ff, #34d399, #a78bfa, #7cc0ff);
+        background-size: 300% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: hxpGradient 8s linear infinite;
+    }
+
+    @keyframes hxpGradient {
+        to { background-position: 300% center; }
+    }
+
+    .hxp-lead {
+        font-size: 1.12rem;
+        line-height: 1.75;
+        color: rgba(230, 236, 247, 0.78);
+        max-width: 60ch;
+        margin-bottom: 1.8rem;
+    }
+
+    .hxp-lead strong {
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .hxp-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+    }
+
+    /* AI / SPADE-LLM button — vivid violet so it reads on the dark hero */
+    .hxp-actions .btn-ai {
+        background: linear-gradient(135deg, #8b5cf6, #d946ef);
+        background-size: 160% auto;
+        color: #fff;
+        border: none;
+        box-shadow: 0 8px 24px -8px rgba(139, 92, 246, 0.7);
+        transition: all 0.35s var(--ease-spring, ease);
+    }
+
+    .hxp-actions .btn-ai:hover {
+        background-position: right center;
+        color: #fff;
+        transform: translateY(-3px);
+        box-shadow: 0 14px 34px -8px rgba(217, 70, 239, 0.7);
+    }
+
+    /* SPADE mascot */
+    .hxp-mascot {
+        position: absolute;
+        top: 50%;
+        right: clamp(2rem, 7vw, 7rem);
+        transform: translateY(-50%);
+        width: clamp(240px, 26vw, 360px);
+        height: auto;
+        filter: drop-shadow(0 24px 50px rgba(0, 0, 0, 0.55));
+        animation: hxpFloat 7s ease-in-out infinite;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    @keyframes hxpFloat {
+        0%, 100% { transform: translateY(-50%); }
+        50% { transform: translateY(calc(-50% - 16px)); }
+    }
+
+    @media (max-width: 1100px) {
+        .hxp-mascot { display: none; }
+    }
+
+    .hxp-pip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-top: 1.5rem;
+        padding: 0.6rem 1.25rem;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.92rem;
+        color: rgba(255, 255, 255, 0.92);
+        background: rgba(10, 16, 31, 0.55);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 50rem;
+        cursor: pointer;
+        backdrop-filter: blur(8px);
+        transition: all 0.3s var(--ease-spring, ease);
+    }
+
+    .hxp-pip:hover {
+        border-color: rgba(110, 231, 183, 0.6);
+        box-shadow: 0 0 24px -4px rgba(52, 211, 153, 0.4);
+        transform: translateY(-2px);
+    }
+
+    .hxp-pip-prompt { color: #34d399; font-weight: 700; }
+    .hxp-pip-icon { font-size: 0.85rem; opacity: 0.7; }
+    .hxp-pip.copied { border-color: #34d399; color: #6ee7b7; }
+
+    /* hero entrance */
+    .hxp-rise {
+        opacity: 0;
+        transform: translateY(26px);
+        animation: hxpRise 0.9s var(--ease-spring, cubic-bezier(0.22, 1, 0.36, 1)) forwards;
+        animation-delay: var(--d, 0s);
+    }
+
+    @keyframes hxpRise {
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---- Scroll hint ---- */
+    .hxp-hint {
+        position: absolute;
+        bottom: 1.8rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        color: rgba(230, 236, 247, 0.6);
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        pointer-events: none;
+    }
+
+    .hxp-hint-mouse {
+        width: 21px;
+        height: 32px;
+        border: 2px solid rgba(230, 236, 247, 0.4);
+        border-radius: 11px;
+        display: inline-flex;
+        justify-content: center;
+        padding-top: 6px;
+    }
+
+    .hxp-hint-wheel {
+        width: 3px;
+        height: 6px;
+        border-radius: 2px;
+        background: rgba(230, 236, 247, 0.7);
+        animation: hxpWheel 1.7s ease-in-out infinite;
+    }
+
+    @keyframes hxpWheel {
+        0% { transform: translateY(0); opacity: 1; }
+        70% { transform: translateY(8px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 0; }
+    }
+
+    /* ---- Stage captions ---- */
+    .hxp-caption {
+        position: absolute;
+        top: 50%;
+        left: clamp(1.25rem, 8vw, 9rem);
+        transform: translateY(-30%);
+        max-width: 430px;
+        color: #e6ecf7;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 3;
+    }
+
+    .hxp-caption a {
+        pointer-events: auto;
+        color: #a5d8ff;
+    }
+
+    .hxp-caption-right {
+        left: auto;
+        right: clamp(1.25rem, 8vw, 9rem);
+    }
+
+    .hxp-cap-kicker {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.76rem;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #6ee7b7;
+        margin-bottom: 0.8rem;
+    }
+
+    .hxp-caption h2 {
+        font-size: clamp(1.7rem, 1.2rem + 1.8vw, 2.5rem);
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+        color: #fff;
+    }
+
+    .hxp-caption p {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: rgba(230, 236, 247, 0.76);
+    }
+
+    .hxp-caption p strong { color: #fff; }
+
+    .hxp-caption code {
+        display: inline-block;
+        margin-top: 0.4rem;
+        padding: 0.8rem 1rem;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.78rem;
+        line-height: 1.6;
+        color: #93c5fd;
+        background: rgba(10, 16, 31, 0.75);
+        border: 1px solid rgba(122, 167, 255, 0.2);
+        border-radius: 12px;
+        backdrop-filter: blur(6px);
+    }
+
+    /* ---- Stage dots ---- */
+    .hxp-dots {
+        position: absolute;
+        right: 1.4rem;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        z-index: 3;
+    }
+
+    .hxp-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(230, 236, 247, 0.22);
+        transition: all 0.4s var(--ease-spring, ease);
+    }
+
+    .hxp-dot.active {
+        background: #34d399;
+        box-shadow: 0 0 10px rgba(52, 211, 153, 0.7);
+        transform: scale(1.3);
+    }
+
+    @media (max-width: 768px) {
+        .hxp { height: 480vh; }
+        .hxp-title { font-size: 2.1rem; }
+        .hxp-lead { font-size: 1rem; }
+        .hxp-caption {
+            left: 1.25rem;
+            right: 1.25rem;
+            max-width: none;
+            top: auto;
+            bottom: 4.5rem;
+            transform: none;
+        }
+        .hxp-caption-right { left: 1.25rem; }
+        .hxp-caption h2 { font-size: 1.5rem; }
+        .hxp-dots { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .hxp { height: auto; }
+        .hxp-sticky { position: relative; height: auto; min-height: 100vh; padding: 7rem 0 3rem; }
+        .hxp-hero { position: relative; inset: auto; }
+        .hxp-hint { display: none; }
+        .hxp-rise { opacity: 1; transform: none; animation: none; }
+        .hxp-caption {
+            position: relative;
+            opacity: 1 !important;
+            top: auto;
+            left: auto;
+            right: auto;
+            transform: none !important;
+            margin: 2.5rem auto;
+            max-width: 600px;
+            padding: 0 1.5rem;
+        }
+        .hxp-dots { display: none; }
+    }
+</style>
+
+<script>
+    (() => {
+        const section = document.querySelector('.hxp');
+        if (!section) return;
+        const canvas = section.querySelector('.hxp-canvas');
+        const ctx = canvas.getContext('2d');
+        const heroEl = section.querySelector('.hxp-hero');
+        const captions = Array.from(section.querySelectorAll('.hxp-caption'));
+        const dots = Array.from(section.querySelectorAll('.hxp-dot'));
+        const hint = section.querySelector('.hxp-hint');
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+        /* ---------- glow sprites ---------- */
+        function makeGlow(color, inner) {
+            const s = document.createElement('canvas');
+            s.width = s.height = 64;
+            const g = s.getContext('2d');
+            const grad = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+            grad.addColorStop(0, inner);
+            grad.addColorStop(0.25, color);
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+            g.fillStyle = grad;
+            g.fillRect(0, 0, 64, 64);
+            return s;
+        }
+        const glowAgent = makeGlow('rgba(91,140,255,0.5)', 'rgba(229,239,255,1)');
+        const glowBeh = makeGlow('rgba(52,211,153,0.5)', 'rgba(220,255,242,1)');
+        const glowMsg = makeGlow('rgba(125,211,252,0.55)', 'rgba(240,250,255,1)');
+        const glowLLM = makeGlow('rgba(167,139,250,0.55)', 'rgba(240,234,255,1)');
+
+        /* ---------- scene ---------- */
+        let seed = 42;
+        const rnd = () => {
+            seed = (seed * 16807) % 2147483647;
+            return (seed - 1) / 2147483646;
+        };
+
+        const N = isMobile ? 14 : 24;
+        const nodes = [];
+        for (let i = 0; i < N; i++) {
+            const theta = rnd() * Math.PI * 2;
+            const phi = Math.acos(2 * rnd() - 1);
+            const r = 150 + rnd() * 110;
+            nodes.push({
+                x: r * Math.sin(phi) * Math.cos(theta),
+                y: (r * Math.cos(phi)) * 0.55,
+                z: r * Math.sin(phi) * Math.sin(theta),
+                size: 5 + rnd() * 4,
+                born: i / N,
+                ringT: rnd(),
+                orbit: rnd() * Math.PI * 2,
+                orbitSpeed: 0.5 + rnd() * 0.8,
+                wobble: rnd() * Math.PI * 2,
+            });
+        }
+        const llm = { x: 0, y: 0, z: 0, size: 14 };
+
+        const edges = [];
+        const seen = new Set();
+        nodes.forEach((a, i) => {
+            nodes
+                .map((b, j) => ({ j, d: (a.x - b.x) ** 2 + (a.y - b.y) ** 2 + (a.z - b.z) ** 2 }))
+                .filter((o) => o.j !== i)
+                .sort((p, q) => p.d - q.d)
+                .slice(0, 2)
+                .forEach(({ j }) => {
+                    const key = i < j ? `${i}-${j}` : `${j}-${i}`;
+                    if (!seen.has(key)) {
+                        seen.add(key);
+                        edges.push({ a: i, b: j });
+                    }
+                });
+        });
+
+        const particles = [];
+        const MAXP = isMobile ? 26 : 60;
+
+        /* ---------- scroll / stages ---------- */
+        let progress = 0;
+        let smooth = 0;
+        const clamp01 = (v) => Math.max(0, Math.min(1, v));
+        const smoothstep = (a, b, v) => {
+            const t = clamp01((v - a) / (b - a));
+            return t * t * (3 - 2 * t);
+        };
+
+        // hero occupies ~first 15% of the scroll, then four stages
+        const heroVis = (p) => 1 - smoothstep(0.05, 0.15, p);
+        const stageOn = (p) => [
+            smoothstep(0.14, 0.24, p),
+            smoothstep(0.36, 0.46, p),
+            smoothstep(0.56, 0.66, p),
+            smoothstep(0.78, 0.86, p),
+        ];
+        const stageMix = (p) => [
+            smoothstep(0.14, 0.24, p) * (1 - smoothstep(0.32, 0.4, p)),
+            smoothstep(0.36, 0.46, p) * (1 - smoothstep(0.52, 0.6, p)),
+            smoothstep(0.56, 0.66, p) * (1 - smoothstep(0.74, 0.8, p)),
+            smoothstep(0.78, 0.86, p),
+        ];
+        // network slowly assembles while the hero is on screen
+        const buildAmount = (p) => 0.45 + 0.55 * smoothstep(0.08, 0.3, p);
+        const nodeVis = (n, p) => clamp01((buildAmount(p) - n.born * 0.8) / 0.2);
+
+        function readScroll() {
+            const rect = section.getBoundingClientRect();
+            const total = section.offsetHeight - window.innerHeight;
+            progress = total > 0 ? clamp01(-rect.top / total) : 0;
+        }
+
+        /* ---------- camera ---------- */
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('pointermove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+        }, { passive: true });
+
+        function camera(p, t) {
+            const angle = -0.55 + p * Math.PI * 1.3 + t * 0.016;
+            const radius = 820 - p * 400;
+            const height = 280 - p * 195 + Math.sin(t * 0.35) * 5;
+            return {
+                x: Math.cos(angle) * radius + mouseX * 22,
+                y: height + mouseY * 14,
+                z: Math.sin(angle) * radius,
+            };
+        }
+
+        const FOV = 520;
+        let W = 0, H = 0, DPR = 1;
+
+        function makeBasis(cam) {
+            let fx = -cam.x, fy = -cam.y, fz = -cam.z;
+            const fl = Math.hypot(fx, fy, fz) || 1;
+            fx /= fl; fy /= fl; fz /= fl;
+            let rx = fz, ry = 0, rz = -fx;
+            const rl = Math.hypot(rx, ry, rz) || 1;
+            rx /= rl; ry /= rl; rz /= rl;
+            const ux = fy * rz - fz * ry;
+            const uy = fz * rx - fx * rz;
+            const uz = fx * ry - fy * rx;
+            return { fx, fy, fz, rx, ry, rz, ux, uy, uz };
+        }
+
+        function project(px, py, pz, cam, basis) {
+            const dx = px - cam.x, dy = py - cam.y, dz = pz - cam.z;
+            const x = dx * basis.rx + dy * basis.ry + dz * basis.rz;
+            const y = dx * basis.ux + dy * basis.uy + dz * basis.uz;
+            const z = dx * basis.fx + dy * basis.fy + dz * basis.fz;
+            if (z < 40) return null;
+            const s = FOV / z;
+            return { x: W / 2 + x * s, y: H / 2 - y * s, s, z };
+        }
+
+        const fog = (z) => clamp01(1.25 - z / 1500);
+
+        /* ---------- render ---------- */
+        function resize() {
+            DPR = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+            W = canvas.clientWidth;
+            H = canvas.clientHeight;
+            canvas.width = Math.round(W * DPR);
+            canvas.height = Math.round(H * DPR);
+            ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        }
+
+        function spawnParticle() {
+            if (particles.length >= MAXP) return;
+            const e = edges[Math.floor(Math.random() * edges.length)];
+            particles.push({ e, t: 0, speed: 0.45 + Math.random() * 0.75, dir: Math.random() < 0.5 ? 1 : -1 });
+        }
+
+        function render(t) {
+            const hero = heroVis(smooth);
+            const [s1, s2, s3, s4] = stageOn(smooth);
+            const [s1m] = stageMix(smooth);
+
+            ctx.clearRect(0, 0, W, H);
+            const bg = ctx.createLinearGradient(0, 0, W, H);
+            bg.addColorStop(0, '#070c1c');
+            bg.addColorStop(0.5, '#091128');
+            bg.addColorStop(1, '#0b0a22');
+            ctx.fillStyle = bg;
+            ctx.fillRect(0, 0, W, H);
+
+            // while hero is visible, shift the network to the right & dim it
+            // so the headline keeps full contrast
+            const shiftX = isMobile ? 0 : hero * W * 0.22;
+            const dim = 1 - hero * 0.45;
+
+            const cam = camera(smooth, t);
+            const basis = makeBasis(cam);
+            const off = (P) => (P ? { ...P, x: P.x + shiftX } : null);
+
+            const llmP = off(project(llm.x, llm.y, llm.z, cam, basis));
+            const proj = nodes.map((n) => {
+                const wob = Math.sin(t * 0.6 + n.wobble) * 5;
+                return off(project(n.x, n.y + wob, n.z, cam, basis));
+            });
+
+            // edges
+            ctx.lineWidth = 1;
+            edges.forEach((e) => {
+                const A = proj[e.a], B = proj[e.b];
+                if (!A || !B) return;
+                const vis = Math.min(nodeVis(nodes[e.a], smooth), nodeVis(nodes[e.b], smooth));
+                const alpha = (0.06 + s3 * 0.22) * vis * fog((A.z + B.z) / 2) * dim;
+                if (alpha <= 0.004) return;
+                ctx.strokeStyle = `rgba(122,167,255,${alpha})`;
+                ctx.beginPath();
+                ctx.moveTo(A.x, A.y);
+                ctx.lineTo(B.x, B.y);
+                ctx.stroke();
+            });
+
+            // LLM spokes
+            if (s4 > 0.01 && llmP) {
+                nodes.forEach((n, i) => {
+                    const P = proj[i];
+                    if (!P) return;
+                    const pulse = 0.5 + 0.5 * Math.sin(t * 2 + i);
+                    const alpha = s4 * 0.15 * pulse * fog((P.z + llmP.z) / 2);
+                    ctx.strokeStyle = `rgba(167,139,250,${alpha})`;
+                    ctx.beginPath();
+                    ctx.moveTo(llmP.x, llmP.y);
+                    ctx.lineTo(P.x, P.y);
+                    ctx.stroke();
+                });
+            }
+
+            // particles
+            if (s3 > 0.05 && !reduced) {
+                if (Math.random() < s3 * 0.5) spawnParticle();
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    const p = particles[i];
+                    p.t += 0.016 * p.speed;
+                    if (p.t >= 1) { particles.splice(i, 1); continue; }
+                    const na = nodes[p.dir > 0 ? p.e.a : p.e.b];
+                    const nb = nodes[p.dir > 0 ? p.e.b : p.e.a];
+                    const P = off(project(
+                        na.x + (nb.x - na.x) * p.t,
+                        na.y + (nb.y - na.y) * p.t,
+                        na.z + (nb.z - na.z) * p.t,
+                        cam, basis
+                    ));
+                    if (!P) continue;
+                    const sz = 14 * P.s * (0.7 + 0.3 * Math.sin(p.t * Math.PI));
+                    ctx.globalAlpha = s3 * fog(P.z) * dim;
+                    ctx.drawImage(glowMsg, P.x - sz / 2, P.y - sz / 2, sz, sz);
+                }
+                ctx.globalAlpha = 1;
+            }
+
+            // nodes far → near
+            nodes
+                .map((n, i) => ({ i, z: proj[i] ? proj[i].z : Infinity }))
+                .sort((a, b) => b.z - a.z)
+                .forEach(({ i }) => {
+                    const n = nodes[i];
+                    const P = proj[i];
+                    if (!P) return;
+                    const vis = nodeVis(n, smooth);
+                    if (vis <= 0.01) return;
+                    const f = fog(P.z);
+                    const sz = n.size * P.s * 9 * (0.85 + 0.15 * vis);
+
+                    const ringPhase = (t * 0.7 + n.ringT) % 1;
+                    const ringAlpha = (s1m * 0.5 + 0.05) * (1 - ringPhase) * vis * f * dim;
+                    if (ringAlpha > 0.01) {
+                        ctx.strokeStyle = `rgba(110,231,183,${ringAlpha})`;
+                        ctx.lineWidth = 1.2;
+                        ctx.beginPath();
+                        ctx.arc(P.x, P.y, sz * (0.35 + ringPhase * 1.1), 0, Math.PI * 2);
+                        ctx.stroke();
+                    }
+
+                    ctx.globalAlpha = vis * f * dim;
+                    ctx.drawImage(glowAgent, P.x - sz / 2, P.y - sz / 2, sz, sz);
+                    ctx.globalAlpha = 1;
+
+                    if (s2 > 0.02) {
+                        const sats = i % 3 === 0 ? 3 : 2;
+                        for (let k = 0; k < sats; k++) {
+                            const a = n.orbit + t * n.orbitSpeed + (k * Math.PI * 2) / sats;
+                            const orad = n.size * 2.6;
+                            const SP = off(project(
+                                n.x + Math.cos(a) * orad,
+                                n.y + Math.sin(a * 0.8) * orad * 0.5,
+                                n.z + Math.sin(a) * orad,
+                                cam, basis
+                            ));
+                            if (!SP) continue;
+                            const ss = 7 * SP.s;
+                            ctx.globalAlpha = s2 * 0.9 * vis * fog(SP.z) * dim;
+                            ctx.drawImage(glowBeh, SP.x - ss / 2, SP.y - ss / 2, ss, ss);
+                        }
+                        ctx.globalAlpha = 1;
+                    }
+                });
+
+            // LLM core
+            if (s4 > 0.01 && llmP) {
+                const pulse = 1 + 0.12 * Math.sin(t * 2.2);
+                const sz = llm.size * llmP.s * 14 * s4 * pulse;
+                ctx.globalAlpha = s4 * fog(llmP.z);
+                ctx.drawImage(glowLLM, llmP.x - sz / 2, llmP.y - sz / 2, sz, sz);
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        /* ---------- overlays ---------- */
+        function updateOverlays() {
+            const hero = heroVis(smooth);
+            const mix = stageMix(smooth);
+
+            if (heroEl) {
+                heroEl.style.opacity = hero.toFixed(3);
+                heroEl.style.transform = `translateY(${(1 - hero) * -40}px)`;
+                heroEl.style.pointerEvents = hero > 0.5 ? 'auto' : 'none';
+            }
+            if (hint) hint.style.opacity = smooth < 0.03 ? '1' : '0';
+
+            captions.forEach((c, i) => {
+                const m = mix[i];
+                c.style.opacity = m.toFixed(3);
+                const slide = (1 - m) * 34;
+                c.style.transform = isMobile
+                    ? `translateY(${slide}px)`
+                    : `translateY(calc(-30% + ${slide}px))`;
+            });
+
+            let active = -1, best = 0.15;
+            mix.forEach((m, i) => { if (m > best) { best = m; active = i; } });
+            dots.forEach((d) => {
+                const key = d.getAttribute('data-dot');
+                d.classList.toggle('active', key === 'hero' ? hero > 0.5 : String(active) === key);
+            });
+        }
+
+        /* ---------- loop ---------- */
+        let running = false;
+        let rafId = 0;
+        const t0 = performance.now();
+
+        function frame(now) {
+            if (!running) return;
+            readScroll();
+            smooth += (progress - smooth) * 0.085;
+            render((now - t0) / 1000);
+            updateOverlays();
+            rafId = requestAnimationFrame(frame);
+        }
+
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting && !running) {
+                    running = true;
+                    resize();
+                    rafId = requestAnimationFrame(frame);
+                } else if (!entry.isIntersecting && running) {
+                    running = false;
+                    cancelAnimationFrame(rafId);
+                }
+            });
+        }, { rootMargin: '100px' });
+        io.observe(section);
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && running) {
+                running = false;
+                cancelAnimationFrame(rafId);
+            } else if (!document.hidden) {
+                const rect = section.getBoundingClientRect();
+                if (rect.bottom > 0 && rect.top < window.innerHeight && !running) {
+                    running = true;
+                    rafId = requestAnimationFrame(frame);
+                }
+            }
+        });
+
+        window.addEventListener('resize', () => { if (running) resize(); }, { passive: true });
+
+        if (reduced) {
+            resize();
+            smooth = 0.3;
+            render(0);
+        }
+
+        /* ---------- uv pill ---------- */
+        const pip = document.getElementById('hxp-pip');
+        if (pip) {
+            pip.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText('uv add spade');
+                    pip.classList.add('copied');
+                    const icon = pip.querySelector('.hxp-pip-icon');
+                    if (icon) icon.className = 'bi bi-check-lg hxp-pip-icon';
+                    setTimeout(() => {
+                        pip.classList.remove('copied');
+                        if (icon) icon.className = 'bi bi-clipboard hxp-pip-icon';
+                    }, 1800);
+                } catch { /* clipboard unavailable */ }
+            });
+        }
+    })();
+</script>

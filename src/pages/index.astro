@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Navbar from '../components/Navbar.astro';
-import Hero from '../components/Hero.astro';
+import HeroExperience from '../components/HeroExperience.astro';
 import Footer from '../components/Footer.astro';
 import PythonCodeBlock from '../components/PythonCodeBlock.astro';
 
@@ -15,6 +15,7 @@ import UseCasesSection from '../components/UseCasesSection.astro';
 import FAQSection from '../components/FAQSection.astro';
 import StatisticsSection from '../components/StatisticsSection.astro';
 import NewsSection from '../components/NewsSection.astro';
+import GetStartedSection from '../components/GetStartedSection.astro';
 
 // Define features data
 const features = [
@@ -112,15 +113,29 @@ const plugins = [
 
 <BaseLayout title="SPADE - Python Multi-Agent Framework | Smart Agent Development Environment">
     <Navbar />
-    <Hero />
-    
+
+    <!-- Hero + scroll-driven 3D tour: what SPADE is and how it works -->
+    <HeroExperience />
+
+    <!-- Social proof -->
     <BadgeSection />
     <StatisticsSection />
+
+    <!-- Understand: capabilities in depth -->
     <FeaturesSection features={features} />
+
+    <!-- See: real code -->
     <CodeExampleSection />
+
+    <!-- Do: install and run with uv -->
+    <GetStartedSection />
+
+    <!-- Grow: ecosystem and applications -->
     <PluginsSection plugins={plugins} />
     <UseCasesSection />
     <SpadeLLMSection />
+
+    <!-- Resolve doubts & stay updated -->
     <FAQSection />
     <NewsSection />
     <Footer />

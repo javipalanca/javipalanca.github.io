@@ -45,7 +45,14 @@ const baseUrl = import.meta.env.BASE_URL;
                         SPADE Framework
                         <i class="bi bi-arrow-up-right external-icon"></i>
                     </a>
-                </li>                
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link external-link" href="/agentspeak">
+                        AgentSpeak
+                        <i class="bi bi-arrow-up-right external-icon"></i>
+                    </a>
+                </li>
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle external-link" href="/plugins/" id="pluginsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Plugins
@@ -65,6 +72,9 @@ const baseUrl = import.meta.env.BASE_URL;
                         </a></li>
                         <li><a class="dropdown-item" href="/plugins/spade-bdi">
                             <i class="bi bi-cpu me-2"></i>SPADE BDI
+                        </a></li>
+                        <li><a class="dropdown-item" href="/agentspeak">
+                            <i class="bi bi-braces me-2"></i>AgentSpeak Lab
                         </a></li>
                         <li><a class="dropdown-item" href="/plugins/spade-pubsub">
                             <i class="bi bi-broadcast me-2"></i>SPADE PubSub
@@ -98,24 +108,55 @@ const baseUrl = import.meta.env.BASE_URL;
         left: 0;
         right: 0;
         z-index: 1030;
+        background: rgba(255, 255, 255, 0.72) !important;
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+        box-shadow: none !important;
         transition:
             background-color 0.3s ease,
-            box-shadow 0.3s ease;
+            box-shadow 0.3s ease,
+            border-color 0.3s ease;
     }
 
     .navbar.scrolled {
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.88) !important;
+        box-shadow: 0 10px 30px -12px rgba(15, 23, 42, 0.18) !important;
+    }
+
+    .navbar-brand img {
+        transition: transform 0.4s var(--ease-bounce, ease), filter 0.3s ease;
+    }
+
+    /* Keep the wordmark in dark mode, render it white */
+    :global(body.dark-mode) .navbar-brand img {
+        filter: brightness(0) invert(1);
+    }
+
+    .navbar-brand:hover img {
+        transform: rotate(-6deg) scale(1.08);
+    }
+
+    .navbar .nav-link {
+        font-weight: 500;
+        transition: color 0.25s ease, transform 0.25s ease;
+    }
+
+    .navbar .nav-link:hover {
+        color: var(--primary-color);
     }
 
     /* Dark mode styles */
     :global(body.dark-mode) .navbar {
-        background-color: var(--dark-card-bg) !important;
+        background: rgba(10, 16, 31, 0.72) !important;
         color: var(--dark-text) !important;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
+        border-bottom-color: rgba(255, 255, 255, 0.08);
+        box-shadow: none !important;
     }
 
     :global(body.dark-mode) .navbar.scrolled {
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        background: rgba(10, 16, 31, 0.88) !important;
+        box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.6) !important;
     }
 
     :global(body.dark-mode) .navbar-light .navbar-toggler {
@@ -256,29 +297,30 @@ const baseUrl = import.meta.env.BASE_URL;
         position: absolute;
         top: 0;
         left: 0;
-        height: 6px;
+        height: 3px;
         background: linear-gradient(
             90deg,
-            #3498db,
-            #2ecc71,
-            #8e44ad
+            #2f6bff,
+            #06b6d4,
+            #10b981,
+            #8b5cf6
         );
+        background-size: 200% 100%;
+        animation: progressShimmer 4s linear infinite;
         width: 0%;
         transition: width 0.1s ease-out;
         z-index: 1031;
         border-radius: 0 4px 4px 0;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0 12px rgba(47, 107, 255, 0.6);
+    }
+
+    @keyframes progressShimmer {
+        to { background-position: 200% 0; }
     }
 
     /* Dark mode progress bar */
     :global(body.dark-mode) .scroll-progress-bar {
-        background: linear-gradient(
-            90deg,
-            #205080,
-            #1a573a,
-            #5d4e75
-        );
-        box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 12px rgba(122, 167, 255, 0.5);
     }
 
     /* Dropdown Menu Styling */

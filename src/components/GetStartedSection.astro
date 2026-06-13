@@ -1,0 +1,275 @@
+---
+// Get Started section: three steps from zero to a running agent, uv-first.
+// The Python sample is kept as a plain string so Astro doesn't try to evaluate
+// the f-string braces (e.g. {self.agent.jid}) as JSX expressions.
+const agentCode = `# agent.py
+import spade
+from spade.agent import Agent
+from spade.behaviour import OneShotBehaviour
+
+class HelloAgent(Agent):
+    class Hello(OneShotBehaviour):
+        async def run(self):
+            print(f"Hello from {self.agent.jid}!")
+
+    async def setup(self):
+        self.add_behaviour(self.Hello())
+
+async def main():
+    agent = HelloAgent("hello@localhost", "secret")
+    await agent.start()
+    await spade.wait_until_finished(agent)
+
+if __name__ == "__main__":
+    spade.run(main())`;
+---
+
+<section id="get-started" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5 fade-in-up">
+            <h2 class="fw-bold">From Zero to Agents in Minutes</h2>
+            <p class="lead text-muted">No XMPP server to configure — SPADE ships with everything you need</p>
+        </div>
+        <div class="row g-4 align-items-stretch">
+            <div class="col-lg-4 slide-in-left stagger-1">
+                <div class="gs-steps">
+                    <div class="gs-step">
+                        <div class="gs-step-num">1</div>
+                        <div>
+                            <h5>Install SPADE</h5>
+                            <p>One command with <a href="https://docs.astral.sh/uv/">uv</a> (or pip). Python 3.10+ on Linux, macOS or Windows.</p>
+                        </div>
+                    </div>
+                    <div class="gs-step">
+                        <div class="gs-step-num">2</div>
+                        <div>
+                            <h5>Write your first agent</h5>
+                            <p>Subclass <code>Agent</code>, add a behaviour, done. The built-in XMPP server starts automatically.</p>
+                        </div>
+                    </div>
+                    <div class="gs-step">
+                        <div class="gs-step-num">3</div>
+                        <div>
+                            <h5>Run it</h5>
+                            <p>Watch your agent connect, announce its presence and start exchanging messages.</p>
+                        </div>
+                    </div>
+                    <a href="https://spadeagents.eu/docs/spade" class="btn btn-primary mt-2">
+                        <i class="bi bi-book me-2"></i>Full Quickstart Guide
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-8 slide-in-right stagger-2">
+                <div class="gs-terminal">
+                    <div class="gs-terminal-bar">
+                        <span class="gs-dots"></span>
+                        <div class="gs-tabs" role="tablist" aria-label="Installation method">
+                            <button class="gs-tab active" data-tool="uv" role="tab" aria-selected="true">uv</button>
+                            <button class="gs-tab" data-tool="pip" role="tab" aria-selected="false">pip</button>
+                        </div>
+                    </div>
+                    <div class="gs-terminal-body">
+                        <pre class="gs-cmd" data-pane="uv"><span class="gs-prompt">$</span> uv init my-agents &amp;&amp; cd my-agents
+<span class="gs-prompt">$</span> uv add spade
+<span class="gs-prompt">$</span> uv run agent.py</pre>
+                        <pre class="gs-cmd" data-pane="pip" hidden><span class="gs-prompt">$</span> python -m venv .venv &amp;&amp; source .venv/bin/activate
+<span class="gs-prompt">$</span> pip install spade
+<span class="gs-prompt">$</span> python agent.py</pre>
+                        <pre class="gs-code"><code class="language-python">{agentCode}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .gs-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 1.4rem;
+        height: 100%;
+        justify-content: center;
+    }
+
+    .gs-step {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .gs-step-num {
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display, inherit);
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: white;
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-cyan, #06b6d4));
+        box-shadow: 0 8px 20px -6px rgba(47, 107, 255, 0.45);
+    }
+
+    .gs-step h5 {
+        margin-bottom: 0.3rem;
+        font-size: 1.08rem;
+    }
+
+    .gs-step p {
+        color: var(--text-muted-color, #6c757d);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 0;
+    }
+
+    :global(body.dark-mode) .gs-step p {
+        color: var(--dark-text-muted);
+    }
+
+    /* Terminal */
+    .gs-terminal {
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(122, 167, 255, 0.18);
+        background: #0a101f;
+        box-shadow: 0 24px 60px -20px rgba(7, 11, 22, 0.55);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .gs-terminal-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.6rem 1rem;
+        background: #0e1526;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .gs-dots {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #ff5f57;
+        box-shadow: 20px 0 0 #febc2e, 40px 0 0 #28c840;
+        margin-right: 52px;
+    }
+
+    .gs-tabs {
+        display: flex;
+        gap: 0.3rem;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.2rem;
+        border-radius: 50rem;
+    }
+
+    .gs-tab {
+        border: none;
+        background: transparent;
+        color: #93a1b8;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 0.25rem 0.95rem;
+        border-radius: 50rem;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .gs-tab.active {
+        background: linear-gradient(135deg, #2f6bff, #06b6d4);
+        color: white;
+    }
+
+    .gs-terminal-body {
+        padding: 1.1rem 1.3rem;
+        overflow-x: auto;
+    }
+
+    .gs-cmd {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.84rem;
+        line-height: 1.9;
+        color: #d7e2f5;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    .gs-prompt {
+        color: #34d399;
+        font-weight: 700;
+    }
+
+    .gs-code {
+        margin: 0;
+    }
+
+    /* Force dark code styling inside the terminal regardless of theme */
+    .gs-terminal pre.gs-code,
+    .gs-terminal pre.gs-code code {
+        background: transparent !important;
+        border: none !important;
+        color: #d7e2f5 !important;
+        font-size: 0.8rem;
+        line-height: 1.65;
+        padding: 0;
+        margin: 0;
+    }
+
+</style>
+
+<!-- Prism token spans are created at runtime without this component's scope
+     attribute, so the bright palette for the dark terminal must be global. -->
+<style is:global>
+    .gs-terminal pre.gs-code .token.comment,
+    .gs-terminal pre.gs-code .token.prolog,
+    .gs-terminal pre.gs-code .token.doctype,
+    .gs-terminal pre.gs-code .token.cdata { color: #64748b !important; font-style: italic; }
+    .gs-terminal pre.gs-code .token.punctuation { color: #9aa7bd !important; }
+    .gs-terminal pre.gs-code .token.keyword,
+    .gs-terminal pre.gs-code .token.atrule,
+    .gs-terminal pre.gs-code .token.attr-value { color: #c084fc !important; }
+    .gs-terminal pre.gs-code .token.boolean,
+    .gs-terminal pre.gs-code .token.number,
+    .gs-terminal pre.gs-code .token.constant,
+    .gs-terminal pre.gs-code .token.tag,
+    .gs-terminal pre.gs-code .token.property,
+    .gs-terminal pre.gs-code .token.symbol,
+    .gs-terminal pre.gs-code .token.deleted { color: #fbbf24 !important; }
+    .gs-terminal pre.gs-code .token.string,
+    .gs-terminal pre.gs-code .token.char,
+    .gs-terminal pre.gs-code .token.attr-name,
+    .gs-terminal pre.gs-code .token.builtin,
+    .gs-terminal pre.gs-code .token.inserted,
+    .gs-terminal pre.gs-code .token.selector { color: #34d399 !important; }
+    .gs-terminal pre.gs-code .token.operator,
+    .gs-terminal pre.gs-code .token.entity,
+    .gs-terminal pre.gs-code .token.url { color: #60a5fa !important; }
+    .gs-terminal pre.gs-code .token.function,
+    .gs-terminal pre.gs-code .token.class-name { color: #f472b6 !important; }
+    .gs-terminal pre.gs-code .token.variable,
+    .gs-terminal pre.gs-code .token.regex,
+    .gs-terminal pre.gs-code .token.important { color: #fde047 !important; }
+</style>
+
+<script>
+    const tabs = document.querySelectorAll('.gs-tab');
+    tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+            tabs.forEach((t) => {
+                t.classList.toggle('active', t === tab);
+                t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+            });
+            const tool = tab.getAttribute('data-tool');
+            document.querySelectorAll('.gs-cmd').forEach((pane) => {
+                pane.hidden = pane.getAttribute('data-pane') !== tool;
+            });
+        });
+    });
+</script>

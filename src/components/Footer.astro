@@ -24,6 +24,7 @@ const baseUrl = import.meta.env.BASE_URL;
                     <li><a href="https://spadeagents.eu/docs/spade/usage" class="text-muted text-decoration-none">User Guide</a></li>
                     <li><a href="https://spadeagents.eu/docs/spade/api" class="text-muted text-decoration-none">API Reference</a></li>
                     <li><a href="https://spadeagents.eu/docs/spade/examples" class="text-muted text-decoration-none">Examples</a></li>
+                    <li><a href="/agentspeak" class="text-muted text-decoration-none">AgentSpeak Lab</a></li>
                 </ul>
             </div>
             <div class="col-lg-2 col-md-6 mb-4">
@@ -64,3 +65,83 @@ const baseUrl = import.meta.env.BASE_URL;
         </div>
     </div>
 </footer>
+
+<style>
+    .footer {
+        position: relative;
+        background:
+            radial-gradient(ellipse 70% 120% at 20% 0%, rgba(47, 107, 255, 0.14), transparent 60%),
+            radial-gradient(ellipse 60% 120% at 85% 100%, rgba(139, 92, 246, 0.12), transparent 60%),
+            #0b1228;
+        color: #e6ecf7;
+        overflow: hidden;
+    }
+
+    .footer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #2f6bff, #06b6d4, #10b981, #8b5cf6);
+        background-size: 200% 100%;
+        animation: footerGlow 6s linear infinite;
+    }
+
+    @keyframes footerGlow {
+        to { background-position: 200% 0; }
+    }
+
+    .footer h6 {
+        color: #fff;
+        letter-spacing: 0.12em;
+        font-size: 0.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .footer .text-muted,
+    .footer a.text-muted {
+        color: #93a1b8 !important;
+    }
+
+    .footer ul li {
+        padding: 0.18rem 0;
+    }
+
+    .footer a {
+        transition: color 0.25s ease, transform 0.25s ease;
+        display: inline-block;
+    }
+
+    .footer a.text-muted:hover {
+        color: #fff !important;
+        transform: translateX(3px);
+    }
+
+    .footer a.text-white {
+        opacity: 0.85;
+        transition: opacity 0.25s ease, transform 0.3s var(--ease-bounce, ease);
+    }
+
+    .footer a.text-white:hover {
+        opacity: 1;
+        transform: translateY(-4px) scale(1.12);
+    }
+
+    .footer hr {
+        border-color: rgba(255, 255, 255, 0.12);
+        opacity: 1;
+    }
+
+    .footer img {
+        filter: brightness(0) invert(1);
+        opacity: 0.92;
+    }
+
+    :global(body.dark-mode) .footer {
+        background:
+            radial-gradient(ellipse 70% 120% at 20% 0%, rgba(47, 107, 255, 0.12), transparent 60%),
+            #060a14;
+    }
+</style>

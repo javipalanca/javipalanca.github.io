@@ -46,10 +46,16 @@
         {
           "from": "agent1",
           "to": "agent2",
-          "type": "message"
+          "type": "message",
+          "label": "inform · \"Hello World!\""
         }
       ],
-      "pythonFile": "simple.py"
+      "pythonFile": "simple.py",
+      "concepts": [
+        "One agent sends, another receives",
+        "Messages carry metadata over XMPP",
+        "CyclicBehaviour runs the loop"
+      ]
     },
     {
       "id": "behaviors",
@@ -112,15 +118,22 @@
         {
           "from": "coordinator",
           "to": "worker1",
-          "type": "task"
+          "type": "task",
+          "label": "request · ProcessTask"
         },
         {
           "from": "coordinator",
           "to": "worker2",
-          "type": "task"
+          "type": "task",
+          "label": "request · ProcessTask"
         }
       ],
-      "pythonFile": "behaviors.py"
+      "pythonFile": "behaviors.py",
+      "concepts": [
+        "A coordinator delegates work",
+        "OneShotBehaviour fires once at startup",
+        "Workers run CyclicBehaviour tasks"
+      ]
     },
     {
       "id": "network",
@@ -227,30 +240,40 @@
         {
           "from": "coordinator",
           "to": "sender",
-          "type": "command"
+          "type": "command",
+          "label": "Initialize"
         },
         {
           "from": "sender",
           "to": "receiver1",
-          "type": "message"
+          "type": "message",
+          "label": "inform"
         },
         {
           "from": "sender",
           "to": "receiver2",
-          "type": "message"
+          "type": "message",
+          "label": "inform"
         },
         {
           "from": "receiver1",
           "to": "worker1",
-          "type": "task"
+          "type": "task",
+          "label": "delegate"
         },
         {
           "from": "receiver2",
           "to": "worker2",
-          "type": "task"
+          "type": "task",
+          "label": "delegate"
         }
       ],
-      "pythonFile": "network.py"
+      "pythonFile": "network.py",
+      "concepts": [
+        "Many agents cooperate in a pipeline",
+        "A command fans out into messages",
+        "Work is delegated down the chain"
+      ]
     },
     {
       "id": "presence",
@@ -313,25 +336,34 @@
         {
           "from": "server",
           "to": "buddy1",
-          "type": "presence"
+          "type": "presence",
+          "label": "available"
         },
         {
           "from": "server",
           "to": "buddy2",
-          "type": "presence"
+          "type": "presence",
+          "label": "available"
         },
         {
           "from": "buddy1",
           "to": "server",
-          "type": "status"
+          "type": "status",
+          "label": "subscribe"
         },
         {
           "from": "buddy2",
           "to": "server",
-          "type": "status"
+          "type": "status",
+          "label": "subscribe"
         }
       ],
-      "pythonFile": "presence.py"
+      "pythonFile": "presence.py",
+      "concepts": [
+        "Agents subscribe to each other",
+        "Presence shows who is online",
+        "Status changes notify contacts in real time"
+      ]
     },
     {
       "id": "pubsub",
@@ -423,25 +455,34 @@
         {
           "from": "publisher1",
           "to": "broker",
-          "type": "publish"
+          "type": "publish",
+          "label": "publish · news"
         },
         {
           "from": "publisher2",
           "to": "broker",
-          "type": "publish"
+          "type": "publish",
+          "label": "publish · weather"
         },
         {
           "from": "broker",
           "to": "subscriber1",
-          "type": "deliver"
+          "type": "deliver",
+          "label": "news update"
         },
         {
           "from": "broker",
           "to": "subscriber2",
-          "type": "deliver"
+          "type": "deliver",
+          "label": "weather update"
         }
       ],
-      "pythonFile": "pubsub.py"
+      "pythonFile": "pubsub.py",
+      "concepts": [
+        "Publishers emit to topics",
+        "A broker routes by topic",
+        "Subscribers receive only what they want"
+      ]
     },
     {
       "id": "event-driven",
@@ -519,99 +560,150 @@
         {
           "from": "forwarder",
           "to": "responder1",
-          "type": "request"
+          "type": "request",
+          "label": "request"
         },
         {
           "from": "forwarder",
           "to": "responder2",
-          "type": "request"
+          "type": "request",
+          "label": "request"
         },
         {
           "from": "responder1",
           "to": "aggregator",
-          "type": "response"
+          "type": "response",
+          "label": "response"
         },
         {
           "from": "responder2",
           "to": "aggregator",
-          "type": "response"
+          "type": "response",
+          "label": "response"
         }
       ],
-      "pythonFile": "event-driven.py"
+      "pythonFile": "event-driven.py",
+      "concepts": [
+        "Requests fan out to responders",
+        "Responses are processed in parallel",
+        "An aggregator collects the results"
+      ]
     }
   ],
   "agentTypes": {
     "sender": {
-      "color": "#4CAF50",
-      "icon": "send",
-      "label": "Sender Agent",
-      "size": 25
+      "color": "#2f6bff",
+      "icon": "send-fill",
+      "label": "Sender",
+      "role": "producer"
     },
     "receiver": {
-      "color": "#2196F3",
-      "icon": "inbox",
-      "label": "Receiver Agent",
-      "size": 25
+      "color": "#10b981",
+      "icon": "inbox-fill",
+      "label": "Receiver",
+      "role": "consumer"
     },
     "coordinator": {
-      "color": "#FF9800",
-      "icon": "hub",
+      "color": "#8b5cf6",
+      "icon": "diagram-3-fill",
       "label": "Coordinator",
-      "size": 30
+      "role": "infra"
     },
     "worker": {
-      "color": "#9C27B0",
-      "icon": "work",
-      "label": "Worker Agent",
-      "size": 20
+      "color": "#06b6d4",
+      "icon": "gear-fill",
+      "label": "Worker",
+      "role": "processor"
     },
     "buddy": {
-      "color": "#00BCD4",
-      "icon": "person",
-      "label": "Buddy Agent",
-      "size": 25
+      "color": "#10b981",
+      "icon": "person-fill",
+      "label": "Buddy",
+      "role": "consumer"
     },
     "server": {
-      "color": "#F44336",
-      "icon": "server",
+      "color": "#8b5cf6",
+      "icon": "hdd-rack-fill",
       "label": "Server",
-      "size": 35
+      "role": "infra"
     },
     "publisher": {
-      "color": "#8BC34A",
-      "icon": "publish",
+      "color": "#2f6bff",
+      "icon": "broadcast-pin",
       "label": "Publisher",
-      "size": 25
+      "role": "producer"
     },
     "subscriber": {
-      "color": "#3F51B5",
-      "icon": "subscribe",
+      "color": "#10b981",
+      "icon": "rss-fill",
       "label": "Subscriber",
-      "size": 25
+      "role": "consumer"
     },
     "broker": {
-      "color": "#FF5722",
-      "icon": "router",
-      "label": "Message Broker",
-      "size": 35
+      "color": "#8b5cf6",
+      "icon": "shuffle",
+      "label": "Broker",
+      "role": "infra"
     },
     "forwarder": {
-      "color": "#607D8B",
-      "icon": "forward",
+      "color": "#f59e0b",
+      "icon": "arrow-right-circle-fill",
       "label": "Forwarder",
-      "size": 25
+      "role": "processor"
     },
     "responder": {
-      "color": "#795548",
-      "icon": "reply",
+      "color": "#06b6d4",
+      "icon": "reply-fill",
       "label": "Responder",
-      "size": 25
+      "role": "processor"
     },
     "aggregator": {
-      "color": "#E91E63",
-      "icon": "merge",
+      "color": "#f59e0b",
+      "icon": "collection-fill",
       "label": "Aggregator",
-      "size": 25
+      "role": "processor"
+    }
+  },
+  "edgeTypes": {
+    "message": {
+      "color": "#2f6bff",
+      "label": "inform"
+    },
+    "request": {
+      "color": "#2f6bff",
+      "label": "request"
+    },
+    "response": {
+      "color": "#10b981",
+      "label": "response"
+    },
+    "command": {
+      "color": "#8b5cf6",
+      "label": "command"
+    },
+    "task": {
+      "color": "#06b6d4",
+      "label": "task"
+    },
+    "presence": {
+      "color": "#10b981",
+      "label": "presence"
+    },
+    "status": {
+      "color": "#06b6d4",
+      "label": "status"
+    },
+    "publish": {
+      "color": "#2f6bff",
+      "label": "publish"
+    },
+    "deliver": {
+      "color": "#10b981",
+      "label": "deliver"
+    },
+    "subscribe": {
+      "color": "#f59e0b",
+      "label": "subscribe"
     }
   }
 }

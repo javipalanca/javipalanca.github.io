@@ -1,0 +1,399 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import AgentSpeakPlayground from '../components/AgentSpeakPlayground.astro';
+import AgentSpeakReference from '../components/AgentSpeakReference.astro';
+---
+
+<BaseLayout
+    title="AgentSpeak(L) — The Language of Intelligent Agents | Online Interpreter | SPADE"
+    description="Learn AgentSpeak(L), the BDI agent programming language: beliefs, goals and plans explained step by step, with an online interpreter to try it in your browser. Run real AgentSpeak in Python with SPADE BDI."
+>
+    <Navbar />
+
+    <!-- Page hero -->
+    <section class="asp-hero">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-9">
+                    <div class="asp-kicker fade-in-up">BDI · Beliefs · Desires · Intentions</div>
+                    <h1 class="asp-title fade-in-up">AgentSpeak<span class="asp-title-accent">(L)</span></h1>
+                    <p class="asp-sub fade-in-up">
+                        The programming language of <strong>cognitive agents</strong>. Instead of writing
+                        <em>how</em> step by step, you declare what your agent <strong>believes</strong>,
+                        what it <strong>wants</strong>, and the <strong>plans</strong> it can use — the
+                        BDI reasoning cycle does the rest.
+                    </p>
+                    <div class="d-flex justify-content-center gap-2 flex-wrap fade-in-up">
+                        <a href="#agentspeak-playground" class="btn btn-light btn-lg px-4">
+                            <i class="bi bi-play-fill me-2"></i>Try It Online
+                        </a>
+                        <a href="/plugins/spade-bdi" class="btn btn-outline-light btn-lg px-4">
+                            <i class="bi bi-cpu me-2"></i>SPADE BDI Plugin
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why a language for agents -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <div class="text-center mb-5 fade-in-up">
+                        <h2 class="fw-bold">Why a Language for Agents?</h2>
+                        <p class="lead text-muted">From procedural code to mental attitudes</p>
+                    </div>
+                    <p class="asp-prose">
+                        AgentSpeak(L) was proposed by <strong>Anand Rao in 1996</strong> as a formalization of the
+                        <strong>Belief–Desire–Intention</strong> model of rational agency, and was popularized by the
+                        <strong>Jason</strong> interpreter. It treats an agent not as an object with methods, but as an
+                        entity with <em>mental attitudes</em>: it holds <strong>beliefs</strong> about the world, adopts
+                        <strong>goals</strong> it desires to achieve, and commits to <strong>intentions</strong> — concrete
+                        plans it executes, suspends or abandons as the world changes.
+                    </p>
+                    <p class="asp-prose">
+                        This makes AgentSpeak ideal for systems that must <strong>react to a changing environment while
+                        pursuing long-term objectives</strong>: robots that re-plan when a corridor is blocked, traders
+                        that revise positions when the market moves, or smart-home controllers that balance comfort and
+                        energy. In SPADE, the <a href="/plugins/spade-bdi">SPADE BDI plugin</a> runs AgentSpeak programs
+                        inside real XMPP agents, so reasoning agents and ordinary behaviour-based agents coexist in the
+                        same distributed system.
+                    </p>
+                    <div class="row g-4 mt-3">
+                        <div class="col-md-4 scale-in stagger-1">
+                            <div class="asp-pillar">
+                                <div class="asp-pillar-icon asp-pillar-blue"><i class="bi bi-database"></i></div>
+                                <h5>Beliefs</h5>
+                                <p>Facts the agent holds about the world, as logical predicates. They change as the agent perceives and communicates.</p>
+                                <code>temperature(31).</code>
+                            </div>
+                        </div>
+                        <div class="col-md-4 scale-in stagger-2">
+                            <div class="asp-pillar">
+                                <div class="asp-pillar-icon asp-pillar-green"><i class="bi bi-bullseye"></i></div>
+                                <h5>Goals</h5>
+                                <p>States the agent wants to bring about. Adding a goal triggers the search for an applicable plan.</p>
+                                <code>!keep_comfortable.</code>
+                            </div>
+                        </div>
+                        <div class="col-md-4 scale-in stagger-3">
+                            <div class="asp-pillar">
+                                <div class="asp-pillar-icon asp-pillar-purple"><i class="bi bi-diagram-3"></i></div>
+                                <h5>Plans</h5>
+                                <p>Recipes that say how to react to an event when a context holds — the agent's know-how.</p>
+                                <code>+!g : c &lt;- body.</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reasoning cycle -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <div class="text-center mb-5 fade-in-up">
+                        <h2 class="fw-bold">The Reasoning Cycle</h2>
+                        <p class="lead text-muted">What the interpreter does on every iteration</p>
+                    </div>
+                    <div class="asp-cycle">
+                        <div class="asp-cycle-step slide-in-left stagger-1">
+                            <span class="asp-cycle-num">1</span>
+                            <div>
+                                <h6>Perceive &amp; update beliefs</h6>
+                                <p>New percepts and messages revise the belief base, generating events like <code>+temperature(31)</code>.</p>
+                            </div>
+                        </div>
+                        <div class="asp-cycle-step slide-in-left stagger-2">
+                            <span class="asp-cycle-num">2</span>
+                            <div>
+                                <h6>Select an event</h6>
+                                <p>One pending event — a belief change or a new goal — is picked for processing.</p>
+                            </div>
+                        </div>
+                        <div class="asp-cycle-step slide-in-left stagger-3">
+                            <span class="asp-cycle-num">3</span>
+                            <div>
+                                <h6>Find an applicable plan</h6>
+                                <p>Plans whose trigger matches the event are filtered by their context, checked against the beliefs with unification.</p>
+                            </div>
+                        </div>
+                        <div class="asp-cycle-step slide-in-left stagger-4">
+                            <span class="asp-cycle-num">4</span>
+                            <div>
+                                <h6>Execute one step of an intention</h6>
+                                <p>The selected plan becomes an intention; actions run, subgoals push new plans, beliefs are updated — and the cycle repeats.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Playground (includes syntax anatomy) -->
+    <section class="py-5 asp-playground-section">
+        <div class="container">
+            <AgentSpeakPlayground />
+        </div>
+    </section>
+
+    <!-- Complete language reference / manual -->
+    <AgentSpeakReference />
+
+    <!-- AgentSpeak in SPADE -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-9 text-center">
+                    <div class="fade-in-up">
+                        <h2 class="fw-bold mb-3">Run AgentSpeak in Real Distributed Agents</h2>
+                        <p class="lead text-muted mb-4">
+                            With the <strong>SPADE BDI</strong> plugin, your AgentSpeak programs run inside real XMPP agents:
+                            they exchange beliefs and goals with KQML performatives (<code>tell</code>, <code>untell</code>,
+                            <code>achieve</code>) across machines, and mix freely with behaviour-based and LLM-powered agents.
+                        </p>
+                    </div>
+                    <div class="asp-install scale-in">
+                        <code><span class="asp-install-prompt">$</span> uv add spade_bdi</code>
+                    </div>
+                    <div class="d-flex justify-content-center gap-2 flex-wrap mt-4 fade-in-up">
+                        <a href="/plugins/spade-bdi" class="btn btn-primary">
+                            <i class="bi bi-cpu me-2"></i>Explore SPADE BDI
+                        </a>
+                        <a href="https://spade-bdi.readthedocs.io" class="btn btn-outline-primary">
+                            <i class="bi bi-book me-2"></i>Documentation
+                        </a>
+                        <a href="https://github.com/javipalanca/spade_bdi" class="btn btn-outline-primary">
+                            <i class="bi bi-github me-2"></i>GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <Footer />
+</BaseLayout>
+
+<style>
+    .asp-hero {
+        background:
+            radial-gradient(ellipse 60% 120% at 20% 0%, rgba(139, 92, 246, 0.35), transparent 60%),
+            radial-gradient(ellipse 50% 120% at 85% 100%, rgba(47, 107, 255, 0.3), transparent 60%),
+            #0b1228;
+        color: white;
+        padding: 6.5rem 0 5.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .asp-hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+        background-size: 48px 48px;
+        mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, black 30%, transparent 75%);
+        -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, black 30%, transparent 75%);
+        pointer-events: none;
+    }
+
+    .asp-kicker {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #c4b5fd;
+        margin-bottom: 1.2rem;
+    }
+
+    .asp-title {
+        font-size: clamp(3rem, 2rem + 4.5vw, 5rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        font-family: var(--font-mono, monospace);
+        margin-bottom: 1.2rem;
+    }
+
+    .asp-title-accent {
+        background: linear-gradient(135deg, #a78bfa, #e879f9);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .asp-sub {
+        font-size: 1.15rem;
+        line-height: 1.75;
+        color: rgba(230, 236, 247, 0.8);
+        max-width: 56ch;
+        margin: 0 auto 2rem;
+    }
+
+    .asp-sub strong { color: #fff; }
+
+    .asp-prose {
+        font-size: 1.05rem;
+        line-height: 1.8;
+        color: var(--text-muted-color, #5b6b81);
+        margin-bottom: 1.2rem;
+    }
+
+    .asp-prose strong { color: var(--text-color, #0f172a); }
+
+    :global(body.dark-mode) .asp-prose { color: var(--dark-text-muted); }
+    :global(body.dark-mode) .asp-prose strong { color: var(--dark-text); }
+
+    /* Pillars */
+    .asp-pillar {
+        height: 100%;
+        padding: 1.6rem;
+        border-radius: var(--radius-lg, 22px);
+        border: 1px solid var(--border-color, rgba(15, 23, 42, 0.08));
+        background: var(--surface, #fff);
+        box-shadow: var(--shadow-sm);
+        transition: transform 0.45s var(--ease-spring, ease), box-shadow 0.45s ease;
+        text-align: center;
+    }
+
+    .asp-pillar:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-lift);
+    }
+
+    .asp-pillar-icon {
+        width: 56px;
+        height: 56px;
+        margin: 0 auto 1rem;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        color: white;
+    }
+
+    .asp-pillar-blue { background: linear-gradient(135deg, #2f6bff, #06b6d4); }
+    .asp-pillar-green { background: linear-gradient(135deg, #10b981, #06b6d4); }
+    .asp-pillar-purple { background: linear-gradient(135deg, #8b5cf6, #d946ef); }
+
+    .asp-pillar p {
+        font-size: 0.93rem;
+        color: var(--text-muted-color, #6c757d);
+        line-height: 1.6;
+    }
+
+    .asp-pillar code {
+        font-size: 0.82rem;
+        background: rgba(47, 107, 255, 0.08);
+        padding: 0.25rem 0.6rem;
+        border-radius: 8px;
+    }
+
+    :global(body.dark-mode) .asp-pillar {
+        background: var(--dark-card-bg);
+        border-color: var(--dark-border);
+    }
+
+    :global(body.dark-mode) .asp-pillar p { color: var(--dark-text-muted); }
+
+    /* Cycle */
+    .asp-cycle {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .asp-cycle-step {
+        display: flex;
+        gap: 1.1rem;
+        align-items: flex-start;
+        background: var(--surface, #fff);
+        border: 1px solid var(--border-color, rgba(15, 23, 42, 0.08));
+        border-radius: var(--radius-md, 16px);
+        padding: 1.3rem 1.5rem;
+        box-shadow: var(--shadow-sm);
+        transition: transform 0.4s var(--ease-spring, ease), box-shadow 0.4s ease;
+    }
+
+    .asp-cycle-step:hover {
+        transform: translateX(8px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .asp-cycle-num {
+        flex-shrink: 0;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display, inherit);
+        font-weight: 700;
+        color: white;
+        background: linear-gradient(135deg, #8b5cf6, #2f6bff);
+    }
+
+    .asp-cycle-step h6 {
+        margin-bottom: 0.25rem;
+        font-size: 1.02rem;
+    }
+
+    .asp-cycle-step p {
+        margin: 0;
+        font-size: 0.93rem;
+        color: var(--text-muted-color, #6c757d);
+        line-height: 1.6;
+    }
+
+    :global(body.dark-mode) .asp-cycle-step {
+        background: var(--dark-card-bg);
+        border-color: var(--dark-border);
+    }
+
+    :global(body.dark-mode) .asp-cycle-step p { color: var(--dark-text-muted); }
+
+    /* Install pill */
+    .asp-install {
+        display: inline-block;
+    }
+
+    .asp-install code {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-family: var(--font-mono, monospace);
+        font-size: 1rem;
+        color: #e6ecf7 !important;
+        background: #0a101f !important;
+        border: 1px solid rgba(139, 92, 246, 0.4);
+        border-radius: 50rem;
+        padding: 0.7rem 1.6rem;
+        box-shadow: 0 12px 32px -10px rgba(139, 92, 246, 0.4);
+    }
+
+    .asp-install-prompt {
+        color: #34d399;
+        font-weight: 700;
+    }
+
+    /* Playground section: the embedded card has its own styling */
+    .asp-playground-section :global(.info-card) {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
+</style>
