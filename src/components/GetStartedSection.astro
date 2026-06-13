@@ -130,16 +130,36 @@ if __name__ == "__main__":
         color: var(--dark-text-muted);
     }
 
-    /* Terminal */
+    /* Terminal — follows the site theme (light in light mode, dark in dark). */
     .gs-terminal {
+        --gs-surface: #ffffff;
+        --gs-bar: #eef2f9;
+        --gs-border: rgba(15, 23, 42, 0.1);
+        --gs-divider: rgba(15, 23, 42, 0.08);
+        --gs-muted: #5b6b81;
+        --gs-text: #0f172a;
+        --gs-prompt: #059669;
+        --gs-tabs-bg: rgba(15, 23, 42, 0.05);
+
         border-radius: 16px;
         overflow: hidden;
-        border: 1px solid rgba(122, 167, 255, 0.18);
-        background: #0a101f;
-        box-shadow: 0 24px 60px -20px rgba(7, 11, 22, 0.55);
+        border: 1px solid var(--gs-border);
+        background: var(--gs-surface);
+        box-shadow: var(--shadow-md, 0 24px 60px -20px rgba(7, 11, 22, 0.2));
         height: 100%;
         display: flex;
         flex-direction: column;
+    }
+
+    :global(body.dark-mode) .gs-terminal {
+        --gs-surface: #0a101f;
+        --gs-bar: #0e1526;
+        --gs-border: rgba(122, 167, 255, 0.18);
+        --gs-divider: rgba(255, 255, 255, 0.07);
+        --gs-muted: #93a1b8;
+        --gs-text: #d7e2f5;
+        --gs-prompt: #34d399;
+        --gs-tabs-bg: rgba(255, 255, 255, 0.05);
     }
 
     .gs-terminal-bar {
@@ -147,8 +167,8 @@ if __name__ == "__main__":
         align-items: center;
         justify-content: space-between;
         padding: 0.6rem 1rem;
-        background: #0e1526;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        background: var(--gs-bar);
+        border-bottom: 1px solid var(--gs-divider);
     }
 
     .gs-dots {
@@ -163,7 +183,7 @@ if __name__ == "__main__":
     .gs-tabs {
         display: flex;
         gap: 0.3rem;
-        background: rgba(255, 255, 255, 0.05);
+        background: var(--gs-tabs-bg);
         padding: 0.2rem;
         border-radius: 50rem;
     }
@@ -171,7 +191,7 @@ if __name__ == "__main__":
     .gs-tab {
         border: none;
         background: transparent;
-        color: #93a1b8;
+        color: var(--gs-muted);
         font-family: var(--font-mono, monospace);
         font-size: 0.78rem;
         font-weight: 600;
@@ -195,14 +215,14 @@ if __name__ == "__main__":
         font-family: var(--font-mono, monospace);
         font-size: 0.84rem;
         line-height: 1.9;
-        color: #d7e2f5;
+        color: var(--gs-text);
         margin-bottom: 1rem;
         padding-bottom: 1rem;
-        border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+        border-bottom: 1px dashed var(--gs-divider);
     }
 
     .gs-prompt {
-        color: #34d399;
+        color: var(--gs-prompt);
         font-weight: 700;
     }
 
@@ -210,52 +230,17 @@ if __name__ == "__main__":
         margin: 0;
     }
 
-    /* Force dark code styling inside the terminal regardless of theme */
+    /* The code follows the global Prism theme; just sit it on the surface. */
     .gs-terminal pre.gs-code,
     .gs-terminal pre.gs-code code {
         background: transparent !important;
         border: none !important;
-        color: #d7e2f5 !important;
         font-size: 0.8rem;
         line-height: 1.65;
         padding: 0;
         margin: 0;
     }
 
-</style>
-
-<!-- Prism token spans are created at runtime without this component's scope
-     attribute, so the bright palette for the dark terminal must be global. -->
-<style is:global>
-    .gs-terminal pre.gs-code .token.comment,
-    .gs-terminal pre.gs-code .token.prolog,
-    .gs-terminal pre.gs-code .token.doctype,
-    .gs-terminal pre.gs-code .token.cdata { color: #64748b !important; font-style: italic; }
-    .gs-terminal pre.gs-code .token.punctuation { color: #9aa7bd !important; }
-    .gs-terminal pre.gs-code .token.keyword,
-    .gs-terminal pre.gs-code .token.atrule,
-    .gs-terminal pre.gs-code .token.attr-value { color: #c084fc !important; }
-    .gs-terminal pre.gs-code .token.boolean,
-    .gs-terminal pre.gs-code .token.number,
-    .gs-terminal pre.gs-code .token.constant,
-    .gs-terminal pre.gs-code .token.tag,
-    .gs-terminal pre.gs-code .token.property,
-    .gs-terminal pre.gs-code .token.symbol,
-    .gs-terminal pre.gs-code .token.deleted { color: #fbbf24 !important; }
-    .gs-terminal pre.gs-code .token.string,
-    .gs-terminal pre.gs-code .token.char,
-    .gs-terminal pre.gs-code .token.attr-name,
-    .gs-terminal pre.gs-code .token.builtin,
-    .gs-terminal pre.gs-code .token.inserted,
-    .gs-terminal pre.gs-code .token.selector { color: #34d399 !important; }
-    .gs-terminal pre.gs-code .token.operator,
-    .gs-terminal pre.gs-code .token.entity,
-    .gs-terminal pre.gs-code .token.url { color: #60a5fa !important; }
-    .gs-terminal pre.gs-code .token.function,
-    .gs-terminal pre.gs-code .token.class-name { color: #f472b6 !important; }
-    .gs-terminal pre.gs-code .token.variable,
-    .gs-terminal pre.gs-code .token.regex,
-    .gs-terminal pre.gs-code .token.important { color: #fde047 !important; }
 </style>
 
 <script>

@@ -491,40 +491,84 @@ const baseUrl = import.meta.env.BASE_URL;
 
     /* Responsive dropdown adjustments */
     @media (max-width: 991.98px) {
+        /* Expanded mobile menu becomes a solid floating card so links never
+           sit on the translucent navbar glass (which showed the hero behind). */
+        .navbar-collapse {
+            margin-top: 0.6rem;
+            padding: 0.5rem;
+            background: var(--surface, #ffffff);
+            border: 1px solid var(--border-color, rgba(15, 23, 42, 0.1));
+            border-radius: 16px;
+            box-shadow: 0 18px 44px -18px rgba(15, 23, 42, 0.3);
+            max-height: calc(100vh - 96px);
+            overflow-y: auto;
+        }
+
+        :global(body.dark-mode) .navbar-collapse {
+            background: var(--dark-card-bg, #0e1526);
+            border-color: var(--dark-border, rgba(255, 255, 255, 0.1));
+            box-shadow: 0 18px 44px -18px rgba(0, 0, 0, 0.7);
+        }
+
+        .navbar-nav {
+            gap: 0.1rem;
+            align-items: stretch;
+        }
+
+        .navbar-nav .nav-link {
+            padding: 0.65rem 0.85rem;
+            border-radius: 10px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link:focus {
+            background: rgba(47, 107, 255, 0.08);
+        }
+
+        :global(body.dark-mode) .navbar-nav .nav-link:hover,
+        :global(body.dark-mode) .navbar-nav .nav-link:focus {
+            background: rgba(122, 167, 255, 0.12);
+        }
+
         .dropdown-menu {
             position: static !important;
             float: none;
             width: auto;
-            margin-top: 0;
+            margin: 0.15rem 0 0.25rem;
             background-color: transparent;
             border: 0;
             box-shadow: none;
-            padding-left: 1rem;
+            padding-left: 0.75rem;
         }
 
         .dropdown-item {
-            padding: 0.5rem 1rem;
+            padding: 0.55rem 0.85rem;
+            border-radius: 10px;
         }
 
         .dropdown-item.featured-plugin {
             margin: 0.25rem 0;
-            border-radius: 8px;
+            border-radius: 10px;
         }
 
-        /* Hide separator on mobile */
+        /* Hide the desktop-only separator on mobile */
         .nav-separator {
             display: none;
         }
 
-        /* Mobile external link adjustments */
-        .external-link {
-            padding-left: 0.75rem;
-            border-left: 2px solid rgba(108, 117, 125, 0.2);
-            margin-left: 0.5rem;
+        /* Subtle divider between the internal and external link groups */
+        .nav-item:has(.external-link):first-of-type {
+            margin-top: 0.4rem;
+            padding-top: 0.4rem;
+            border-top: 1px solid var(--border-color, rgba(15, 23, 42, 0.08));
         }
 
-        :global(body.dark-mode) .external-link {
-            border-left-color: rgba(255, 255, 255, 0.2);
+        /* The GitHub CTA spans the menu width and gets breathing room */
+        .navbar-nav .nav-link.btn-primary {
+            margin: 0.5rem 0.25rem 0.15rem;
+            text-align: center;
+            justify-content: center;
         }
     }
 </style>

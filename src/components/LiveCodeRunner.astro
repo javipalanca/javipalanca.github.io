@@ -98,13 +98,57 @@ const cid = 'lcr-' + Math.random().toString(36).slice(2, 9);
 </div>
 
 <style is:global>
-    /* Global because the terminal lines are created dynamically. All .lcr-*. */
+    /* Global because the terminal lines are created dynamically. All .lcr-*.
+       The widget follows the site theme: light surface in light mode, dark in
+       dark mode — driven by these CSS variables. */
     .lcr {
+        --lcr-surface: #ffffff;
+        --lcr-bar-bg: #eef2f9;
+        --lcr-border: rgba(15, 23, 42, 0.1);
+        --lcr-divider: rgba(15, 23, 42, 0.08);
+        --lcr-muted: #5b6b81;
+        --lcr-icon-hover: #0f172a;
+        --lcr-preview-bg: #f6f9ff;
+        --lcr-term-bg: #f1f5fb;
+        --lcr-term-border: rgba(15, 23, 42, 0.08);
+        --lcr-track: rgba(47, 107, 255, 0.28);
+        --lcr-empty: #94a3b8;
+        --lcr-prompt: #059669;
+        --lcr-cmd: #0f172a;
+        --lcr-sys: #64748b;
+        --lcr-ok: #059669;
+        --lcr-print: #0f172a;
+        --lcr-info: #475569;
+        --lcr-msg-in: #0284c7;
+        --lcr-msg-out: #7c3aed;
+
         border-radius: 18px;
         overflow: hidden;
-        border: 1px solid var(--border-color, rgba(15, 23, 42, 0.1));
+        border: 1px solid var(--lcr-border);
         box-shadow: var(--shadow-md, 0 12px 32px rgba(15, 23, 42, 0.1));
-        background: #0a101f;
+        background: var(--lcr-surface);
+    }
+
+    body.dark-mode .lcr {
+        --lcr-surface: #0a101f;
+        --lcr-bar-bg: #0e1526;
+        --lcr-border: rgba(255, 255, 255, 0.08);
+        --lcr-divider: rgba(255, 255, 255, 0.07);
+        --lcr-muted: #93a1b8;
+        --lcr-icon-hover: #ffffff;
+        --lcr-preview-bg: #070c1c;
+        --lcr-term-bg: #05080f;
+        --lcr-term-border: rgba(255, 255, 255, 0.06);
+        --lcr-track: rgba(122, 167, 255, 0.3);
+        --lcr-empty: #475569;
+        --lcr-prompt: #34d399;
+        --lcr-cmd: #e6ecf7;
+        --lcr-sys: #64748b;
+        --lcr-ok: #34d399;
+        --lcr-print: #e6ecf7;
+        --lcr-info: #93a1b8;
+        --lcr-msg-in: #38bdf8;
+        --lcr-msg-out: #c4b5fd;
     }
 
     .lcr-grid {
@@ -117,10 +161,10 @@ const cid = 'lcr-' + Math.random().toString(36).slice(2, 9);
     }
 
     .lcr-pane { display: flex; flex-direction: column; min-width: 0; }
-    .lcr-code { border-right: 1px solid rgba(255, 255, 255, 0.07); }
+    .lcr-code { border-right: 1px solid var(--lcr-divider); }
 
     @media (max-width: 900px) {
-        .lcr-code { border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.07); }
+        .lcr-code { border-right: none; border-bottom: 1px solid var(--lcr-divider); }
     }
 
     .lcr-bar {
@@ -128,8 +172,8 @@ const cid = 'lcr-' + Math.random().toString(36).slice(2, 9);
         align-items: center;
         gap: 0.6rem;
         padding: 0.6rem 0.9rem;
-        background: #0e1526;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        background: var(--lcr-bar-bg);
+        border-bottom: 1px solid var(--lcr-divider);
         min-height: 44px;
     }
 
@@ -144,22 +188,22 @@ const cid = 'lcr-' + Math.random().toString(36).slice(2, 9);
     .lcr-file {
         font-family: var(--font-mono, monospace);
         font-size: 0.8rem;
-        color: #93a1b8;
+        color: var(--lcr-muted);
         flex: 1;
     }
 
     .lcr-icon-btn {
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        border: 1px solid var(--lcr-border);
         background: transparent;
-        color: #93a1b8;
+        color: var(--lcr-muted);
         border-radius: 8px;
         padding: 0.2rem 0.5rem;
         cursor: pointer;
         transition: all 0.2s ease;
     }
 
-    .lcr-icon-btn:hover { color: #fff; border-color: rgba(255, 255, 255, 0.3); }
-    .lcr-copy.copied { color: #34d399; border-color: #34d399; }
+    .lcr-icon-btn:hover { color: var(--lcr-icon-hover); border-color: var(--lcr-muted); }
+    .lcr-copy.copied { color: #10b981; border-color: #10b981; }
 
     .lcr-pre {
         margin: 0;
@@ -169,63 +213,31 @@ const cid = 'lcr-' + Math.random().toString(36).slice(2, 9);
         max-height: 420px;
     }
 
-    /* Force the dark code palette regardless of site theme. Prism adds a
-       `language-*` class to the <pre> after highlighting, which makes the
-       global `pre[class*="language-"]` rule (light background) win on
-       specificity — so we override with the more specific `.lcr pre.lcr-pre`. */
+    /* The code itself follows the site theme via the global Prism rules
+       (light background + dark tokens in light mode, dark + bright in dark).
+       We only make the <pre> transparent so it sits on the card surface, and
+       use a more specific selector because Prism adds a `language-*` class to
+       the <pre>, bumping the global rule's specificity. */
     .lcr pre.lcr-pre,
     .lcr pre.lcr-pre code {
         background: transparent !important;
         border: none !important;
-        color: #d7e2f5 !important;
         font-family: var(--font-mono, monospace);
         font-size: 0.8rem;
         line-height: 1.65;
     }
 
-    /* The code pane is always dark, so pin bright Prism token colours here
-       regardless of the site's light/dark theme (overrides global.css). */
-    .lcr pre.lcr-pre .token.comment,
-    .lcr pre.lcr-pre .token.prolog,
-    .lcr pre.lcr-pre .token.doctype,
-    .lcr pre.lcr-pre .token.cdata { color: #64748b !important; font-style: italic; }
-    .lcr pre.lcr-pre .token.punctuation { color: #9aa7bd !important; }
-    .lcr pre.lcr-pre .token.keyword,
-    .lcr pre.lcr-pre .token.atrule,
-    .lcr pre.lcr-pre .token.attr-value { color: #c084fc !important; }
-    .lcr pre.lcr-pre .token.boolean,
-    .lcr pre.lcr-pre .token.number,
-    .lcr pre.lcr-pre .token.constant,
-    .lcr pre.lcr-pre .token.tag,
-    .lcr pre.lcr-pre .token.property,
-    .lcr pre.lcr-pre .token.symbol,
-    .lcr pre.lcr-pre .token.deleted { color: #fbbf24 !important; }
-    .lcr pre.lcr-pre .token.string,
-    .lcr pre.lcr-pre .token.char,
-    .lcr pre.lcr-pre .token.attr-name,
-    .lcr pre.lcr-pre .token.builtin,
-    .lcr pre.lcr-pre .token.inserted,
-    .lcr pre.lcr-pre .token.selector { color: #34d399 !important; }
-    .lcr pre.lcr-pre .token.operator,
-    .lcr pre.lcr-pre .token.entity,
-    .lcr pre.lcr-pre .token.url { color: #60a5fa !important; }
-    .lcr pre.lcr-pre .token.function,
-    .lcr pre.lcr-pre .token.class-name { color: #f472b6 !important; }
-    .lcr pre.lcr-pre .token.variable,
-    .lcr pre.lcr-pre .token.regex,
-    .lcr pre.lcr-pre .token.important { color: #fde047 !important; }
-
     /* Generic "network" endpoint (single-agent scene) */
-    .lcr-endpoint { opacity: 0.85; }
+    .lcr-endpoint { opacity: 0.9; }
     .lcr-endpoint .lcr-agent-icon {
-        background: rgba(100, 116, 139, 0.18);
-        color: #93a1b8;
+        background: color-mix(in srgb, var(--lcr-muted) 16%, transparent);
+        color: var(--lcr-muted);
         box-shadow: none;
-        border: 1px dashed rgba(148, 163, 184, 0.5);
+        border: 1px dashed color-mix(in srgb, var(--lcr-muted) 55%, transparent);
     }
 
     /* ---- Preview pane ---- */
-    .lcr-preview { background: #070c1c; }
+    .lcr-preview { background: var(--lcr-preview-bg); }
 
     .lcr-preview-title {
         display: inline-flex;
@@ -235,13 +247,13 @@ const cid = 'lcr-' + Math.random().toString(36).slice(2, 9);
         font-weight: 700;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: #93a1b8;
+        color: var(--lcr-muted);
         flex: 1;
     }
 
     .lcr-live-dot {
         width: 8px; height: 8px; border-radius: 50%;
-        background: #64748b;
+        background: var(--lcr-empty);
         transition: background 0.3s ease, box-shadow 0.3s ease;
     }
 
@@ -328,7 +340,7 @@ const cid = 'lcr-' + Math.random().toString(36).slice(2, 9);
     .lcr-agent-label {
         font-family: var(--font-mono, monospace);
         font-size: 0.64rem;
-        color: #93a1b8;
+        color: var(--lcr-muted);
         line-height: 1.2;
     }
 
@@ -336,7 +348,7 @@ const cid = 'lcr-' + Math.random().toString(36).slice(2, 9);
         position: relative;
         flex: 1;
         height: 2px;
-        background: repeating-linear-gradient(90deg, rgba(122,167,255,0.3) 0 6px, transparent 6px 12px);
+        background: repeating-linear-gradient(90deg, var(--lcr-track) 0 6px, transparent 6px 12px);
     }
 
     .lcr-packet {
@@ -358,8 +370,8 @@ const cid = 'lcr-' + Math.random().toString(36).slice(2, 9);
     .lcr-terminal {
         margin: 0.5rem 0.4rem 0.6rem;
         padding: 0.7rem 0.9rem;
-        background: #05080f;
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: var(--lcr-term-bg);
+        border: 1px solid var(--lcr-term-border);
         border-radius: 12px;
         font-family: var(--font-mono, monospace);
         font-size: 0.76rem;
@@ -371,24 +383,24 @@ const cid = 'lcr-' + Math.random().toString(36).slice(2, 9);
 
     .lcr-terminal:empty::before {
         content: "Press Run to execute…";
-        color: #475569;
+        color: var(--lcr-empty);
     }
 
     .lcr-line { display: block; animation: lcrIn 0.2s ease both; white-space: pre-wrap; word-break: break-word; }
     @keyframes lcrIn { from { opacity: 0; transform: translateX(-5px); } to { opacity: 1; transform: translateX(0); } }
 
-    .lcr-line .lcr-prompt { color: #34d399; font-weight: 700; }
-    .lcr-k-cmd { color: #e6ecf7; }
-    .lcr-k-sys { color: #64748b; }
-    .lcr-k-ok { color: #34d399; }
-    .lcr-k-print { color: #e6ecf7; }
-    .lcr-k-info { color: #93a1b8; }
-    .lcr-k-msg-in { color: #38bdf8; }
-    .lcr-k-msg-out { color: #c4b5fd; }
+    .lcr-line .lcr-prompt { color: var(--lcr-prompt); font-weight: 700; }
+    .lcr-k-cmd { color: var(--lcr-cmd); }
+    .lcr-k-sys { color: var(--lcr-sys); }
+    .lcr-k-ok { color: var(--lcr-ok); }
+    .lcr-k-print { color: var(--lcr-print); font-weight: 600; }
+    .lcr-k-info { color: var(--lcr-info); }
+    .lcr-k-msg-in { color: var(--lcr-msg-in); }
+    .lcr-k-msg-out { color: var(--lcr-msg-out); }
 
     .lcr-cursor::after {
         content: "▋";
-        color: #34d399;
+        color: var(--lcr-prompt);
         animation: lcrBlink 1s steps(2) infinite;
     }
     @keyframes lcrBlink { 50% { opacity: 0; } }

@@ -84,7 +84,7 @@ const toc = [
                             </tbody>
                         </table>
                     </div>
-                    <pre class="asr-pre"><code>{`// constants vs. variables
+                    <pre class="asr-pre"><code class="language-agentspeak">{`// constants vs. variables
 position(robot, 3, 4).   // robot, 3, 4 are constants
 +!move(Dir) <- step(Dir).   // Dir is a variable, bound when the goal runs
 
@@ -99,7 +99,7 @@ color('dark green').     // quoted atom keeps the space and case`}</code></pre>
                         each ending in a full stop. Beliefs are added and removed as the agent perceives the
                         environment, receives messages, or updates its own mental notes.
                     </p>
-                    <pre class="asr-pre"><code>{`temperature(22).
+                    <pre class="asr-pre"><code class="language-agentspeak">{`temperature(22).
 location(kitchen).
 is_sunny(true).
 friend(alice).
@@ -108,7 +108,7 @@ friend(bob).`}</code></pre>
                         <strong>Strong (explicit) negation</strong> uses <code>~</code>. It states that something is
                         <em>known to be false</em>, which is different from simply not being in the belief base:
                     </p>
-                    <pre class="asr-pre"><code>{`~raining.          // the agent knows it is NOT raining
+                    <pre class="asr-pre"><code class="language-agentspeak">{`~raining.          // the agent knows it is NOT raining
 ~enemy(alice).     // alice is explicitly known not to be an enemy`}</code></pre>
                     <p>
                         Every belief carries <strong>annotations</strong> in square brackets that record
@@ -125,7 +125,7 @@ friend(bob).`}</code></pre>
                             </tbody>
                         </table>
                     </div>
-                    <pre class="asr-pre"><code>{`colour(box1, red)[source(percept)].
+                    <pre class="asr-pre"><code class="language-agentspeak">{`colour(box1, red)[source(percept)].
 
 // only trust a belief that did not come from bob
 +!act : open(door)[source(S)] & S \\== bob <- go_through.`}</code></pre>
@@ -139,7 +139,7 @@ friend(bob).`}</code></pre>
                         new conclusions on demand. A rule has the form <code>Head :- Body</code> and is used
                         whenever the head is queried in a plan context.
                     </p>
-                    <pre class="asr-pre"><code>{`// facts
+                    <pre class="asr-pre"><code class="language-agentspeak">{`// facts
 parent(tom, bob).
 parent(bob, ann).
 
@@ -167,7 +167,7 @@ grandparent(X, Z) :- parent(X, Y) & parent(Y, Z).
                             </tbody>
                         </table>
                     </div>
-                    <pre class="asr-pre"><code>{`!greet_everyone.        // initial achievement goal (runs at start-up)
+                    <pre class="asr-pre"><code class="language-agentspeak">{`!greet_everyone.        // initial achievement goal (runs at start-up)
 
 +!report <-
     ?temperature(T);    // test goal: bind T from the belief base
@@ -199,7 +199,7 @@ triggering event       context (guard)               plan body`}</code></pre>
                         and commits to the first whose context holds — so order your plans from most specific to
                         most general, like a fall-through:
                     </p>
-                    <pre class="asr-pre"><code>{`+!greet(Who) : friend(Who)      <- .print("Hey", Who, "!").
+                    <pre class="asr-pre"><code class="language-agentspeak">{`+!greet(Who) : friend(Who)      <- .print("Hey", Who, "!").
 +!greet(Who) : true             <- .print("Hello", Who).   // fallback`}</code></pre>
                 </article>
 
@@ -224,7 +224,7 @@ triggering event       context (guard)               plan body`}</code></pre>
                             </tbody>
                         </table>
                     </div>
-                    <pre class="asr-pre"><code>{`// react to perceiving a new temperature reading
+                    <pre class="asr-pre"><code class="language-agentspeak">{`// react to perceiving a new temperature reading
 +temperature(T) : T > 30 <- .print("It's getting hot!"); !cool_down.
 
 // recover when an achievement goal fails
@@ -254,7 +254,7 @@ triggering event       context (guard)               plan body`}</code></pre>
                             </tbody>
                         </table>
                     </div>
-                    <pre class="asr-pre"><code>{`+!process_order(Item, Qty) : stock(Item, N) & N >= Qty <-
+                    <pre class="asr-pre"><code class="language-agentspeak">{`+!process_order(Item, Qty) : stock(Item, N) & N >= Qty <-
     Remaining = N - Qty;            // expression: bind Remaining
     -+stock(Item, Remaining);       // update the stock belief
     .print("Shipping", Qty, "x", Item);
@@ -300,7 +300,7 @@ triggering event       context (guard)               plan body`}</code></pre>
                             </table>
                         </div>
                     </div>
-                    <pre class="asr-pre"><code>{`+!buy(Item) : price(Item, P) & funds(F) & F >= P & not blacklisted(Item) <-
+                    <pre class="asr-pre"><code class="language-agentspeak">{`+!buy(Item) : price(Item, P) & funds(F) & F >= P & not blacklisted(Item) <-
     NewFunds = F - P;
     -+funds(NewFunds);
     .print("Bought", Item, "- balance:", NewFunds).`}</code></pre>
@@ -321,13 +321,13 @@ triggering event       context (guard)               plan body`}</code></pre>
                         pattern <code>[H|T]</code> is the workhorse for recursion: <code>H</code> unifies with the
                         first element, <code>T</code> with the rest.
                     </p>
-                    <pre class="asr-pre"><code>{`[]                 // empty list
+                    <pre class="asr-pre"><code class="language-agentspeak">{`[]                 // empty list
 [a, b, c]          // three elements
 [H | T]            // H = a, T = [b, c]  (when matched against [a,b,c])
 [a, b | Rest]      // first two fixed, Rest = the tail
 [name(ann), 42, "hi"]   // elements can be any term`}</code></pre>
                     <p>Recursing over a list with two plans — one for the empty case, one for head/tail:</p>
-                    <pre class="asr-pre"><code>{`+!sum([], 0).
+                    <pre class="asr-pre"><code class="language-agentspeak">{`+!sum([], 0).
 +!sum([H|T], S) <- !sum(T, Rest); S = H + Rest.
 
 +!greet_all([]).
@@ -336,7 +336,7 @@ triggering event       context (guard)               plan body`}</code></pre>
                         Practical example combining both: take a list of usernames, build a message string,
                         and notify each user one by one.
                     </p>
-                    <pre class="asr-pre"><code>{`// users waiting for a reminder
+                    <pre class="asr-pre"><code class="language-agentspeak">{`// users waiting for a reminder
 pending_users([alice, bob, carol]).
 
 +!notify_pending <-
@@ -395,7 +395,7 @@ pending_users([alice, bob, carol]).
                             </tbody>
                         </table>
                     </div>
-                    <pre class="asr-pre"><code>{`+!summarise <-
+                    <pre class="asr-pre"><code class="language-agentspeak">{`+!summarise <-
     .findall(Name, friend(Name), Friends);   // collect all matches
     .length(Friends, N);
     .print("I have", N, "friends:", Friends).`}</code></pre>
@@ -431,7 +431,7 @@ pending_users([alice, bob, carol]).
                             </tbody>
                         </table>
                     </div>
-                    <pre class="asr-pre"><code>{`// inform another agent of a fact
+                    <pre class="asr-pre"><code class="language-agentspeak">{`// inform another agent of a fact
 .send(robot1, tell, location(kitchen));
 
 // delegate a goal to a coordinator
@@ -450,7 +450,7 @@ pending_users([alice, bob, carol]).
                         <code>.asl</code> file and hand it to a <code>BDIAgent</code>. From Python you can seed,
                         read and react to beliefs while the reasoning cycle runs over XMPP.
                     </p>
-                    <pre class="asr-pre asr-pre-py"><code>{`import spade
+                    <pre class="asr-pre asr-pre-py"><code class="language-python">{`import spade
 from spade_bdi.bdi import BDIAgent
 
 async def main():
@@ -467,7 +467,7 @@ if __name__ == "__main__":
                         To expose new <strong>internal actions or functions</strong> to AgentSpeak, subclass
                         <code>BDIAgent</code> and override <code>add_custom_actions</code>:
                     </p>
-                    <pre class="asr-pre asr-pre-py"><code>{`import agentspeak
+                    <pre class="asr-pre asr-pre-py"><code class="language-python">{`import agentspeak
 from spade_bdi.bdi import BDIAgent
 
 class MyAgent(BDIAgent):

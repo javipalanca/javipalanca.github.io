@@ -1,76 +1,49 @@
-// Prism.js initialization script
-console.log('Prism init script loaded');
+// Prism.js initialization — shared by every layout.
+// Registers a small AgentSpeak(L) grammar (not built into Prism) and then
+// highlights every code block that carries a language-* class.
 
-// Initialize immediately
-function initPrism() {
-  console.log('Attempting to initialize Prism.js...');
-  console.log('window.Prism:', typeof window.Prism);
+(function () {
+  function registerAgentSpeak() {
+    if (!window.Prism || Prism.languages.agentspeak) return;
+    Prism.languages.agentspeak = {
+      comment: [/\/\/.*/, /\/\*[\s\S]*?\*\//],
+      string: { pattern: /"(?:\\.|[^"\\])*"/, greedy: true },
+      'plan-operator': { pattern: /<-|:-|!!?|\?|\+|-(?=[a-z!])/, alias: 'keyword' },
+      builtin: { pattern: /\.[a-z_]\w*/, alias: 'function' },
+      variable: /\b[A-Z_]\w*\b/,
+      number: /\b\d+(?:\.\d+)?\b/,
+      operator: /:-|<-|>=|<=|==|\\==|>|<|=|&|\||~|\bnot\b|\bdiv\b|\bmod\b/,
+      functor: { pattern: /[a-z]\w*(?=\()/, alias: 'symbol' },
+      punctuation: /[(){}\[\].,;:]/,
+    };
+  }
 
-  if (typeof window.Prism !== 'undefined' && window.Prism.highlightAll) {
-    console.log('Prism.js found, highlighting all code blocks...');
-
-    // Find all code blocks with language classes
-    const codeBlocks = document.querySelectorAll(
-      'pre code[class*="language-"]'
-    );
-    console.log('Found', codeBlocks.length, 'code blocks to highlight');
-
-    // Highlight each code block
-    codeBlocks.forEach((block, index) => {
-      console.log(`Highlighting block ${index + 1}:`, block.className);
-      window.Prism.highlightElement(block);
-    });
-
-    // Also run highlightAll for good measure
+  function highlight() {
+    if (!window.Prism || !window.Prism.highlightAll) return false;
+    registerAgentSpeak();
     window.Prism.highlightAll();
-    console.log('Prism.js highlighting completed');
-
     return true;
+  }
+
+  // Prism's component scripts may still be parsing; retry briefly.
+  function run() {
+    if (highlight()) return;
+    var attempts = 0;
+    var timer = setInterval(function () {
+      attempts++;
+      if (highlight() || attempts >= 10) clearInterval(timer);
+    }, 100);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
   } else {
-    console.log(
-      'Prism.js not ready yet, available methods:',
-      Object.keys(window.Prism || {})
-    );
-    return false;
-  }
-}
-
-// Try to initialize on DOM ready
-document.addEventListener('DOMContentLoaded', function () {
-  console.log('DOM loaded, initializing Prism.js...');
-
-  // Try multiple times with increasing delays
-  let attempts = 0;
-  const maxAttempts = 10;
-
-  function tryInit() {
-    attempts++;
-    console.log(`Initialization attempt ${attempts}/${maxAttempts}`);
-
-    if (initPrism()) {
-      console.log('Prism.js successfully initialized!');
-      return;
-    }
-
-    if (attempts < maxAttempts) {
-      setTimeout(tryInit, 100 * attempts); // Increasing delay
-    } else {
-      console.error(
-        'Failed to initialize Prism.js after',
-        maxAttempts,
-        'attempts'
-      );
-    }
+    run();
   }
 
-  tryInit();
-});
-
-// Re-initialize when new content is added
-function rehighlightCode() {
-  console.log('Rehighlighting code...');
-  return initPrism();
-}
-
-// Make function globally available
-window.rehighlightCode = rehighlightCode;
+  // Re-highlight after a dark-mode toggle so tokens repaint cleanly.
+  window.rehighlightCode = function () {
+    registerAgentSpeak();
+    if (window.Prism && window.Prism.highlightAll) window.Prism.highlightAll();
+  };
+})();

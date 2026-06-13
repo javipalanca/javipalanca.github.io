@@ -242,21 +242,28 @@ import Breadcrumb from '../../components/Breadcrumb.astro';
                         <h2 class="mb-4">LLM Provider Architecture</h2>
                         <p class="mb-4">Production-ready integration with leading AI providers and local serving frameworks:</p>
                         <div class="row text-center">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 col-lg-3 mb-3">
                                 <div class="provider-card mx-auto">
                                     <img src="/img/openai_light.png" alt="OpenAI Logo" class="provider-logo provider-logo-openai mb-2">
                                     <strong>OpenAI</strong>
-                                    <small class="d-block text-muted">GPT-4.1, GPT-4.1-mini<br/>GPT-4o, GPT-4-turbo</small>
+                                    <small class="d-block text-muted">GPT-5, GPT-5-mini<br/>GPT-4.1, GPT-4.1-mini</small>
                                 </div>
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 col-lg-3 mb-3">
+                                <div class="provider-card mx-auto">
+                                    <img src="https://cdn.simpleicons.org/anthropic/D97757" alt="Anthropic Logo" class="provider-logo provider-logo-claude mb-2">
+                                    <strong>Anthropic</strong>
+                                    <small class="d-block text-muted">Claude Sonnet 4<br/>Claude Opus 4</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-3 mb-3">
                                 <div class="provider-card mx-auto">
                                     <img src="https://avatars.githubusercontent.com/u/151674099?s=200&v=4" alt="Ollama Logo" class="provider-logo mb-2">
                                     <strong>Ollama</strong>
                                     <small class="d-block text-muted">Llama 3.3, Qwen3, Gemma 3<br/>DeepSeek-R1, Phi-4</small>
                                 </div>
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-6 col-lg-3 mb-3">
                                 <div class="provider-card mx-auto">
                                     <img src="/img/lmstudio_light.png" alt="LM Studio Logo" class="provider-logo provider-logo-lmstudio mb-2">
                                     <strong>LM Studio</strong>
@@ -345,7 +352,7 @@ import Breadcrumb from '../../components/Breadcrumb.astro';
                             </li>
                             <li class="mb-3">
                                 <i class="bi bi-check-circle text-success me-2"></i>
-                                <strong>Provider Flexibility:</strong> Dynamic provider switching with unified API across OpenAI, Ollama, and LM Studio
+                                <strong>Provider Flexibility:</strong> Dynamic provider switching with unified API across OpenAI, Anthropic, Ollama, and LM Studio
                             </li>
                             <li class="mb-3">
                                 <i class="bi bi-check-circle text-success me-2"></i>
@@ -587,6 +594,13 @@ async def main():
         object-fit: contain;
         border-radius: 10px;
         transition: all 0.3s ease;
+    }
+
+    .provider-logo-claude {
+        padding: 8px;
+        background: #ffffff;
+        border: 1px solid rgba(17, 24, 39, 0.16);
+        box-shadow: 0 4px 12px rgba(17, 24, 39, 0.08);
     }
 
     .provider-card:hover .provider-logo {
@@ -930,6 +944,12 @@ async def main():
 
     :global(body.dark-mode) .provider-logo-lmstudio {
         content: url('/img/lmstudio_dark.png');
+    }
+
+    :global(body.dark-mode) .provider-logo-claude {
+        background: #ffffff;
+        border-color: rgba(148, 163, 184, 0.45);
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.35);
     }
 
     :global(body.dark-mode) .simple-tutorial-card {
