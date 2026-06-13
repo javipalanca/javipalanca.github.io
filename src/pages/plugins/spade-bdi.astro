@@ -176,6 +176,18 @@ is_sunny(true).</code></pre>
                 </div>
             </div>
 
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <a href="/agentspeak" class="asl-cta plugin-section">
+                        <div class="asl-cta-text">
+                            <div class="asl-cta-kicker">Interactive · No install needed</div>
+                            <h3>Learn AgentSpeak &amp; try it online</h3>
+                            <p>Beliefs, goals and plans explained step by step — with a live interpreter running in your browser.</p>
+                        </div>
+                        <div class="asl-cta-arrow"><i class="bi bi-arrow-right"></i></div>
+                    </a>
+                </div>
+            </div>
 
             <div class="row mb-5">
                 <div class="col-lg-8 mx-auto">
@@ -245,7 +257,7 @@ is_sunny(true).</code></pre>
                         <div class="integration-example mt-4">
                             <h5>Quick Integration Example:</h5>
                             <pre><code class="language-python"># Install and create BDI agent
-pip install spade-bdi
+pip install spade_bdi
 
 # Agent script file (agent.asl)
 !start.
@@ -611,13 +623,84 @@ asyncio.run(main())</code></pre>
         border-left: 3px solid var(--primary-color);
     }
 
+    /* AgentSpeak page cross-link */
+    .asl-cta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        padding: 2rem 2.2rem;
+        border-radius: 20px;
+        text-decoration: none !important;
+        color: white !important;
+        background:
+            radial-gradient(ellipse 70% 150% at 15% 0%, rgba(139, 92, 246, 0.5), transparent 60%),
+            radial-gradient(ellipse 60% 150% at 90% 100%, rgba(47, 107, 255, 0.4), transparent 60%),
+            #0b1228;
+        border: 1px solid rgba(139, 92, 246, 0.35);
+        transition: transform 0.45s var(--ease-spring, ease), box-shadow 0.45s ease, border-color 0.45s ease;
+    }
+
+    .asl-cta:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 24px 60px -16px rgba(139, 92, 246, 0.55);
+        border-color: rgba(167, 139, 250, 0.7);
+    }
+
+    .asl-cta-kicker {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #c4b5fd;
+        margin-bottom: 0.5rem;
+    }
+
+    .asl-cta h3 {
+        color: white !important;
+        font-size: 1.5rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .asl-cta p {
+        color: rgba(230, 236, 247, 0.75);
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    .asl-cta-arrow {
+        flex-shrink: 0;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        color: white;
+        background: linear-gradient(135deg, #8b5cf6, #d946ef);
+        transition: transform 0.4s var(--ease-bounce, ease);
+    }
+
+    .asl-cta:hover .asl-cta-arrow {
+        transform: translateX(6px);
+    }
+
     .agentspeak-syntax pre {
-        background: #1e1e1e;
-        color: #d4d4d4;
+        background: #f8faff;
+        color: #212529;
+        border: 1px solid rgba(15, 23, 42, 0.1);
         border-radius: 10px;
         padding: 1rem;
         margin-bottom: 1rem;
         overflow-x: auto;
+    }
+
+    :global(body.dark-mode) .agentspeak-syntax pre {
+        background: #0a101f !important;
+        color: #d4d4d4;
+        border-color: rgba(255, 255, 255, 0.1);
     }
 
     .agentspeak-syntax code {
@@ -655,12 +738,19 @@ asyncio.run(main())</code></pre>
     }
 
     .integration-example pre {
-        background: #1e1e1e;
-        color: #d4d4d4;
+        background: #f8faff;
+        color: #212529;
+        border: 1px solid rgba(15, 23, 42, 0.1);
         border-radius: 10px;
         padding: 1rem;
         margin-top: 1rem;
         overflow-x: auto;
+    }
+
+    :global(body.dark-mode) .integration-example pre {
+        background: #0a101f !important;
+        color: #d4d4d4;
+        border-color: rgba(255, 255, 255, 0.1);
     }
 
     /* Dark mode support */

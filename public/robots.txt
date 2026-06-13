@@ -28,7 +28,7 @@ Disallow: *.tmp
 Disallow: *.cache
 
 # Sitemap location for search engines
-Sitemap: https://javipalanca.github.io/spade/sitemap.xml
+Sitemap: https://spadeagents.eu/sitemap-index.xml
 
 # Crawl-delay for respectful crawling
 Crawl-delay: 1

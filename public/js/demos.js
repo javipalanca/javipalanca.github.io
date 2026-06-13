@@ -21,6 +21,11 @@ let messageIdCounter = 0; // Counter for unique message IDs
 
 // Initialize the demo when document is loaded
 document.addEventListener("DOMContentLoaded", async function () {
+  // Exit silently on pages without the interactive demo section
+  if (!document.getElementById("agent-network")) {
+    return;
+  }
+
   console.log("DOMContentLoaded - Starting demo initialization...");
 
   // Wait for demo data to be loaded

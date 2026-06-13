@@ -189,7 +189,7 @@ import Breadcrumb from '../../components/Breadcrumb.astro';
                                 </div>
                                 <div>
                                     <h4>FIWARE Context Broker Integration</h4>
-                                    <p>Advanced integration with FIWARE ecosystem through dedicated <strong>spade-fiware-artifacts</strong> library. Separate implementation with full NGSI-LD protocol support, Orion and Scorpio Context Brokers, and specialized IoT data management optimized for asyncio operations.</p>
+                                    <p>Advanced integration with FIWARE ecosystem through dedicated <strong>spade_fiware_artifacts</strong> library. Separate implementation with full NGSI-LD protocol support, Orion and Scorpio Context Brokers, and specialized IoT data management optimized for asyncio operations.</p>
                                 </div>
                             </div>
                         </div>
@@ -203,11 +203,81 @@ import Breadcrumb from '../../components/Breadcrumb.astro';
                     <div class="plugin-section animate-on-scroll stagger-3">
                         <h2 class="text-center mb-5">PubSub Communication Architecture</h2>
                         <div class="pubsub-diagram-container">
-                            <img 
-                                src="/img/pubsub.png" 
-                                alt="SPADE PubSub Communication Mechanism" 
-                                class="pubsub-diagram img-fluid rounded shadow"
-                            />
+                            <p class="pubsub-subtitle">How Artifacts and Agents Communicate</p>
+                            <svg class="pubsub-svg" viewBox="0 0 720 330" role="img" aria-labelledby="psTitle psDesc" xmlns="http://www.w3.org/2000/svg">
+                                <title id="psTitle">SPADE PubSub communication mechanism</title>
+                                <desc id="psDesc">Artifacts publish data to a shared communication channel; agents subscribe and receive real-time notifications when artifact state changes.</desc>
+                                <defs>
+                                    <linearGradient id="psBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b8cff"/><stop offset="1" stop-color="#2f6bff"/></linearGradient>
+                                    <linearGradient id="psPurple" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient>
+                                    <linearGradient id="psRed" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fb7185"/><stop offset="1" stop-color="#ef4444"/></linearGradient>
+                                    <linearGradient id="psGreen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34d399"/><stop offset="1" stop-color="#10b981"/></linearGradient>
+                                    <marker id="psArrowBlue" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2f6bff"/></marker>
+                                    <marker id="psArrowPurple" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#8b5cf6"/></marker>
+                                    <marker id="psArrowRed" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#ef4444"/></marker>
+                                    <marker id="psArrowGreen" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#10b981"/></marker>
+                                </defs>
+
+                                <!-- Column captions -->
+                                <text class="ps-col" x="115" y="34" text-anchor="middle">Artifacts</text>
+                                <text class="ps-col-sub" x="115" y="52" text-anchor="middle">Data Sources</text>
+                                <text class="ps-col" x="620" y="34" text-anchor="middle">Agents</text>
+                                <text class="ps-col-sub" x="620" y="52" text-anchor="middle">Data Consumers</text>
+
+                                <!-- Connections (animated flow) -->
+                                <path class="ps-flow ps-flow-blue" d="M190,118 C235,118 240,150 275,150" fill="none" stroke="#2f6bff" marker-end="url(#psArrowBlue)"/>
+                                <path class="ps-flow ps-flow-purple" d="M190,232 C235,232 240,182 275,182" fill="none" stroke="#8b5cf6" marker-end="url(#psArrowPurple)"/>
+                                <path class="ps-flow ps-flow-red" d="M445,150 C495,150 520,140 565,140" fill="none" stroke="#ef4444" marker-end="url(#psArrowRed)"/>
+                                <path class="ps-flow ps-flow-green" d="M445,182 C495,182 520,232 565,232" fill="none" stroke="#10b981" marker-end="url(#psArrowGreen)"/>
+
+                                <!-- Artifact A -->
+                                <g class="ps-node">
+                                    <rect x="40" y="92" width="150" height="56" rx="14" fill="url(#psBlue)"/>
+                                    <text class="ps-node-title" x="115" y="116" text-anchor="middle">Artifact A</text>
+                                    <text class="ps-node-sub" x="115" y="134" text-anchor="middle">Temperature: 25°C</text>
+                                </g>
+                                <!-- Artifact B -->
+                                <g class="ps-node">
+                                    <rect x="40" y="204" width="150" height="56" rx="14" fill="url(#psPurple)"/>
+                                    <text class="ps-node-title" x="115" y="228" text-anchor="middle">Artifact B</text>
+                                    <text class="ps-node-sub" x="115" y="246" text-anchor="middle">Status: Active</text>
+                                </g>
+
+                                <!-- Communication channel -->
+                                <rect class="ps-channel" x="278" y="96" width="164" height="160" rx="18"/>
+                                <text class="ps-channel-title" x="360" y="122" text-anchor="middle">Communication Channel</text>
+                                <g class="ps-icon">
+                                    <circle cx="312" cy="168" r="19" fill="rgba(239,68,68,0.14)" stroke="#ef4444"/>
+                                    <text class="ps-icon-emoji" x="312" y="174" text-anchor="middle">📤</text>
+                                    <text class="ps-icon-label" x="312" y="204" text-anchor="middle" fill="#ef4444">Publish</text>
+                                </g>
+                                <g class="ps-icon">
+                                    <circle cx="360" cy="168" r="19" fill="rgba(245,158,11,0.16)" stroke="#f59e0b"/>
+                                    <text class="ps-icon-emoji" x="360" y="174" text-anchor="middle">🔔</text>
+                                    <text class="ps-icon-label" x="360" y="204" text-anchor="middle" fill="#d97706">Subscribe</text>
+                                </g>
+                                <g class="ps-icon">
+                                    <circle cx="408" cy="168" r="19" fill="rgba(16,185,129,0.14)" stroke="#10b981"/>
+                                    <text class="ps-icon-emoji" x="408" y="174" text-anchor="middle">📡</text>
+                                    <text class="ps-icon-label" x="408" y="204" text-anchor="middle" fill="#059669">Notify</text>
+                                </g>
+                                <text class="ps-channel-foot" x="360" y="238" text-anchor="middle">Real-time Updates</text>
+
+                                <!-- Agent A -->
+                                <g class="ps-node">
+                                    <circle cx="620" cy="140" r="44" fill="url(#psRed)"/>
+                                    <text class="ps-node-title" x="620" y="134" text-anchor="middle">Agent A</text>
+                                    <text class="ps-node-mini" x="620" y="150" text-anchor="middle">Subscribed to:</text>
+                                    <text class="ps-node-mini" x="620" y="162" text-anchor="middle">Temperature</text>
+                                </g>
+                                <!-- Agent B -->
+                                <g class="ps-node">
+                                    <circle cx="620" cy="232" r="44" fill="url(#psGreen)"/>
+                                    <text class="ps-node-title" x="620" y="226" text-anchor="middle">Agent B</text>
+                                    <text class="ps-node-mini" x="620" y="242" text-anchor="middle">Subscribed to:</text>
+                                    <text class="ps-node-mini" x="620" y="254" text-anchor="middle">Both properties</text>
+                                </g>
+                            </svg>
                             <div class="diagram-caption mt-4">
                                 <p class="text-center text-muted">
                                     <strong>PubSub Architecture:</strong> SPADE Artifact uses XMPP-based publish-subscribe mechanisms to enable real-time 
@@ -232,18 +302,18 @@ import Breadcrumb from '../../components/Breadcrumb.astro';
                                         <div class="install-option mb-3">
                                             <h6 class="text-primary">Core Framework:</h6>
                                             <div class="bg-dark p-3 rounded">
-                                                <pre><code class="text-light"># Install core SPADE Artifact
-pip install spade-artifact
+                                                <pre><code class="language-bash"># Install core SPADE Artifact
+pip install spade_artifact
 
 # Optional: PubSub support
-pip install spade-pubsub</code></pre>
+pip install spade_pubsub</code></pre>
                                             </div>
                                         </div>
                                         <div class="install-option">
                                             <h6 class="text-warning">FIWARE Integration:</h6>
                                             <div class="bg-dark p-3 rounded">
-                                                <pre><code class="text-light"># Install FIWARE-specific artifacts
-pip install spade-fiware-artifacts</code></pre>
+                                                <pre><code class="language-bash"># Install FIWARE-specific artifacts
+pip install spade_fiware_artifacts</code></pre>
                                             </div>
                                         </div>
                                     </div>
@@ -253,7 +323,7 @@ pip install spade-fiware-artifacts</code></pre>
                                 <div class="info-card">
                                     <h4><i class="bi bi-code-slash me-2"></i>Basic Implementation</h4>
                                     <div class="bg-dark p-3 rounded mt-3">
-                                        <pre><code class="text-light">from spade import Agent
+                                        <pre><code class="language-python">from spade import Agent
 from spade_artifact import Artifact, ArtifactMixin
 
 class DataAgent(Agent, ArtifactMixin):
@@ -466,17 +536,73 @@ class DataAgent(Agent, ArtifactMixin):
         border-color: rgba(52, 152, 219, 0.2);
     }
 
-    .pubsub-diagram {
-        max-width: 100%;
-        height: auto;
-        border-radius: 15px;
-        transition: all 0.3s ease;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    .pubsub-subtitle {
+        text-align: center;
+        color: var(--text-muted-color, #5b6b81);
+        font-size: 1.02rem;
+        margin: -0.5rem 0 1.5rem;
     }
 
-    .pubsub-diagram:hover {
-        transform: scale(1.02);
-        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+    :global(body.dark-mode) .pubsub-subtitle { color: var(--dark-text-muted); }
+
+    .pubsub-svg {
+        display: block;
+        width: 100%;
+        max-width: 760px;
+        height: auto;
+        margin: 0 auto;
+        font-family: var(--font-body, sans-serif);
+    }
+
+    /* Theme-aware text colours */
+    .ps-col { fill: var(--text-color, #0f172a); font-weight: 700; font-size: 18px; font-family: var(--font-display, sans-serif); }
+    .ps-col-sub { fill: var(--text-muted-color, #5b6b81); font-size: 12px; font-style: italic; }
+    .ps-node-title { fill: #fff; font-weight: 700; font-size: 15px; }
+    .ps-node-sub { fill: rgba(255, 255, 255, 0.92); font-size: 11.5px; }
+    .ps-node-mini { fill: rgba(255, 255, 255, 0.92); font-size: 9.5px; }
+    .ps-channel { fill: rgba(148, 163, 184, 0.08); stroke: rgba(100, 116, 139, 0.5); stroke-width: 2; stroke-dasharray: 6 5; }
+    .ps-channel-title { fill: var(--text-color, #0f172a); font-weight: 700; font-size: 12.5px; }
+    .ps-channel-foot { fill: var(--text-muted-color, #5b6b81); font-size: 11px; font-style: italic; }
+    .ps-icon-emoji { font-size: 16px; }
+    .ps-icon-label { font-size: 10px; font-weight: 600; }
+
+    :global(body.dark-mode) .ps-col { fill: var(--dark-text); }
+    :global(body.dark-mode) .ps-col-sub,
+    :global(body.dark-mode) .ps-channel-foot { fill: var(--dark-text-muted); }
+    :global(body.dark-mode) .ps-channel-title { fill: var(--dark-text); }
+    :global(body.dark-mode) .ps-channel { fill: rgba(148, 163, 184, 0.1); stroke: rgba(148, 163, 184, 0.45); }
+
+    /* Node hover lift */
+    .ps-node { transition: transform 0.35s var(--ease-spring, ease); transform-box: fill-box; transform-origin: center; }
+    .ps-node:hover { transform: translateY(-4px) scale(1.03); }
+
+    /* Animated data flow along the connections */
+    .ps-flow {
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-dasharray: 7 7;
+        animation: psFlow 1.1s linear infinite;
+    }
+    .ps-flow-purple { animation-delay: -0.3s; }
+    .ps-flow-red { animation-delay: -0.55s; }
+    .ps-flow-green { animation-delay: -0.8s; }
+
+    @keyframes psFlow {
+        to { stroke-dashoffset: -28; }
+    }
+
+    /* Channel icons gently pulse */
+    .ps-icon circle { animation: psPulse 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    .ps-icon:nth-of-type(2) circle { animation-delay: 0.4s; }
+    .ps-icon:nth-of-type(3) circle { animation-delay: 0.8s; }
+
+    @keyframes psPulse {
+        0%, 100% { opacity: 0.85; }
+        50% { opacity: 1; transform: scale(1.08); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .ps-flow, .ps-icon circle { animation: none; }
     }
 
     .diagram-caption {

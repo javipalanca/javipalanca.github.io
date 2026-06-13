@@ -1,1213 +1,879 @@
 ---
-// Interactive Demo Section component
-import PythonCodeBlock from './PythonCodeBlock.astro';
+// Interactive Agent Demo.
+// A self-contained, JSON-driven visualizer: agents are themed HTML cards,
+// while a canvas underneath draws the links and animates messages flowing
+// between them. Every scenario, agent type and message type is configured
+// in /public/json/demos.json — edit the JSON to change the demos.
+const baseUrl = import.meta.env.BASE_URL;
 ---
 
-<section id="interactive-demo" class="py-5 interactive-demo">
+<section id="interactive-demo" class="idemo py-5">
     <div class="container">
-        <div class="text-center mb-5">
+        <div class="text-center mb-5 fade-in-up">
             <h2 class="fw-bold">Interactive Agent Demo</h2>
-            <p class="lead">See how SPADE agents communicate and interact in real-time</p>
+            <p class="lead text-muted">Pick a scenario and press play — watch SPADE agents exchange messages in real time</p>
         </div>
-        
-        <div class="row">
-            <div class="col-lg-10 mx-auto">
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-body p-0">
-                        <!-- Demo canvas container -->
-                        <div id="agent-demo-container" class="position-relative demo-canvas-container">
-                            <!-- Canvas for agent animation (will be replaced by vis.js) -->
-                            <canvas id="agent-canvas" width="800" height="400" class="w-100" style="display: none;"></canvas>
-                            <div id="agent-network" style="width: 100%; height: 400px; border: 1px solid #ddd; border-radius: 5px 5px 0 0;"></div>
-                            
-                            <!-- Controls - positioned at bottom but not overlapping -->
-                            <div class="demo-controls p-3 bg-light bg-opacity-90 dark-mode-aware border-top">
-                                <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center mb-2">
-                                    <div class="mb-2 mb-sm-0 me-sm-3">
-                                        <select id="demo-scenario" class="form-select form-select-sm">
-                                            <!-- Options will be loaded dynamically from JSON -->
-                                        </select>
-                                    </div>
-                                    <div class="button-group">
-                                        <button id="start-demo" class="btn btn-primary btn-sm me-1 mb-1 mb-sm-0">
-                                            <i class="bi bi-play-fill"></i> <span class="d-none d-sm-inline">Start</span>
-                                        </button>
-                                        <button id="reset-demo" class="btn btn-outline-secondary btn-sm me-1 mb-1 mb-sm-0">
-                                            <i class="bi bi-arrow-counterclockwise"></i> <span class="d-none d-sm-inline">Reset</span>
-                                        </button>                        <button id="toggle-code" class="btn btn-outline-info btn-sm" title="Scroll to code examples">
-                            <i class="bi bi-code-slash"></i> <span class="d-none d-sm-inline">View Code</span>
-                        </button>
-                                    </div>
-                                </div>
-                                <div class="row mt-2">
-                                    <div class="col">
-                                        <small class="text-muted">
-                                            Status: <span id="demo-status-text" class="text-warning">Paused</span>
-                                        </small>
-                                    </div>
-                                </div>
-                                <div class="row mt-1">
-                                    <div class="col">
-                                        <small class="text-muted" id="demo-description">
-                                            A simple demonstration of two agents exchanging messages.
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
 
+        <div class="idemo-shell">
+            <!-- Scenario chips + transport controls -->
+            <div class="idemo-toolbar">
+                <div class="idemo-scenarios" id="idemo-scenarios" role="tablist" aria-label="Demo scenario"></div>
+                <div class="idemo-controls">
+                    <button class="idemo-btn idemo-btn-play" id="idemo-play" type="button" aria-label="Play or pause">
+                        <i class="bi bi-play-fill"></i><span>Play</span>
+                    </button>
+                    <button class="idemo-btn" id="idemo-step" type="button" aria-label="Step one message">
+                        <i class="bi bi-skip-end-fill"></i><span>Step</span>
+                    </button>
+                    <button class="idemo-btn" id="idemo-reset" type="button" aria-label="Reset">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </button>
+                    <div class="idemo-speed" role="group" aria-label="Speed">
+                        <button class="idemo-speed-btn" data-speed="0.5" type="button">0.5×</button>
+                        <button class="idemo-speed-btn active" data-speed="1" type="button">1×</button>
+                        <button class="idemo-speed-btn" data-speed="2" type="button">2×</button>
                     </div>
                 </div>
-                
-                <div class="row text-center mb-4">
-                    <div class="col-md-4">
-                        <h6>Agent Communication</h6>
-                        <p class="small text-muted">Watch agents send and receive messages using XMPP protocol</p>
-                    </div>
-                    <div class="col-md-4">
-                        <h6>Behavior Patterns</h6>
-                        <p class="small text-muted">See different behavior types: Cyclic, Periodic, and One-shot</p>
-                    </div>
-                    <div class="col-md-4">
-                        <h6>Real-time Updates</h6>
-                        <p class="small text-muted">Monitor agent status and presence in real-time</p>
-                    </div>
+            </div>
+
+            <div class="idemo-main">
+                <!-- Stage: canvas (links + messages) behind HTML agent cards -->
+                <div class="idemo-stage" id="idemo-stage">
+                    <canvas class="idemo-canvas" id="idemo-canvas" aria-hidden="true"></canvas>
+                    <div class="idemo-nodes" id="idemo-nodes"></div>
+                    <div class="idemo-legend" id="idemo-legend" aria-hidden="true"></div>
                 </div>
-                
-                <!-- Python Code Examples Section -->
-                <div class="card border-0 shadow-sm mb-4" id="code-section">
-                    <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
-                        <div>
-                            <i class="bi bi-code-slash me-2"></i>
-                            <span>Python Implementation</span>
-                        </div>
-                        <button class="btn btn-sm btn-outline-light" id="collapse-code">
-                            <i class="bi bi-chevron-up"></i>
-                        </button>
+
+                <!-- Side panel: description, concepts, live event log -->
+                <aside class="idemo-side">
+                    <div class="idemo-desc">
+                        <h3 id="idemo-title">—</h3>
+                        <p id="idemo-description">—</p>
+                        <ul class="idemo-concepts" id="idemo-concepts"></ul>
                     </div>
-                    <div class="card-body p-0" id="code-container">
-                        <!-- Tabs for different scenarios - will be populated dynamically -->
-                        <ul class="nav nav-tabs" id="codeExampleTabs" role="tablist">
-                            <!-- Tabs will be generated from demo data -->
-                        </ul>
-                        
-                        <!-- Tab content - will be populated dynamically -->
-                        <div class="tab-content" id="codeExampleTabsContent">
-                            <!-- Content will be generated from demo data -->
-                        </div>
+                    <div class="idemo-log-head">
+                        <i class="bi bi-terminal me-2"></i>Event log
                     </div>
+                    <div class="idemo-log" id="idemo-log" aria-live="polite"></div>
+                </aside>
+            </div>
+
+            <!-- Python implementation of the selected scenario -->
+            <div class="idemo-code">
+                <div class="idemo-code-bar">
+                    <span class="idemo-code-dots"></span>
+                    <span class="idemo-code-file" id="idemo-code-file">scenario.py</span>
+                    <button class="idemo-copy" id="idemo-copy" type="button" title="Copy code">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
                 </div>
+                <pre class="idemo-code-pre"><code class="language-python" id="idemo-code">…</code></pre>
             </div>
         </div>
     </div>
 </section>
 
-<style>
-    .code-description h6 {
-        font-weight: 600;
-    }
-    
-    /* Custom styles for code tabs */
-    #codeExampleTabs .nav-link {
-        color: #6c757d;
-        font-weight: 500;
-        border: none;
-        padding: 0.75rem 1rem;
-        transition: all 0.2s ease;
-    }
-    
-    #codeExampleTabs .nav-link:hover {
-        color: #495057;
-        background-color: rgba(0, 0, 0, 0.03);
-    }
-    
-    #codeExampleTabs .nav-link.active {
-        color: #0d6efd;
-        font-weight: 600;
-        border-bottom: 2px solid #0d6efd;
-    }
-    
-    /* Interactive demo section styles */
-    .interactive-demo {
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        padding: 4rem 0;
+<style is:global>
+    /* Styles are global because agent nodes, chips and the event log are
+       created dynamically in JS — Astro's scoped styles only apply to
+       elements present in the template. All classes are prefixed .idemo-. */
+    .idemo-shell {
+        border-radius: 22px;
+        overflow: hidden;
+        border: 1px solid rgba(122, 167, 255, 0.18);
+        background: #0a101f;
+        box-shadow: 0 30px 80px -30px rgba(7, 11, 22, 0.7);
     }
 
-    #agentCanvas {
-        border: 2px solid var(--primary-color);
-        border-radius: 10px;
-        background: white;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Demo canvas responsive styles */
-    .demo-canvas-container {
-        height: 500px;
-        min-height: 400px;
-        transition: height 0.3s ease;
-    }
-    
-    /* Better scrolling for code blocks */
-    .code-body {
-        height: 350px; /* Fixed height instead of max-height for consistent appearance */
-        overflow-y: auto;
-        overflow-x: auto;
-        background-color: #f8f9fa;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        border-radius: 0.375rem;
-        position: relative;
-    }
-    
-    .code-body pre {
-        margin: 0;
-        padding: 1rem;
-        background: transparent !important;
-        border: none;
-        border-radius: 0;
-        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
-        font-size: 0.875rem;
-        line-height: 1.5;
-        white-space: pre;  /* Changed from pre-wrap to preserve horizontal scrolling */
-        word-wrap: normal; /* Changed from break-word to maintain code formatting */
-    }
-    
-    .code-body code {
-        padding: 0;
-        background: transparent;
-        border: none;
-        border-radius: 0;
-    }
-    
-    /* Custom scrollbar for code blocks */
-    .code-body::-webkit-scrollbar {
-        width: 10px;
-        height: 10px;
-    }
-    
-    .code-body::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.05);
-        border-radius: 4px;
-    }
-    
-    .code-body::-webkit-scrollbar-thumb {
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 4px;
-        border: 2px solid transparent;
-        background-clip: padding-box;
-    }
-    
-    .code-body::-webkit-scrollbar-thumb:hover {
-        background: rgba(0, 0, 0, 0.3);
-        border: 2px solid transparent;
-        background-clip: padding-box;
-    }
-    
-    .code-body::-webkit-scrollbar-corner {
-        background: rgba(0, 0, 0, 0.05);
-    }
-    
-    /* Dark mode styles for code body */
-    :global(.dark-mode) .code-body {
-        background-color: #2d3748;
-        border-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    :global(.dark-mode) .code-body pre {
-        color: #e2e8f0;
-    }
-    
-    :global(.dark-mode) .code-body::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.05);
-    }
-    
-    :global(.dark-mode) .code-body::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.2);
-        border: 2px solid transparent;
-        background-clip: padding-box;
-    }
-    
-    :global(.dark-mode) .code-body::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.3);
-        border: 2px solid transparent;
-        background-clip: padding-box;
-    }
-    
-    :global(.dark-mode) .code-body::-webkit-scrollbar-corner {
-        background: rgba(255, 255, 255, 0.05);
-    }
-    
-    /* Demo canvas and network container */
-    .demo-canvas-container {
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        border-radius: 8px;
-        overflow: hidden;
-    }
-    
-    #agent-network {
-        background: transparent;
-        border: 1px solid rgba(0, 0, 0, 0.1) !important;
-        border-radius: 5px;
-    }
-    
-    /* Custom scrollbar for code blocks */
-    .code-body::-webkit-scrollbar {
-        width: 10px;
-        height: 10px;
-    }
-    
-    .code-body::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.05);
-        border-radius: 4px;
-    }
-    
-    .code-body::-webkit-scrollbar-thumb {
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 4px;
-        border: 2px solid transparent;
-        background-clip: padding-box;
-    }
-    
-    .code-body::-webkit-scrollbar-thumb:hover {
-        background: rgba(0, 0, 0, 0.3);
-        border: 2px solid transparent;
-        background-clip: padding-box;
-    }
-    
-    .code-body::-webkit-scrollbar-corner {
-        background: rgba(0, 0, 0, 0.05);
-    }
-    
-    /* Dark mode styles for code body */
-    :global(.dark-mode) .code-body {
-        background-color: #2d3748;
-        border-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    :global(.dark-mode) .code-body pre {
-        color: #e2e8f0;
-    }
-    
-    :global(.dark-mode) .code-body::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.05);
-    }
-    
-    :global(.dark-mode) .code-body::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.2);
-        border: 2px solid transparent;
-        background-clip: padding-box;
-    }
-    
-    :global(.dark-mode) .code-body::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.3);
-        border: 2px solid transparent;
-        background-clip: padding-box;
-    }
-    
-    :global(.dark-mode) .code-body::-webkit-scrollbar-corner {
-        background: rgba(255, 255, 255, 0.05);
-    }
-    
-    /* Demo canvas and network container */
-    .demo-canvas-container {
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        border-radius: 8px;
-        overflow: hidden;
-    }
-    
-    #agent-network {
-        background: transparent;
-        border: 1px solid rgba(0, 0, 0, 0.1) !important;
-        border-radius: 5px;
-    }
-    
-    /* Dark mode for demo container */
-    :global(.dark-mode) .demo-canvas-container {
-        background: linear-gradient(135deg, #343a40 0%, #495057 100%);
-    }
-    
-    :global(.dark-mode) #agent-network {
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        background: rgba(255, 255, 255, 0.02);
-    }
-    
-    /* Demo controls */
-    .demo-controls {
-        background: rgba(255, 255, 255, 0.9) !important;
-        backdrop-filter: blur(5px);
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-        transition: all 0.3s ease;
-        z-index: 10;
-        padding: 1.5rem;
-    }
-    
-    /* Running indicator */
-    #demo-status-text.text-success::before {
-        content: "●";
-        color: #28a745;
-        margin-right: 5px;
-        animation: pulse 1.5s infinite;
-    }
-    
-    @keyframes pulse {
-        0% { opacity: 1; }
-        50% { opacity: 0.5; }
-        100% { opacity: 1; }
-    }
-    
-    /* Button styles */
-    .button-group {
+    /* ---- Toolbar ---- */
+    .idemo-toolbar {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.25rem;
+        gap: 0.75rem;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.85rem 1rem;
+        background: #0e1526;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     }
-    
-    .button-group .btn {
-        min-width: 80px;
-        text-align: center;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+    .idemo-scenarios {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
     }
-    
-    #demo-scenario {
-        min-width: 180px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+    .idemo-chip {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+        color: #93a1b8;
+        font-size: 0.82rem;
+        font-weight: 600;
+        padding: 0.4rem 0.85rem;
+        border-radius: 50rem;
+        cursor: pointer;
+        transition: all 0.25s var(--ease-spring, ease);
+        white-space: nowrap;
     }
-    
-    /* Enhanced visual feedback for toggle button */
-    #toggle-code {
+
+    .idemo-chip:hover {
+        color: #e6ecf7;
+        border-color: rgba(122, 167, 255, 0.4);
+    }
+
+    .idemo-chip.active {
+        background: linear-gradient(135deg, #2f6bff, #06b6d4);
+        border-color: transparent;
+        color: #fff;
+        box-shadow: 0 8px 20px -8px rgba(47, 107, 255, 0.6);
+    }
+
+    .idemo-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .idemo-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.05);
+        color: #d7e2f5;
+        font-size: 0.82rem;
+        font-weight: 600;
+        padding: 0.4rem 0.8rem;
+        border-radius: 50rem;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .idemo-btn:hover { background: rgba(255, 255, 255, 0.1); }
+
+    .idemo-btn-play {
+        background: linear-gradient(135deg, #10b981, #06b6d4);
+        border-color: transparent;
+        color: #fff;
+    }
+
+    .idemo-btn-play.playing {
+        background: linear-gradient(135deg, #f59e0b, #ef4444);
+    }
+
+    .idemo-speed {
+        display: flex;
+        gap: 0.15rem;
+        margin-left: 0.3rem;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.15rem;
+        border-radius: 50rem;
+    }
+
+    .idemo-speed-btn {
+        border: none;
+        background: transparent;
+        color: #93a1b8;
+        font-size: 0.74rem;
+        font-weight: 700;
+        padding: 0.25rem 0.55rem;
+        border-radius: 50rem;
+        cursor: pointer;
+    }
+
+    .idemo-speed-btn.active { background: rgba(122, 167, 255, 0.25); color: #fff; }
+
+    /* ---- Main grid ---- */
+    .idemo-main {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        min-height: 440px;
+    }
+
+    @media (max-width: 860px) {
+        .idemo-main { grid-template-columns: 1fr; }
+    }
+
+    /* ---- Stage ---- */
+    .idemo-stage {
         position: relative;
+        min-height: 440px;
+        background:
+            radial-gradient(ellipse 80% 80% at 50% 40%, rgba(47, 107, 255, 0.1), transparent 70%),
+            #070c1c;
         overflow: hidden;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
-    #toggle-code::before {
-        content: '';
+
+    .idemo-canvas {
         position: absolute;
-        top: 0;
-        left: -100%;
+        inset: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transition: left 0.5s ease;
     }
-    
-    #toggle-code:hover::before {
-        left: 100%;
-    }
-    
-    #toggle-code:active {
-        transform: translateY(1px);
-    }
-    
 
-    
-    /* Better mobile view */
-    @media (max-width: 767.98px) {
-        .demo-controls .row {
-            flex-direction: column;
-        }
-        
-        .demo-controls .col-auto {
-            margin-top: 0.5rem;
-            width: 100%;
-        }
-        
-        #demo-scenario {
-            width: 100%;
-        }
-        
-        .demo-controls button {
-            margin-bottom: 0.5rem;
-        }
-    }
-    
-    /* Dark mode support */
-    :global(.dark-mode) .code-description h6 {
-        color: #61dafb !important;
-    }
-    
-    :global(.dark-mode) #codeExampleTabs .nav-link {
-        color: #adb5bd;
-    }
-    
-    :global(.dark-mode) #codeExampleTabs .nav-link:hover {
-        color: #e9ecef;
-        background-color: rgba(255, 255, 255, 0.05);
-    }
-    
-    :global(.dark-mode) #codeExampleTabs .nav-link.active {
-        color: #61dafb;
-        border-bottom-color: #61dafb;
-    }
-    
-    :global(.dark-mode) .demo-controls {
-        background: rgba(33, 37, 41, 0.9) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    /* Controls for code section */
-    #code-section {
-        transition: all 0.3s ease;
-    }
-    
-    #code-section.collapsed #code-container {
-        display: none;
-    }
-    
-    #code-section.collapsed #collapse-code i {
-        transform: rotate(180deg);
-    }
-    
-    #collapse-code {
-        transition: all 0.2s ease;
-    }
-    
-    #collapse-code i {
-        transition: transform 0.3s ease;
-    }
-    
-    /* Scroll indicators */
-    .code-example {
-        position: relative;
-        background-color: #ffffff;
-        border: 1px solid #dee2e6;
-        border-radius: 10px;
-        overflow: hidden;
-        margin-bottom: 1rem;
-    }
-    
-    :global(body.dark-mode) .code-example {
-        background-color: var(--dark-card-bg);
-        border-color: var(--dark-border);
-    }
-    
-    .code-header {
-        background-color: #f0f0f0;
-        color: #333;
-        padding: 12px 20px;
-        border-bottom: 1px solid #dee2e6;
-        font-weight: 600;
-    }
-    
-    :global(body.dark-mode) .code-header {
-        background-color: #343a40;
-        color: white;
-        border-bottom-color: #4a5568;
-    }
-    
-    .code-body {
-        padding: 20px;
-        background-color: #ffffff;
-    }
-    
-    .code-body pre {
-        margin: 0;
-        background-color: #ffffff;
-        color: #212529;
-    }
-    
-    .code-body code {
-        background-color: transparent;
-        color: #212529;
-    }
-    
-    :global(body.dark-mode) .code-body {
-        background-color: #1a202c;
-    }
-    
-    :global(body.dark-mode) .code-body pre,
-    :global(body.dark-mode) .code-body code {
-        background-color: #1a202c;
-        color: #e2e8f0;
-    }
-    
-    .scroll-indicator {
+    .idemo-nodes { position: absolute; inset: 0; }
+
+    .idemo-node {
         position: absolute;
-        bottom: 10px;
-        right: 10px;
-        display: flex;
-        gap: 8px;
+        transform: translate(-50%, -50%);
+        width: 132px;
+        padding: 0.7rem 0.6rem 0.6rem;
+        border-radius: 14px;
+        background: rgba(14, 21, 38, 0.92);
+        border: 1px solid var(--c, #2f6bff);
+        box-shadow: 0 10px 26px -10px rgba(0, 0, 0, 0.7);
+        text-align: center;
+        transition: box-shadow 0.3s ease, transform 0.3s var(--ease-spring, ease);
+        z-index: 2;
+        backdrop-filter: blur(4px);
     }
-    
-    .scroll-arrow {
-        width: 24px;
-        height: 24px;
+
+    .idemo-node.pulse {
+        animation: idemoPulse 0.7s var(--ease-spring, ease);
+    }
+
+    @keyframes idemoPulse {
+        0% { box-shadow: 0 0 0 0 var(--c, #2f6bff), 0 10px 26px -10px rgba(0, 0, 0, 0.7); }
+        40% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--c, #2f6bff) 35%, transparent), 0 10px 26px -10px rgba(0, 0, 0, 0.7); transform: translate(-50%, -50%) scale(1.06); }
+        100% { box-shadow: 0 0 0 0 transparent, 0 10px 26px -10px rgba(0, 0, 0, 0.7); }
+    }
+
+    .idemo-node.sending .idemo-node-icon { animation: idemoNudge 0.5s ease; }
+    @keyframes idemoNudge { 50% { transform: scale(1.18); } }
+
+    .idemo-node-icon {
+        width: 42px;
+        height: 42px;
+        margin: 0 auto 0.4rem;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 50%;
-        background-color: rgba(13, 110, 253, 0.1);
-        color: #0d6efd;
-        animation: fadeInOut 2s infinite;
+        font-size: 1.2rem;
+        color: #fff;
+        background: var(--c, #2f6bff);
+        box-shadow: 0 6px 16px -6px var(--c, #2f6bff);
     }
-    
-    @keyframes fadeInOut {
-        0%, 100% { opacity: 0.4; }
-        50% { opacity: 0.8; }
+
+    .idemo-node-name {
+        display: block;
+        font-family: var(--font-display, sans-serif);
+        font-weight: 600;
+        font-size: 0.84rem;
+        color: #fff;
+        line-height: 1.2;
     }
-    
-    :global(.dark-mode) .scroll-arrow {
-        background-color: rgba(97, 218, 251, 0.1);
-        color: #61dafb;
-    }
-    
-    /* Button highlight */
-    #toggle-code.active {
-        background-color: #0dcaf0 !important;
-        color: white !important;
-        border-color: #0dcaf0 !important;
-        box-shadow: 0 0 0 0.2rem rgba(13, 202, 240, 0.25);
-    }
-    
-    :global(.dark-mode) #toggle-code.active {
-        background-color: #0d6efd !important;
-        border-color: #0d6efd !important;
-        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-    }
-    
-    /* Demo container and canvas */
-    .demo-canvas-container {
-        border-radius: 0.375rem;
+
+    .idemo-node-jid {
+        display: block;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.62rem;
+        color: #64748b;
+        margin-top: 1px;
         overflow: hidden;
-    }
-    
-    #agent-network {
-        border-radius: 0.375rem 0.375rem 0 0 !important;
-    }
-    
-    /* Demo controls - no longer absolute positioned */
-    .demo-controls {
-        border-radius: 0 0 0.375rem 0.375rem;
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
-    
-    /* Dark mode styles */
-    :global(.dark-mode) .demo-controls {
-        background: rgba(33, 37, 41, 0.9) !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    
-    /* Responsive adjustments for demo controls */
-    @media (max-width: 576px) {
-        .demo-controls {
-            padding: 10px !important;
-        }
-        
-        #demo-scenario {
-            width: 100%;
-            max-width: none;
-            margin-bottom: 0.5rem;
-        }
-        
-        .button-group {
-            width: 100%;
-            justify-content: space-between;
-        }
-        
-        .button-group .btn {
-            flex: 1;
-            min-width: 30%;
-            margin-right: 0.25rem;
-        }
-        
-        .demo-canvas-container {
-            min-height: 350px !important; /* Reduce height for mobile */
-        }
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
-        .interactive-demo {
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        padding: 4rem 0;
+    .idemo-node-beh {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        margin-top: 0.4rem;
+        font-size: 0.62rem;
+        font-weight: 600;
+        color: var(--c, #2f6bff);
+        background: color-mix(in srgb, var(--c, #2f6bff) 14%, transparent);
+        padding: 0.12rem 0.5rem;
+        border-radius: 50rem;
     }
 
-    #agentCanvas {
-        border: 2px solid var(--primary-color);
-        border-radius: 10px;
-        background: white;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    .idemo-legend {
+        position: absolute;
+        left: 0.75rem;
+        bottom: 0.6rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        max-width: 70%;
     }
 
-    /* Demo canvas responsive styles */
-    .demo-canvas-container {
-        height: 500px;
-        min-height: 400px;
-        transition: height 0.3s ease;
+    .idemo-legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.66rem;
+        color: #93a1b8;
+        font-weight: 600;
     }
 
-    @media (max-width: 576px) {
-        .demo-canvas-container {
-            height: 280px;
-            min-height: 250px;
-        }
+    .idemo-legend i {
+        width: 9px; height: 9px; border-radius: 50%;
     }
 
-    @media (max-width: 768px) {
-        .demo-canvas-container {
-            height: 350px;
-            min-height: 300px;
-        }
+    /* ---- Side panel ---- */
+    .idemo-side {
+        display: flex;
+        flex-direction: column;
+        background: #0b1322;
+        border-left: 1px solid rgba(255, 255, 255, 0.07);
     }
 
-    @media (min-width: 992px) {
-        .demo-canvas-container {
-            height: 550px;
-        }
+    @media (max-width: 860px) {
+        .idemo-side { border-left: none; border-top: 1px solid rgba(255, 255, 255, 0.07); }
     }
 
-    @media (min-width: 1200px) {
-        .demo-canvas-container {
-            height: 600px;
-            min-height: 500px;
-        }
+    .idemo-desc {
+        padding: 1.1rem 1.2rem 0.8rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
-    @media (min-width: 1400px) {
-        .demo-canvas-container {
-            height: 650px;
-            min-height: 550px;
-        }
+    .idemo-desc h3 {
+        font-size: 1.05rem;
+        color: #fff;
+        margin-bottom: 0.4rem;
     }
 
-    .demo-controls {
-        background: white;
-        border-radius: 10px;
-        padding: 1.5rem;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    .idemo-desc p {
+        font-size: 0.86rem;
+        color: #93a1b8;
+        line-height: 1.55;
+        margin-bottom: 0.6rem;
     }
 
-    .agent-circle {
+    .idemo-concepts {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .idemo-concepts li {
+        position: relative;
+        padding-left: 1.1rem;
+        font-size: 0.78rem;
+        color: #cbd5e1;
+        line-height: 1.45;
+    }
+
+    .idemo-concepts li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.45em;
+        width: 6px;
+        height: 6px;
         border-radius: 50%;
-        border: 3px solid #fff;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #2f6bff, #10b981);
     }
 
-    .agent-circle:hover {
-        transform: scale(1.1);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    .idemo-log-head {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #64748b;
     }
 
-    /* Dark mode styles */
-    :global(body.dark-mode) .interactive-demo {
-        background: linear-gradient(
-            135deg,
-            var(--dark-card-bg) 0%,
-            var(--dark-bg) 100%
-        ) !important;
+    .idemo-log {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0 1.2rem 1rem;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.74rem;
+        line-height: 1.7;
+        max-height: 220px;
     }
 
-    :global(body.dark-mode) #agentCanvas {
-        background: var(--dark-card-bg);
-        border-color: var(--dark-border);
+    .idemo-log:empty::before {
+        content: "Press play to start…";
+        color: #475569;
     }
 
-    :global(body.dark-mode) .demo-controls {
-        background: var(--dark-card-bg);
-        color: var(--dark-text);
+    .idemo-log-line {
+        display: block;
+        animation: idemoLogIn 0.25s ease both;
+        color: #cbd5e1;
+    }
+
+    .idemo-log-line .arrow { color: #64748b; }
+    .idemo-log-line .perf { font-weight: 700; }
+
+    @keyframes idemoLogIn {
+        from { opacity: 0; transform: translateX(-6px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ---- Code ---- */
+    .idemo-code {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        background: #070c1c;
+    }
+
+    .idemo-code-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.55rem 1rem;
+        background: #0e1526;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .idemo-code-dots {
+        width: 11px; height: 11px; border-radius: 50%;
+        background: #ff5f57;
+        box-shadow: 18px 0 0 #febc2e, 36px 0 0 #28c840;
+        margin-right: 38px;
+    }
+
+    .idemo-code-file {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.8rem;
+        color: #93a1b8;
+        flex: 1;
+    }
+
+    .idemo-copy {
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: transparent;
+        color: #93a1b8;
+        border-radius: 8px;
+        padding: 0.2rem 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .idemo-copy:hover { color: #fff; border-color: rgba(255, 255, 255, 0.3); }
+    .idemo-copy.copied { color: #34d399; border-color: #34d399; }
+
+    .idemo-code-pre {
+        margin: 0;
+        max-height: 340px;
+        overflow: auto;
+        padding: 1rem 1.2rem;
+    }
+
+    /* Force the dark code palette regardless of the site theme. Prism adds a
+       `language-*` class to the <pre>, so the global `pre[class*="language-"]`
+       rule would otherwise win — use a more specific selector to override it. */
+    .idemo-code pre.idemo-code-pre,
+    .idemo-code pre.idemo-code-pre code {
+        background: transparent !important;
+        border: none !important;
+        color: #d7e2f5 !important;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.8rem;
+        line-height: 1.65;
+    }
+
+    /* Bright token palette pinned for the always-dark code pane */
+    .idemo-code pre.idemo-code-pre .token.comment,
+    .idemo-code pre.idemo-code-pre .token.prolog,
+    .idemo-code pre.idemo-code-pre .token.doctype,
+    .idemo-code pre.idemo-code-pre .token.cdata { color: #64748b !important; font-style: italic; }
+    .idemo-code pre.idemo-code-pre .token.punctuation { color: #9aa7bd !important; }
+    .idemo-code pre.idemo-code-pre .token.keyword,
+    .idemo-code pre.idemo-code-pre .token.atrule,
+    .idemo-code pre.idemo-code-pre .token.attr-value { color: #c084fc !important; }
+    .idemo-code pre.idemo-code-pre .token.boolean,
+    .idemo-code pre.idemo-code-pre .token.number,
+    .idemo-code pre.idemo-code-pre .token.constant,
+    .idemo-code pre.idemo-code-pre .token.tag,
+    .idemo-code pre.idemo-code-pre .token.property,
+    .idemo-code pre.idemo-code-pre .token.symbol,
+    .idemo-code pre.idemo-code-pre .token.deleted { color: #fbbf24 !important; }
+    .idemo-code pre.idemo-code-pre .token.string,
+    .idemo-code pre.idemo-code-pre .token.char,
+    .idemo-code pre.idemo-code-pre .token.attr-name,
+    .idemo-code pre.idemo-code-pre .token.builtin,
+    .idemo-code pre.idemo-code-pre .token.inserted,
+    .idemo-code pre.idemo-code-pre .token.selector { color: #34d399 !important; }
+    .idemo-code pre.idemo-code-pre .token.operator,
+    .idemo-code pre.idemo-code-pre .token.entity,
+    .idemo-code pre.idemo-code-pre .token.url { color: #60a5fa !important; }
+    .idemo-code pre.idemo-code-pre .token.function,
+    .idemo-code pre.idemo-code-pre .token.class-name { color: #f472b6 !important; }
+    .idemo-code pre.idemo-code-pre .token.variable,
+    .idemo-code pre.idemo-code-pre .token.regex,
+    .idemo-code pre.idemo-code-pre .token.important { color: #fde047 !important; }
+
+    @media (prefers-reduced-motion: reduce) {
+        .idemo-node.pulse, .idemo-node.sending .idemo-node-icon { animation: none; }
     }
 </style>
 
-<script is:inline>
-// Load Python code examples from demos.json and populate the tabs
-document.addEventListener('DOMContentLoaded', async function() {
-    try {
-        // Use absolute paths from root to ensure it works from any page
-        const baseUrl = '/';
-        
-        // Log the base URL to help with debugging
-        console.log('Using base URL for Python files:', baseUrl);
-        
-        // Fetch demo data from JSON
-        const response = await fetch(`${baseUrl}json/demos.json`);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch demos: ${response.status}`);
-        }
-        
-        const demoData = await response.json();
-        if (!demoData || !demoData.demos || !Array.isArray(demoData.demos)) {
-            throw new Error('Invalid demo data format');
-        }
-        
-        // Store global demo data for later use
-        window.demoData = demoData;
-        
-        // Python code cache
-        const pythonCodeCache = new Map();
-        
-        // Function to load Python code from file
-        async function loadPythonCode(pythonFile) {
-            if (pythonCodeCache.has(pythonFile)) {
-                return pythonCodeCache.get(pythonFile);
-            }
-            
+<script is:inline define:vars={{ baseUrl }}>
+    (() => {
+        const stage = document.getElementById('idemo-stage');
+        if (!stage) return;
+
+        const canvas = document.getElementById('idemo-canvas');
+        const ctx = canvas.getContext('2d');
+        const nodesEl = document.getElementById('idemo-nodes');
+        const legendEl = document.getElementById('idemo-legend');
+        const scenariosEl = document.getElementById('idemo-scenarios');
+        const logEl = document.getElementById('idemo-log');
+        const titleEl = document.getElementById('idemo-title');
+        const descEl = document.getElementById('idemo-description');
+        const conceptsEl = document.getElementById('idemo-concepts');
+        const codeEl = document.getElementById('idemo-code');
+        const codeFileEl = document.getElementById('idemo-code-file');
+        const playBtn = document.getElementById('idemo-play');
+        const stepBtn = document.getElementById('idemo-step');
+        const resetBtn = document.getElementById('idemo-reset');
+        const copyBtn = document.getElementById('idemo-copy');
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        const behIcon = {
+            cyclic: 'arrow-repeat', 'one-shot': '1-circle', periodic: 'clock',
+            presenceNotification: 'eye', publication: 'broadcast', subscription: 'rss',
+            autoResponse: 'reply', messageForwarding: 'arrow-right', messageAggregation: 'collection',
+        };
+
+        let data = null, demo = null, types = {}, edgeTypes = {};
+        let layout = [];           // {id, node, el, nx, ny}
+        let sequence = [];         // ordered message events
+        let seqIndex = 0;
+        let playing = false;
+        let speed = 1;
+        let packet = null;         // current animated message
+        let rafId = 0;
+        let W = 0, H = 0, DPR = 1;
+
+        /* ---------- data ---------- */
+        async function boot() {
             try {
-                // Use the same baseUrl as other resources
-                const response = await fetch(`${baseUrl}py/${pythonFile}`);
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch ${pythonFile}: ${response.status}`);
+                if (window.demoData) data = window.demoData;
+                else data = await (await fetch(`${baseUrl}json/demos.json`)).json();
+            } catch (e) { return; }
+            types = data.agentTypes || {};
+            edgeTypes = data.edgeTypes || {};
+            renderScenarioChips();
+            buildLegend();
+            selectDemo(data.demos[0].id);
+            window.addEventListener('resize', () => { if (demo) { positionNodes(); resize(); drawStatic(); } }, { passive: true });
+        }
+
+        function renderScenarioChips() {
+            scenariosEl.innerHTML = '';
+            data.demos.forEach((d) => {
+                const b = document.createElement('button');
+                b.className = 'idemo-chip';
+                b.type = 'button';
+                b.textContent = d.name;
+                b.dataset.id = d.id;
+                b.addEventListener('click', () => selectDemo(d.id));
+                scenariosEl.appendChild(b);
+            });
+        }
+
+        function buildLegend() {
+            const seen = new Set();
+            legendEl.innerHTML = '';
+            // built per-demo in selectDemo
+        }
+
+        /* ---------- scenario selection ---------- */
+        function selectDemo(id) {
+            demo = data.demos.find((d) => d.id === id);
+            if (!demo) return;
+            stop();
+            seqIndex = 0;
+            packet = null;
+            logEl.innerHTML = '';
+
+            scenariosEl.querySelectorAll('.idemo-chip').forEach((c) =>
+                c.classList.toggle('active', c.dataset.id === id));
+
+            titleEl.textContent = demo.name;
+            descEl.textContent = demo.description;
+            conceptsEl.innerHTML = (demo.concepts || []).map((c) => `<li>${c}</li>`).join('');
+            codeFileEl.textContent = demo.pythonFile || 'scenario.py';
+
+            buildLayout();
+            buildSequence();
+            buildDemoLegend();
+            loadCode();
+            resize();
+            drawStatic();
+        }
+
+        function buildDemoLegend() {
+            const seen = new Map();
+            demo.edges.forEach((e) => {
+                const t = edgeTypes[e.type] || { color: '#2f6bff', label: e.type };
+                if (!seen.has(e.type)) seen.set(e.type, t);
+            });
+            legendEl.innerHTML = [...seen.values()]
+                .map((t) => `<span><i style="background:${t.color}"></i>${t.label}</span>`)
+                .join('');
+        }
+
+        /* ---------- layout ---------- */
+        function buildLayout() {
+            nodesEl.innerHTML = '';
+            const xs = demo.nodes.map((n) => n.position.x);
+            const ys = demo.nodes.map((n) => n.position.y);
+            const minX = Math.min(...xs), maxX = Math.max(...xs);
+            const minY = Math.min(...ys), maxY = Math.max(...ys);
+            const spanX = maxX - minX || 1, spanY = maxY - minY || 1;
+
+            layout = demo.nodes.map((n) => {
+                const t = types[n.type] || { color: '#2f6bff', icon: 'cpu', label: n.type };
+                const nx = 0.12 + ((n.position.x - minX) / spanX) * 0.76;
+                const ny = 0.16 + ((n.position.y - minY) / spanY) * 0.68;
+                const beh = (n.behaviors && n.behaviors[0]) || null;
+
+                const el = document.createElement('div');
+                el.className = 'idemo-node';
+                el.style.setProperty('--c', t.color);
+                el.style.left = (nx * 100) + '%';
+                el.style.top = (ny * 100) + '%';
+                el.dataset.id = n.id;
+                el.innerHTML = `
+                    <span class="idemo-node-icon"><i class="bi bi-${t.icon}"></i></span>
+                    <span class="idemo-node-name">${t.label}</span>
+                    <span class="idemo-node-jid">${n.id}@localhost</span>
+                    ${beh ? `<span class="idemo-node-beh"><i class="bi bi-${behIcon[beh.type] || 'lightning-charge'}"></i>${beh.name}</span>` : ''}
+                `;
+                nodesEl.appendChild(el);
+                return { id: n.id, node: n, el, nx, ny };
+            });
+            positionNodes();
+        }
+
+        function positionNodes() {
+            // % positioning is handled by CSS left/top; nothing to recompute,
+            // but keep hook for future pixel-snapping.
+        }
+
+        function nodeCenter(id) {
+            const L = layout.find((l) => l.id === id);
+            return L ? { x: L.nx * W, y: L.ny * H } : { x: 0, y: 0 };
+        }
+
+        /* ---------- sequence ---------- */
+        function buildSequence() {
+            sequence = demo.edges.map((e) => {
+                const t = edgeTypes[e.type] || { color: '#2f6bff', label: e.type };
+                return { from: e.from, to: e.to, color: t.color, perf: t.label, label: e.label || '' };
+            });
+        }
+
+        /* ---------- canvas ---------- */
+        function resize() {
+            DPR = Math.min(window.devicePixelRatio || 1, 2);
+            W = stage.clientWidth;
+            H = stage.clientHeight;
+            canvas.width = Math.round(W * DPR);
+            canvas.height = Math.round(H * DPR);
+            ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        }
+
+        function edgePath(a, b) {
+            // gentle curve for visual interest
+            const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+            const dx = b.x - a.x, dy = b.y - a.y;
+            const len = Math.hypot(dx, dy) || 1;
+            const nx = -dy / len, ny = dx / len;
+            const bow = Math.min(40, len * 0.12);
+            return { cx: mx + nx * bow, cy: my + ny * bow };
+        }
+
+        function pointOnCurve(a, c, b, t) {
+            const u = 1 - t;
+            return {
+                x: u * u * a.x + 2 * u * t * c.x + t * t * b.x,
+                y: u * u * a.y + 2 * u * t * c.y + t * t * b.y,
+            };
+        }
+
+        function drawStatic() {
+            ctx.clearRect(0, 0, W, H);
+            demo.edges.forEach((e) => {
+                const a = nodeCenter(e.from), b = nodeCenter(e.to);
+                const c = edgePath(a, b);
+                ctx.strokeStyle = 'rgba(122,167,255,0.16)';
+                ctx.lineWidth = 1.5;
+                ctx.setLineDash([4, 5]);
+                ctx.beginPath();
+                ctx.moveTo(a.x, a.y);
+                ctx.quadraticCurveTo(c.cx, c.cy, b.x, b.y);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            });
+        }
+
+        /* ---------- animation ---------- */
+        function fireMessage(onDone) {
+            const ev = sequence[seqIndex % sequence.length];
+            const a = nodeCenter(ev.from), b = nodeCenter(ev.to);
+            const c = edgePath(a, b);
+            packet = { ev, a, b, c, t: 0, done: onDone };
+            const fromEl = layout.find((l) => l.id === ev.from)?.el;
+            if (fromEl) { fromEl.classList.add('sending'); setTimeout(() => fromEl.classList.remove('sending'), 500); }
+            if (!rafId) rafId = requestAnimationFrame(frame);
+        }
+
+        function logEvent(ev) {
+            const from = types[layout.find((l) => l.id === ev.from)?.node.type]?.label || ev.from;
+            const to = types[layout.find((l) => l.id === ev.to)?.node.type]?.label || ev.to;
+            const line = document.createElement('span');
+            line.className = 'idemo-log-line';
+            line.innerHTML = `<span class="perf" style="color:${ev.color}">${ev.perf}</span> ` +
+                `${ev.from} <span class="arrow">→</span> ${ev.to}` +
+                (ev.label ? ` <span class="arrow">·</span> ${ev.label.replace(/^[^·]*·\s*/, '')}` : '');
+            logEl.appendChild(line);
+            logEl.scrollTop = logEl.scrollHeight;
+            while (logEl.children.length > 30) logEl.removeChild(logEl.firstChild);
+        }
+
+        function frame() {
+            rafId = 0;
+            ctx.clearRect(0, 0, W, H);
+            drawStatic();
+
+            if (packet) {
+                packet.t += 0.018 * speed;
+                const { a, b, c, ev } = packet;
+
+                // highlight the active edge
+                ctx.strokeStyle = ev.color + '88';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(a.x, a.y);
+                ctx.quadraticCurveTo(c.cx, c.cy, b.x, b.y);
+                ctx.stroke();
+
+                // travelling packet with trail
+                for (let i = 0; i < 6; i++) {
+                    const tt = Math.max(0, packet.t - i * 0.05);
+                    const p = pointOnCurve(a, { x: c.cx, y: c.cy }, b, Math.min(tt, 1));
+                    const r = (7 - i) * (1 - i * 0.04);
+                    ctx.globalAlpha = (1 - i / 6) * 0.9;
+                    ctx.fillStyle = ev.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, Math.max(1, r), 0, Math.PI * 2);
+                    ctx.fill();
                 }
-                const code = await response.text();
-                pythonCodeCache.set(pythonFile, code);
-                return code;
-            } catch (error) {
-                console.error(`Error loading Python file ${pythonFile}:`, error);
-                return `# Error loading ${pythonFile}\n# ${error.message}`;
+                ctx.globalAlpha = 1;
+
+                // moving label
+                const lp = pointOnCurve(a, { x: c.cx, y: c.cy }, b, Math.min(packet.t, 1));
+                const text = ev.perf;
+                ctx.font = '600 11px ui-monospace, monospace';
+                const tw = ctx.measureText(text).width;
+                ctx.fillStyle = 'rgba(7,12,28,0.85)';
+                roundRect(lp.x - tw / 2 - 7, lp.y - 22, tw + 14, 16, 8);
+                ctx.fill();
+                ctx.fillStyle = ev.color;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(text, lp.x, lp.y - 14);
+
+                if (packet.t >= 1) {
+                    const toEl = layout.find((l) => l.id === ev.to)?.el;
+                    if (toEl) { toEl.classList.add('pulse'); setTimeout(() => toEl.classList.remove('pulse'), 700); }
+                    logEvent(ev);
+                    const done = packet.done;
+                    packet = null;
+                    drawStatic();
+                    if (done) done();
+                    return;
+                }
+                rafId = requestAnimationFrame(frame);
             }
         }
-        
-        // Function to update tab content with Python code
-        async function updateTabWithCode(demo) {
-            const tabPane = document.getElementById(`${demo.id}-code`);
-            if (!tabPane) return;
-            
-            const pythonFile = demo.pythonFile;
-            if (!pythonFile) return;
-            
+
+        function roundRect(x, y, w, h, r) {
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.arcTo(x + w, y, x + w, y + h, r);
+            ctx.arcTo(x + w, y + h, x, y + h, r);
+            ctx.arcTo(x, y + h, x, y, r);
+            ctx.arcTo(x, y, x + w, y, r);
+            ctx.closePath();
+        }
+
+        /* ---------- transport ---------- */
+        function playLoop() {
+            if (!playing) return;
+            fireMessage(() => {
+                seqIndex++;
+                if (!playing) return;
+                const gap = seqIndex % sequence.length === 0 ? 900 : 450;
+                setTimeout(playLoop, gap / speed);
+            });
+        }
+
+        function play() {
+            if (playing) return;
+            playing = true;
+            playBtn.classList.add('playing');
+            playBtn.innerHTML = '<i class="bi bi-pause-fill"></i><span>Pause</span>';
+            playLoop();
+        }
+
+        function stop() {
+            playing = false;
+            playBtn.classList.remove('playing');
+            playBtn.innerHTML = '<i class="bi bi-play-fill"></i><span>Play</span>';
+            if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+        }
+
+        function step() {
+            stop();
+            if (!packet) fireMessage(() => { seqIndex++; });
+        }
+
+        function reset() {
+            stop();
+            seqIndex = 0;
+            packet = null;
+            logEl.innerHTML = '';
+            drawStatic();
+        }
+
+        /* ---------- code ---------- */
+        async function loadCode() {
             try {
-                const code = await loadPythonCode(pythonFile);
-                
-                // Update the tab content with actual code
-                tabPane.innerHTML = `
-                    <div class="p-3">
-                        <div class="code-description mb-3">
-                            <h6 class="text-primary">${demo.name}</h6>
-                            <p class="small text-muted">${demo.description}</p>
-                        </div>
-                        <div class="code-example">
-                            <div class="code-header d-flex justify-content-between align-items-center">
-                                <span class="code-filename">${pythonFile}</span>
-                                <button class="btn btn-sm btn-outline-primary copy-btn" type="button" 
-                                        data-code="${code.replace(/"/g, '&quot;')}" title="Copy code">
-                                    <i class="bi bi-clipboard"></i>
-                                </button>
-                            </div>
-                            <div class="code-body">
-                                <pre><code class="language-python">${code}</code></pre>
-                            </div>
-                            <div class="scroll-indicator">
-                                <div class="scroll-arrow vertical">
-                                    <i class="bi bi-chevron-down"></i>
-                                </div>
-                                <div class="scroll-arrow horizontal">
-                                    <i class="bi bi-chevron-right"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                // Apply syntax highlighting
-                if (typeof window.Prism !== 'undefined') {
-                    const codeBlock = tabPane.querySelector('code.language-python');
-                    if (codeBlock) {
-                        window.Prism.highlightElement(codeBlock);
-                    }
-                }
-                
-                // Update copy button functionality
-                const copyBtn = tabPane.querySelector('.copy-btn');
-                if (copyBtn) {
-                    copyBtn.addEventListener('click', function() {
-                        const code = this.getAttribute('data-code');
-                        if (!code) return;
-                        
-                        navigator.clipboard.writeText(code).then(() => {
-                            // Show copied feedback
-                            const originalHTML = this.innerHTML;
-                            this.innerHTML = '<i class="bi bi-check"></i> Copied!';
-                            this.classList.add('btn-success');
-                            this.classList.remove('btn-outline-primary');
-                            
-                            // Reset after 2 seconds
-                            setTimeout(() => {
-                                this.innerHTML = originalHTML;
-                                this.classList.remove('btn-success');
-                                this.classList.add('btn-outline-primary');
-                            }, 2000);
-                        }).catch(err => {
-                            console.error('Could not copy text: ', err);
-                        });
-                    });
-                }
-                
-            } catch (error) {
-                console.error(`Error updating tab with code for ${demo.id}:`, error);
-                tabPane.innerHTML = `
-                    <div class="p-3">
-                        <div class="alert alert-warning">
-                            <i class="bi bi-exclamation-triangle"></i>
-                            Error loading Python code: ${error.message}
-                        </div>
-                    </div>
-                `;
+                const txt = await (await fetch(`${baseUrl}py/${demo.pythonFile}`)).text();
+                codeEl.textContent = txt;
+                codeEl.className = 'language-python';
+                if (window.Prism) window.Prism.highlightElement(codeEl);
+            } catch (e) {
+                codeEl.textContent = '# Source not available';
             }
         }
-        
-        // Store the updateTabWithCode function globally for use by demos.js
-        window.updateTabWithCode = updateTabWithCode;
-        
-        // Generate tabs and content for each demo
-        const tabList = document.getElementById('codeExampleTabs');
-        const tabContent = document.getElementById('codeExampleTabsContent');
-        
-        if (!tabList || !tabContent) {
-            console.error('Tab containers not found');
-            return;
-        }
-        
-        // Clear existing content
-        tabList.innerHTML = '';
-        tabContent.innerHTML = '';
-        
-        // For each demo with Python code, create a tab and content
-        const demosWithCode = demoData.demos.filter(demo => demo.pythonFile);
-        
-        for (let index = 0; index < demosWithCode.length; index++) {
-            const demo = demosWithCode[index];
-            
-            // Create tab item
-            const tabItem = document.createElement('li');
-            tabItem.className = 'nav-item';
-            tabItem.setAttribute('role', 'presentation');
-            
-            const tabButton = document.createElement('button');
-            tabButton.className = 'nav-link' + (index === 0 ? ' active' : '');
-            tabButton.id = `${demo.id}-tab`;
-            tabButton.setAttribute('data-bs-toggle', 'tab');
-            tabButton.setAttribute('data-bs-target', `#${demo.id}-code`);
-            tabButton.setAttribute('type', 'button');
-            tabButton.setAttribute('role', 'tab');
-            tabButton.setAttribute('aria-controls', `${demo.id}-code`);
-            tabButton.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
-            tabButton.textContent = demo.name;
-            
-            tabItem.appendChild(tabButton);
-            tabList.appendChild(tabItem);
-            
-            // Create tab content with loading placeholder
-            const contentPane = document.createElement('div');
-            contentPane.className = 'tab-pane fade' + (index === 0 ? ' show active' : '');
-            contentPane.id = `${demo.id}-code`;
-            contentPane.setAttribute('role', 'tabpanel');
-            contentPane.setAttribute('aria-labelledby', `${demo.id}-tab`);
-            contentPane.setAttribute('data-python-file', demo.pythonFile);
-            
-            // Add loading placeholder - Python code will be fetched when tab is activated
-            contentPane.innerHTML = `
-                    <div class="p-3">
-                        <div class="code-description mb-3">
-                            <h6 class="text-primary">${demo.name}</h6>
-                            <p class="small text-muted">${demo.description}</p>
-                        </div>
-                        <div class="code-example">
-                            <div class="code-header d-flex justify-content-between align-items-center">
-                                <span class="code-filename">${demo.pythonFile}</span>
-                                <button class="btn btn-sm btn-outline-primary copy-btn" type="button" 
-                                        data-code="" title="Copy code">
-                                    <i class="bi bi-clipboard"></i>
-                                </button>
-                            </div>
-                            <div class="code-body">
-                                <div class="text-center py-4">
-                                    <div class="spinner-border text-primary" role="status">
-                                        <span class="visually-hidden">Loading code...</span>
-                                    </div>
-                                    <p class="mt-2 text-muted">Loading Python code...</p>
-                                </div>
-                            </div>
-                            <!--div class="scroll-indicator">
-                                <div class="scroll-arrow vertical">
-                                    <i class="bi bi-chevron-down"></i>
-                                </div>
-                                <div class="scroll-arrow horizontal">
-                                    <i class="bi bi-chevron-right"></i>
-                                <div>
-                            </div-->
-                        </div>
-                    </div>
-                `;
-            
-            tabContent.appendChild(contentPane);
-        }
-        
-        // Add this immediately after the code tabs setup
-        if (demosWithCode.length > 0) {
-            await updateTabWithCode(demosWithCode[0]);
-        } else {
-            // No demos with code found - show error message
-            const container = document.getElementById('code-container');
-            if (container) {
-                container.innerHTML = `
-                    <div class="p-4">
-                        <div class="alert alert-warning">
-                            <i class="bi bi-exclamation-triangle me-2"></i>
-                            <strong>No Python examples found</strong>
-                            <p class="mb-0 mt-2">Check that the demos.json file includes pythonFile entries and that the Python files exist in the public/py directory.</p>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-        
-        // Set up lazy loading for other tabs
-        const codeTabs = document.querySelectorAll('#codeExampleTabs button[data-bs-toggle="tab"]');
-        codeTabs.forEach(tab => {
-            tab.addEventListener('shown.bs.tab', async function(event) {
-                const targetId = event.target.getAttribute('data-bs-target');
-                if (!targetId) return;
-                
-                const targetPane = document.querySelector(targetId);
-                if (!targetPane) return;
-                
-                // Check if content is already loaded (not showing loading spinner)
-                const hasSpinner = targetPane.querySelector('.spinner-border');
-                if (!hasSpinner) return; // Already loaded
-                
-                // Find the demo for this tab
-                const tabId = event.target.id.replace('-tab', '');
-                const demo = demosWithCode.find(d => d.id === tabId);
-                if (demo) {
-                    await updateTabWithCode(demo);
-                }
+
+        /* ---------- wire up ---------- */
+        playBtn.addEventListener('click', () => (playing ? stop() : play()));
+        stepBtn.addEventListener('click', step);
+        resetBtn.addEventListener('click', reset);
+        document.querySelectorAll('.idemo-speed-btn').forEach((b) => {
+            b.addEventListener('click', () => {
+                speed = parseFloat(b.dataset.speed);
+                document.querySelectorAll('.idemo-speed-btn').forEach((x) => x.classList.toggle('active', x === b));
             });
         });
-        
-        // Initialize syntax highlighting
-        if (typeof window.Prism !== 'undefined') {
-            setTimeout(() => {
-                window.Prism.highlightAll();
-            }, 150);
-        } else {
-            console.warn('Prism.js not loaded - syntax highlighting may not work');
-        }
-        
-        // Setup copy button functionality
-        setupCopyButtons();
-        
-        // Sync scenario selector with code tabs
-        syncTabsWithScenario();
-        
-        // Setup code toggle functionality
-        setupCodeToggle();
-        
-        // Setup scroll indicators
-        setupScrollIndicators();
-        
-    } catch (error) {
-        console.error('Error setting up code examples:', error);
-    }
-});
+        copyBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(codeEl.textContent);
+                copyBtn.classList.add('copied');
+                copyBtn.innerHTML = '<i class="bi bi-check-lg"></i>';
+                setTimeout(() => { copyBtn.classList.remove('copied'); copyBtn.innerHTML = '<i class="bi bi-clipboard"></i>'; }, 1600);
+            } catch (e) {}
+        });
 
-// Function to manage scroll indicators
-function setupScrollIndicators() {
-    // Add event listeners to all code bodies
-    document.querySelectorAll('.code-body').forEach(codeBody => {
-        codeBody.addEventListener('scroll', function() {
-            const parent = this.closest('.code-example');
-            if (!parent) return;
-            
-            const verticalArrow = parent.querySelector('.scroll-arrow.vertical');
-            const horizontalArrow = parent.querySelector('.scroll-arrow.horizontal');
-            
-            if (verticalArrow) {
-                // Show vertical arrow only if there's more content below
-                if (this.scrollHeight > this.clientHeight && 
-                    this.scrollHeight - this.scrollTop > this.clientHeight + 20) {
-                    verticalArrow.style.display = 'flex';
-                } else {
-                    verticalArrow.style.display = 'none';
-                }
-            }
-            
-            if (horizontalArrow) {
-                // Show horizontal arrow only if there's more content to the right
-                if (this.scrollWidth > this.clientWidth && 
-                    this.scrollWidth - this.scrollLeft > this.clientWidth + 20) {
-                    horizontalArrow.style.display = 'flex';
-                } else {
-                    horizontalArrow.style.display = 'none';
-                }
-            }
-        });
-        
-        // Trigger scroll event on load to initialize arrow visibility
-        setTimeout(() => {
-            codeBody.dispatchEvent(new Event('scroll'));
-        }, 500);
-    });
-    
-    // Also set up for dynamically loaded content
-    const observer = new MutationObserver(mutations => {
-        mutations.forEach(mutation => {
-            if (mutation.addedNodes.length) {
-                mutation.addedNodes.forEach(node => {
-                    if (node.nodeType === 1) { // Element node
-                        const codeBodies = node.querySelectorAll ? node.querySelectorAll('.code-body') : [];
-                        codeBodies.forEach(codeBody => {
-                            // Trigger scroll event to initialize arrow visibility
-                            setTimeout(() => {
-                                codeBody.dispatchEvent(new Event('scroll'));
-                            }, 500);
-                        });
-                    }
-                });
-            }
-        });
-    });
-    
-    observer.observe(document.body, { childList: true, subtree: true });
-}
+        // Pause when offscreen
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach((e) => { if (!e.isIntersecting && playing) stop(); });
+        }, { threshold: 0 });
+        io.observe(stage);
 
-// Setup copy buttons for code examples
-function setupCopyButtons() {
-    document.querySelectorAll('.copy-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const code = this.getAttribute('data-code');
-            if (!code) return;
-            
-            navigator.clipboard.writeText(code).then(() => {
-                // Show copied feedback
-                const originalHTML = this.innerHTML;
-                this.innerHTML = '<i class="bi bi-check"></i> Copied!';
-                this.classList.add('btn-success');
-                this.classList.remove('btn-outline-primary');
-                
-                // Reset after 2 seconds
-                setTimeout(() => {
-                    this.innerHTML = originalHTML;
-                    this.classList.remove('btn-success');
-                    this.classList.add('btn-outline-primary');
-                }, 2000);
-            }).catch(err => {
-                console.error('Could not copy text: ', err);
-            });
-        });
-    });
-}
-
-// Sync scenario selector with code tabs
-function syncTabsWithScenario() {
-    const scenarioSelect = document.getElementById('demo-scenario');
-    
-    // Function to highlight code using Prism
-    const highlightCode = () => {
-        if (typeof window.Prism !== 'undefined') {
-            setTimeout(() => {
-                try {
-                    window.Prism.highlightAll();
-                    console.log('Applied syntax highlighting via Prism.highlightAll()');
-                } catch (error) {
-                    console.warn('Error applying syntax highlighting:', error);
-                }
-            }, 100);
-        } else {
-            console.warn('Prism.js not available for syntax highlighting');
-        }
-    };
-    
-    if (scenarioSelect) {
-        // When scenario changes, update code tab
-        scenarioSelect.addEventListener('change', function() {
-            const scenarioId = this.value;
-            const codeTab = document.querySelector(`#${scenarioId}-tab`);
-            if (codeTab && typeof bootstrap !== 'undefined') {
-                // Activate the corresponding tab
-                const tabTrigger = new bootstrap.Tab(codeTab);
-                tabTrigger.show();
-                
-                // Re-highlight code
-                highlightCode();
-            }
-        });
-        
-        // When code tab changes, update scenario
-        const codeTabs = document.querySelectorAll('#codeExampleTabs button');
-        codeTabs.forEach(tab => {
-            tab.addEventListener('shown.bs.tab', function(event) {
-                const scenarioId = event.target.id.replace('-tab', '');
-                if (scenarioSelect.value !== scenarioId) {
-                    scenarioSelect.value = scenarioId;
-                    // Trigger change event to update the demo
-                    const changeEvent = new Event('change');
-                    scenarioSelect.dispatchEvent(changeEvent);
-                }
-                
-                // Re-highlight code in the new tab
-                highlightCode();
-            });
-        });
-    }
-    
-    // Initial highlighting
-    highlightCode();
-}
-
-// Setup code toggle functionality - now scrolls to main code section
-function setupCodeToggle() {
-    const codeSection = document.getElementById('code-section');
-    const toggleCodeBtn = document.getElementById('toggle-code');
-    const collapseCodeBtn = document.getElementById('collapse-code');
-    
-    if (!toggleCodeBtn || !codeSection) {
-        console.warn('Toggle code button or code section not found');
-        return;
-    }
-    
-    // New simple scroll-to-code functionality
-    function scrollToCode() {
-        // Smooth scroll to the code section
-        codeSection.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
-        });
-        
-        // If code section is collapsed, expand it
-        if (codeSection.classList.contains('collapsed')) {
-            codeSection.classList.remove('collapsed');
-            localStorage.setItem('spade-code-visible', 'true');
-        }
-        
-        // Add a brief highlight effect
-        codeSection.style.transition = 'box-shadow 0.3s ease';
-        codeSection.style.boxShadow = '0 0 20px rgba(13, 110, 253, 0.3)';
-        
-        setTimeout(() => {
-            codeSection.style.boxShadow = '';
-        }, 2000);
-    }
-    
-    // Add event listener to toggle button
-    toggleCodeBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        scrollToCode();
-    });
-    
-    // Collapse button in code header
-    if (collapseCodeBtn) {
-        collapseCodeBtn.addEventListener('click', function() {
-            codeSection.classList.toggle('collapsed');
-            const isVisible = !codeSection.classList.contains('collapsed');
-            localStorage.setItem('spade-code-visible', isVisible ? 'true' : 'false');
-        });
-    }
-    
-    // Initialize collapsed state from localStorage
-    const isCodeVisible = localStorage.getItem('spade-code-visible') !== 'false';
-    if (!isCodeVisible) {
-        codeSection.classList.add('collapsed');
-    }
-}
-
-// On page load
-document.addEventListener('DOMContentLoaded', function() {
-    // Other initialization code that was already here
-    // ...
-    
-    // Setup code toggle functionality
-    setupCodeToggle();
-});
+        boot();
+    })();
 </script>
-

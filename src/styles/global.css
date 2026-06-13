@@ -1,33 +1,266 @@
-/* SPADE Landing Page Styles */
+/* ============================================================
+   SPADE — Design System
+   Typography: Space Grotesk (display) · Inter (body) · JetBrains Mono (code)
+   ============================================================ */
+
+/* ============ Animated theme toggle (moon / sun reveal) ============ */
+/* Registered so the reveal radius can be smoothly transitioned. */
+@property --r {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+.theme-fx-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  pointer-events: none;
+  --r: 0px;
+  --cx: 50%;
+  --cy: 50%;
+  -webkit-mask-image: radial-gradient(
+    circle at var(--cx) var(--cy),
+    transparent var(--r),
+    #000 calc(var(--r) + 1.5px)
+  );
+  mask-image: radial-gradient(
+    circle at var(--cx) var(--cy),
+    transparent var(--r),
+    #000 calc(var(--r) + 1.5px)
+  );
+  transition: --r 0.72s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: --r;
+}
+
+.theme-fx-orb {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-fx-orb svg {
+  width: 88px;
+  height: 88px;
+  transform: scale(0.2);
+  opacity: 0;
+}
+
+.theme-fx-orb.run svg {
+  animation: themeOrbBloom 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes themeOrbBloom {
+  0% {
+    transform: scale(0.2) rotate(-25deg);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.55) rotate(8deg);
+    opacity: 0;
+  }
+}
+
+.theme-fx-orb.is-moon {
+  color: #dbeafe;
+}
+
+.theme-fx-orb.is-moon svg {
+  filter: drop-shadow(0 0 22px rgba(147, 197, 253, 0.9))
+    drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+}
+
+.theme-fx-orb.is-sun {
+  color: #fde68a;
+}
+
+.theme-fx-orb.is-sun svg {
+  filter: drop-shadow(0 0 26px rgba(251, 191, 36, 0.95))
+    drop-shadow(0 0 8px rgba(255, 237, 160, 0.85));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-fx-veil,
+  .theme-fx-orb {
+    display: none !important;
+  }
+}
+
 :root {
-  --primary-color: #3498db;
-  --secondary-color: #2ecc71;
-  --dark-color: #2c3e50;
-  --light-color: #ecf0f1;
+  /* Brand palette — evolved from SPADE blue/green/purple */
+  --primary-color: #2f6bff;
+  --primary-soft: #5b8cff;
+  --secondary-color: #10b981;
+  --accent-purple: #8b5cf6;
+  --accent-cyan: #06b6d4;
+  --dark-color: #0f172a;
+  --light-color: #f3f6fc;
 
-  /* Dark mode variables */
-  --dark-bg: #121212;
-  --dark-card-bg: #1e1e1e;
-  --dark-text: #e0e0e0;
-  --dark-text-muted: #a0a0a0;
-  --dark-border: #333;
+  /* Gradients */
+  --gradient-brand: linear-gradient(
+    135deg,
+    #2f6bff 0%,
+    #06b6d4 50%,
+    #10b981 100%
+  );
+  --gradient-ai: linear-gradient(135deg, #8b5cf6, #d946ef);
+  --gradient-hero: linear-gradient(
+    140deg,
+    #0b1530 0%,
+    #12275e 45%,
+    #1b1145 100%
+  );
+
+  /* Surfaces & text (light) */
+  --surface: #ffffff;
+  --surface-alt: #f3f6fc;
+  --text-color: #0f172a;
+  --text-muted-color: #5b6b81;
+  --border-color: rgba(15, 23, 42, 0.08);
+
+  /* Dark mode variables (consumed by components) */
+  --dark-bg: #070b16;
+  --dark-card-bg: #0e1526;
+  --dark-text: #e6ecf7;
+  --dark-text-muted: #93a1b8;
+  --dark-border: rgba(255, 255, 255, 0.09);
+
+  /* Shape & elevation */
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --shadow-sm:
+    0 1px 2px rgba(15, 23, 42, 0.05), 0 4px 16px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 12px 32px rgba(15, 23, 42, 0.1);
+  --shadow-lift: 0 24px 60px -12px rgba(47, 107, 255, 0.25);
+  --shadow-glow:
+    0 0 0 1px rgba(47, 107, 255, 0.25),
+    0 18px 50px -10px rgba(47, 107, 255, 0.45);
+
+  /* Motion */
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Fonts */
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Consolas", "Monaco", monospace;
 }
 
-/* Navigation sticky styles moved to Navbar.astro component */
+/* ============ Base ============ */
 
-/* Add padding to body to compensate for fixed navbar */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
 body {
-  padding-top: 76px; /* Adjust based on navbar height */
-  background-color: #ffffff;
-  color: #212529;
+  padding-top: 76px;
+  background-color: var(--surface);
+  color: var(--text-color);
+  font-family: var(--font-body);
+  font-feature-settings: "cv02", "cv03", "cv04";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
   transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
+    background-color 0.4s ease,
+    color 0.4s ease;
 }
 
-/* Navbar styles moved to Navbar.astro component */
+::selection {
+  background: rgba(47, 107, 255, 0.25);
+  color: inherit;
+}
 
-/* Dark mode support */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+.display-1,
+.display-2,
+.display-3,
+.display-4,
+.display-5,
+.display-6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+}
+
+.lead {
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-muted-color);
+}
+
+.display-4 {
+  font-weight: 700;
+}
+
+/* Section headings: gradient kicker line + tighter look */
+section .text-center.mb-5 h2,
+section h2.fw-bold {
+  font-size: clamp(1.9rem, 1.3rem + 2.2vw, 2.9rem);
+  letter-spacing: -0.03em;
+  position: relative;
+  display: inline-block;
+}
+
+section .text-center.mb-5 h2::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 4px;
+  border-radius: 4px;
+  margin: 0.9rem auto 0;
+  background: var(--gradient-brand);
+  background-size: 200% 100%;
+  animation: gradientSlide 4s linear infinite;
+}
+
+section .text-center.mb-5 .lead {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Gradient text utility */
+.text-gradient {
+  background: var(--gradient-brand);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientSlide 6s linear infinite;
+}
+
+@keyframes gradientSlide {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* ============ Dark mode ============ */
 
 body.dark-mode {
   background-color: var(--dark-bg) !important;
@@ -49,81 +282,11 @@ body.dark-mode small.text-muted {
   color: var(--dark-text-muted) !important;
 }
 
-/* Scroll-triggered animations */
-.animate-on-scroll {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.6s ease-out;
-}
-
-.animate-on-scroll.animate-in {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Fade in from bottom */
-.fade-in-up {
-  opacity: 0;
-  transform: translateY(50px);
-  transition: all 0.8s ease-out;
-}
-
-.fade-in-up.animate-in {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Scale in animation */
-.scale-in {
-  opacity: 0;
-  transform: scale(0.8) translateY(20px);
-  transition: all 0.7s ease-out;
-}
-
-.scale-in.animate-in {
-  opacity: 1;
-  transform: scale(1) translateY(0);
-}
-
-/* Slide from left */
-.slide-in-left {
-  opacity: 0;
-  transform: translateX(-50px);
-  transition: all 0.8s ease-out;
-}
-
-.slide-in-left.animate-in {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Slide from right */
-.slide-in-right {
-  opacity: 0;
-  transform: translateX(50px);
-  transition: all 0.8s ease-out;
-}
-
-.slide-in-right.animate-in {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Stagger animations - delay for sequential appearance */
-.stagger-1 { transition-delay: 0.1s; }
-.stagger-2 { transition-delay: 0.2s; }
-.stagger-3 { transition-delay: 0.3s; }
-.stagger-4 { transition-delay: 0.4s; }
-.stagger-5 { transition-delay: 0.5s; }
-.stagger-6 { transition-delay: 0.6s; }
-
 body.dark-mode .card,
 body.dark-mode .feature-card,
 body.dark-mode .accordion-item {
   border-color: var(--dark-border) !important;
 }
-
-/* Navbar dark mode styles moved to Navbar.astro component */
 
 body.dark-mode .table {
   color: var(--dark-text) !important;
@@ -134,19 +297,18 @@ body.dark-mode .table-dark {
 }
 
 body.dark-mode code {
-  background-color: #2d2d2d !important;
-  color: #e0e0e0 !important;
+  background-color: #1a2336 !important;
+  color: #e0e7f5 !important;
 }
 
 body.dark-mode .bg-light {
-  background-color: #1a1a1a !important;
+  background-color: #0a101f !important;
 }
 
 body.dark-mode .bg-white {
   background-color: var(--dark-card-bg) !important;
 }
 
-/* Headings and bold text in dark mode */
 body.dark-mode h1,
 body.dark-mode h2,
 body.dark-mode h3,
@@ -158,29 +320,16 @@ body.dark-mode .h2,
 body.dark-mode .h3,
 body.dark-mode .h4,
 body.dark-mode .h5,
-body.dark-mode .h6 {
-  color: var(--dark-text) !important;
-}
-
+body.dark-mode .h6,
 body.dark-mode .fw-bold,
-body.dark-mode .font-weight-bold {
-  color: var(--dark-text) !important;
-}
-
-body.dark-mode .lead {
-  color: var(--dark-text) !important;
-}
-
+body.dark-mode .font-weight-bold,
+body.dark-mode .lead,
 body.dark-mode .display-1,
 body.dark-mode .display-2,
 body.dark-mode .display-3,
 body.dark-mode .display-4,
 body.dark-mode .display-5,
-body.dark-mode .display-6 {
-  color: var(--dark-text) !important;
-}
-
-/* Footer and other text elements in dark mode */
+body.dark-mode .display-6,
 body.dark-mode .text-uppercase {
   color: var(--dark-text) !important;
 }
@@ -193,22 +342,16 @@ body.dark-mode .footer a:hover {
   color: var(--secondary-color) !important;
 }
 
-/* Hero section dark mode styles moved to Hero.astro component */
-
-/* Hero section button dark mode styles moved to Hero.astro component */
-
 body.dark-mode .shadow-sm {
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.75) !important;
 }
 
-/* Navbar link styles moved to Navbar.astro component */
-
 body.dark-mode a:not(.btn) {
-  color: #5ba9eb;
+  color: #7aa7ff;
 }
 
 body.dark-mode a:not(.btn):hover {
-  color: #8bc4f3;
+  color: #a8c4ff;
 }
 
 body.dark-mode .accordion-button::after {
@@ -216,13 +359,13 @@ body.dark-mode .accordion-button::after {
 }
 
 body.dark-mode .accordion-button:not(.collapsed) {
-  background-color: #2d2d2d;
+  background-color: #16203a;
   color: var(--dark-text);
 }
 
 body.dark-mode .btn-outline-primary {
-  color: #5ba9eb;
-  border-color: #5ba9eb;
+  color: #7aa7ff;
+  border-color: #7aa7ff;
 }
 
 body.dark-mode .btn-outline-secondary {
@@ -232,10 +375,10 @@ body.dark-mode .btn-outline-secondary {
 
 body.dark-mode .btn-outline-light {
   color: var(--dark-text);
-  border-color: #555;
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
-/* Smooth transitions for dark mode */
+/* Smooth theme transitions */
 body,
 .card,
 .feature-card,
@@ -247,37 +390,170 @@ body,
 a,
 .btn {
   transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
+    background-color 0.35s ease,
+    color 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s var(--ease-spring);
 }
 
-/* Hero Section styles moved to Hero.astro component */
+/* ============ Scroll-triggered animations ============ */
 
-/* Feature Cards styles moved to FeatureCard.astro component */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(36px);
+  transition:
+    opacity 0.8s var(--ease-spring),
+    transform 0.8s var(--ease-spring);
+  will-change: opacity, transform;
+}
 
-/* Card enhancements */
+.animate-on-scroll.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(48px);
+  filter: blur(6px);
+  transition:
+    opacity 0.9s var(--ease-spring),
+    transform 0.9s var(--ease-spring),
+    filter 0.9s var(--ease-spring);
+  will-change: opacity, transform, filter;
+}
+
+.fade-in-up.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.scale-in {
+  opacity: 0;
+  transform: scale(0.88) translateY(24px);
+  transition:
+    opacity 0.7s var(--ease-spring),
+    transform 0.7s var(--ease-bounce);
+  will-change: opacity, transform;
+}
+
+.scale-in.animate-in {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.slide-in-left {
+  opacity: 0;
+  transform: translateX(-56px);
+  transition:
+    opacity 0.85s var(--ease-spring),
+    transform 0.85s var(--ease-spring);
+  will-change: opacity, transform;
+}
+
+.slide-in-left.animate-in {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.slide-in-right {
+  opacity: 0;
+  transform: translateX(56px);
+  transition:
+    opacity 0.85s var(--ease-spring),
+    transform 0.85s var(--ease-spring);
+  will-change: opacity, transform;
+}
+
+.slide-in-right.animate-in {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Stagger delays */
+.stagger-1 {
+  transition-delay: 0.06s;
+}
+.stagger-2 {
+  transition-delay: 0.14s;
+}
+.stagger-3 {
+  transition-delay: 0.22s;
+}
+.stagger-4 {
+  transition-delay: 0.3s;
+}
+.stagger-5 {
+  transition-delay: 0.38s;
+}
+.stagger-6 {
+  transition-delay: 0.46s;
+}
+
+/* On narrow screens the horizontal slide-in offsets push off-screen elements
+   past the viewport edge, creating horizontal overflow (and stretching the
+   fixed navbar). Reveal them vertically instead — no horizontal overflow. */
+@media (max-width: 991.98px) {
+  .slide-in-left,
+  .slide-in-right {
+    transform: translateY(40px);
+  }
+  .slide-in-left.animate-in,
+  .slide-in-right.animate-in {
+    transform: translateY(0);
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .animate-on-scroll,
+  .fade-in-up,
+  .scale-in,
+  .slide-in-left,
+  .slide-in-right {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* ============ Cards ============ */
+
 .card {
-  border: none;
-  border-radius: 12px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.45s var(--ease-spring),
+    box-shadow 0.45s ease,
+    border-color 0.45s ease,
+    background-color 0.35s ease;
   overflow: hidden;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lift);
+  border-color: rgba(47, 107, 255, 0.3);
 }
 
 body.dark-mode .card {
   background: var(--dark-card-bg);
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.35);
 }
 
 body.dark-mode .card:hover {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 24px 60px -12px rgba(47, 107, 255, 0.3);
+  border-color: rgba(122, 167, 255, 0.35);
 }
 
 .card-body {
@@ -295,31 +571,39 @@ body.dark-mode .card-title {
 }
 
 .card-text {
-  color: #6c757d;
-  line-height: 1.6;
+  color: var(--text-muted-color);
+  line-height: 1.65;
 }
 
 body.dark-mode .card-text {
   color: var(--dark-text-muted);
 }
 
-/* Sections */
-/* Plugins section styles moved to PluginsSection.astro component */
+/* ============ Sections ============ */
 
 .badge-section {
-  background-color: #f8f9fa;
+  background: linear-gradient(180deg, #f6f9ff, #eef3fb);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
-/* Dark mode sections */
-/* Plugins section dark mode styles moved to PluginsSection.astro component */
+.badge-section img {
+  margin: 0.25rem 0.3rem;
+  border-radius: 4px;
+  transition:
+    transform 0.3s var(--ease-bounce),
+    filter 0.3s ease;
+}
+
+.badge-section img:hover {
+  transform: translateY(-3px) scale(1.06);
+}
 
 body.dark-mode .badge-section {
-  background-color: var(--dark-card-bg) !important;
+  background: linear-gradient(180deg, #0a101f, #0d1424) !important;
+  border-color: var(--dark-border);
 }
 
-/* Stats Section styles moved to StatisticsSection.astro component */
-
-/* Comparison Section */
 .comparison-section {
   padding: 5rem 0;
 }
@@ -330,69 +614,117 @@ body.dark-mode .badge-section {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Use Cases styles moved to UseCasesSection.astro component */
+/* ============ Buttons ============ */
 
-/* FAQ Section styles moved to FAQSection.astro component */
+.btn {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
 
-/* Buttons */
 .btn-primary {
-  background-color: var(--primary-color) !important;
-  border-color: var(--primary-color) !important;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--accent-cyan)
+  ) !important;
+  background-size: 160% auto !important;
+  border: none !important;
   color: white !important;
+  padding: 12px 30px;
+  border-radius: 50rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s var(--ease-spring);
 }
 
 .btn-primary:hover {
-  background-color: #2980b9 !important;
-  border-color: #2980b9 !important;
+  background-position: right center !important;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -6px rgba(47, 107, 255, 0.55);
   color: white !important;
+}
+
+.btn-primary:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.btn-sm.btn-primary {
+  padding: 8px 20px;
+}
+
+.btn-outline-primary {
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 10px 25px;
+  border-radius: 50rem;
+  transition: all 0.35s var(--ease-spring);
+}
+
+.btn-outline-primary:hover {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px -8px rgba(47, 107, 255, 0.5);
+}
+
+.btn-sm.btn-outline-primary {
+  padding: 7px 18px;
 }
 
 .btn-light {
   background-color: white !important;
   border-color: white !important;
   color: var(--dark-color) !important;
+  border-radius: 50rem;
 }
 
 .btn-light:hover {
-  background-color: var(--light-color) !important;
-  border-color: var(--light-color) !important;
-  color: var(--dark-color) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px -8px rgba(0, 0, 0, 0.35);
 }
 
 body.dark-mode .btn-light:hover {
-  background-color: var(--dark-border) !important;
-  border-color: var(--dark-border) !important;
-  color: var(--dark-text) !important;
+  background-color: #e8eefb !important;
+  color: #0f172a !important;
 }
 
 .btn-outline-light {
   color: white !important;
-  border-color: white !important;
+  border: 2px solid rgba(255, 255, 255, 0.6) !important;
   background-color: transparent !important;
+  border-radius: 50rem;
+  backdrop-filter: blur(6px);
 }
 
 .btn-outline-light:hover {
   background-color: white !important;
   border-color: white !important;
   color: var(--primary-color) !important;
+  transform: translateY(-3px);
 }
 
-/* Code Examples */
+.btn-lg {
+  border-radius: 50rem;
+}
+
+/* ============ Code blocks ============ */
+
 .code-example {
-  background-color: #ffffff;
+  background-color: var(--surface);
   color: var(--text-color);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   padding: 20px;
   margin: 40px 0;
-  font-family: "Courier New", monospace;
+  font-family: var(--font-mono);
   position: relative;
   overflow: visible;
   transition: all 0.3s ease;
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--border-color);
 }
 
 body.dark-mode .code-example {
-  background-color: var(--dark-color);
+  background-color: var(--dark-card-bg);
   color: white;
   border-color: var(--dark-border);
 }
@@ -406,11 +738,10 @@ body.dark-mode .code-example {
   max-height: 400px;
   overflow-y: auto;
   margin: 0;
-  border-radius: 0.25rem;
   transition: all 0.3s ease;
   position: relative;
-  border-radius: 8px !important;
-  border: 1px solid #e9ecef;
+  border-radius: 12px !important;
+  border: 1px solid var(--border-color);
   overflow: hidden;
 }
 
@@ -425,15 +756,12 @@ body.dark-mode .code-block {
   transition: transform 0.2s ease;
 }
 
-/* Code syntax highlighting */
 .code-block .keyword {
-  color: #007bff;
+  color: #2563eb;
 }
-
 .code-block .string {
-  color: #28a745;
+  color: #059669;
 }
-
 .code-block .comment {
   color: #6c757d;
   font-style: italic;
@@ -442,30 +770,40 @@ body.dark-mode .code-block {
 body.dark-mode .code-block .keyword {
   color: #88b0ff;
 }
-
 body.dark-mode .code-block .string {
   color: #7ae28c;
 }
-
 body.dark-mode .code-block .comment {
   color: #a0a0a0;
 }
 
-/* Ensure code examples work in both light and dark mode */
+/* Prism.js base */
+pre[class*="language-"],
+code[class*="language-"] {
+  font-family: var(--font-mono) !important;
+  font-size: 13.5px;
+  line-height: 1.6;
+  border-radius: 12px;
+}
+
 pre[class*="language-"] {
-  background-color: #f8f9fa !important;
-  border: 1px solid #e9ecef !important;
+  padding: 1.25rem;
+  margin: 1rem 0;
+  overflow: auto;
+  background-color: #f8faff !important;
+  border: 1px solid var(--border-color) !important;
   color: #212529 !important;
 }
 
 code[class*="language-"] {
+  background-color: transparent !important;
   color: #212529 !important;
 }
 
-/* Dark mode overrides for code examples */
+/* Prism dark mode */
 body.dark-mode pre[class*="language-"] {
-  background-color: #1a202c !important;
-  border: 1px solid #333 !important;
+  background-color: #0a101f !important;
+  border: 1px solid var(--dark-border) !important;
   color: #e2e8f0 !important;
 }
 
@@ -473,13 +811,12 @@ body.dark-mode code[class*="language-"] {
   color: #e2e8f0 !important;
 }
 
-/* Fix for code-body containers */
 body.dark-mode .code-body {
-  background-color: #1a202c !important;
+  background-color: #0a101f !important;
 }
 
 body.dark-mode .code-body pre {
-  background-color: #1a202c !important;
+  background-color: #0a101f !important;
   color: #e2e8f0 !important;
 }
 
@@ -487,22 +824,11 @@ body.dark-mode .code-body code {
   color: #e2e8f0 !important;
 }
 
-/* Prism.js dark mode support */
-body.dark-mode pre[class*="language-"],
-body.dark-mode code[class*="language-"] {
-  background-color: #2d2d2d !important;
-  color: #e0e0e0 !important;
-}
-
-body.dark-mode pre[class*="language-"] {
-  border: 1px solid var(--dark-border) !important;
-}
-
 body.dark-mode .token.comment,
 body.dark-mode .token.prolog,
-body.dark_mode .token.doctype,
-body.dark_mode .token.cdata {
-  color: #7c7c7c !important;
+body.dark-mode .token.doctype,
+body.dark-mode .token.cdata {
+  color: #64748b !important;
 }
 
 body.dark-mode .token.punctuation {
@@ -516,7 +842,7 @@ body.dark-mode .token.number,
 body.dark-mode .token.constant,
 body.dark-mode .token.symbol,
 body.dark-mode .token.deleted {
-  color: #f39c12 !important;
+  color: #fbbf24 !important;
 }
 
 body.dark-mode .token.selector,
@@ -525,7 +851,7 @@ body.dark-mode .token.string,
 body.dark-mode .token.char,
 body.dark-mode .token.builtin,
 body.dark-mode .token.inserted {
-  color: #2ecc71 !important;
+  color: #34d399 !important;
 }
 
 body.dark-mode .token.operator,
@@ -533,58 +859,24 @@ body.dark-mode .token.entity,
 body.dark-mode .token.url,
 body.dark-mode .language-css .token.string,
 body.dark-mode .style .token.string {
-  color: #3498db !important;
+  color: #60a5fa !important;
 }
 
 body.dark-mode .token.atrule,
 body.dark-mode .token.attr-value,
 body.dark-mode .token.keyword {
-  color: #9b59b6 !important;
+  color: #c084fc !important;
 }
 
 body.dark-mode .token.function,
 body.dark-mode .token.class-name {
-  color: #e74c3c !important;
+  color: #f87171 !important;
 }
 
 body.dark-mode .token.regex,
 body.dark-mode .token.important,
 body.dark-mode .token.variable {
-  color: #f1c40f !important;
-}
-
-/* Prism.js syntax highlighting improvements */
-pre[class*="language-"],
-code[class*="language-"] {
-  font-family: "Consolas", "Monaco", "Courier New", monospace !important;
-  font-size: 14px;
-  line-height: 1.5;
-  border-radius: 8px;
-}
-
-pre[class*="language-"] {
-  padding: 1rem;
-  margin: 1rem 0;
-  overflow: auto;
-  background-color: #ffffff !important;
-  border: 1px solid #e9ecef;
-  color: #212529 !important;
-}
-
-/* Dark mode syntax highlighting */
-body.dark-mode pre[class*="language-"] {
-  background-color: var(--dark-card-bg) !important;
-  border-color: var(--dark-border) !important;
-  color: var(--dark-text) !important;
-}
-
-code[class*="language-"] {
-  background-color: transparent !important;
-  color: #212529 !important;
-}
-
-body.dark-mode code[class*="language-"] {
-  color: var(--dark-text) !important;
+  color: #fde047 !important;
 }
 
 /* Light mode syntax highlighting */
@@ -594,11 +886,9 @@ body.dark-mode code[class*="language-"] {
 .token.cdata {
   color: #6a737d;
 }
-
 .token.punctuation {
   color: #586069;
 }
-
 .token.property,
 .token.tag,
 .token.boolean,
@@ -608,16 +898,14 @@ body.dark-mode code[class*="language-"] {
 .token.deleted {
   color: #005cc5;
 }
-
 .token.selector,
 .token.attr-name,
 .token.string,
 .token.char,
 .token.builtin,
 .token.inserted {
-  color: #032f62;
+  color: #047857;
 }
-
 .token.operator,
 .token.entity,
 .token.url,
@@ -625,74 +913,80 @@ body.dark-mode code[class*="language-"] {
 .style .token.string {
   color: #d73a49;
 }
-
 .token.atrule,
 .token.attr-value,
 .token.keyword {
   color: #d73a49;
 }
-
 .token.function,
 .token.class-name {
   color: #6f42c1;
 }
-
 .token.regex,
 .token.important,
 .token.variable {
   color: #e36209;
 }
 
-/* Custom hero-section styles moved to Hero.astro component */
-
-/* Feature card styles moved to FeatureCard.astro component */
-
-.badge-section {
-  background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+/* Code on a Bootstrap .bg-dark surface is always on a dark background, so it
+   must use the bright token palette in BOTH themes (otherwise the light-theme
+   dark tokens render dark-on-dark and become unreadable in light mode). */
+.bg-dark pre[class*="language-"],
+.bg-dark code[class*="language-"] {
+  background: transparent !important;
+  color: #e6ecf7 !important;
+  border: none !important;
 }
+.bg-dark .token.comment,
+.bg-dark .token.prolog,
+.bg-dark .token.doctype,
+.bg-dark .token.cdata { color: #7c8aa0 !important; }
+.bg-dark .token.punctuation { color: #9aa7bd !important; }
+.bg-dark .token.keyword,
+.bg-dark .token.atrule,
+.bg-dark .token.attr-value { color: #c084fc !important; }
+.bg-dark .token.boolean,
+.bg-dark .token.number,
+.bg-dark .token.constant,
+.bg-dark .token.tag,
+.bg-dark .token.property,
+.bg-dark .token.symbol,
+.bg-dark .token.deleted { color: #fbbf24 !important; }
+.bg-dark .token.string,
+.bg-dark .token.char,
+.bg-dark .token.attr-name,
+.bg-dark .token.builtin,
+.bg-dark .token.inserted,
+.bg-dark .token.selector { color: #34d399 !important; }
+.bg-dark .token.operator,
+.bg-dark .token.entity,
+.bg-dark .token.url { color: #60a5fa !important; }
+.bg-dark .token.function,
+.bg-dark .token.class-name { color: #f472b6 !important; }
+.bg-dark .token.regex,
+.bg-dark .token.important,
+.bg-dark .token.variable { color: #fde047 !important; }
 
-/* Code example styles moved to CodeExampleSection.astro component */
+/* ============ Demo cards ============ */
 
-/* Dark mode badge section and code example */
-body.dark-mode .badge-section {
-  background: linear-gradient(
-    45deg,
-    var(--dark-card-bg),
-    var(--dark-bg)
-  ) !important;
-}
-
-/* Base light mode styles for Prism.js code blocks */
-pre[class*="language-"],
-code[class*="language-"] {
-  background-color: #ffffff !important;
-  color: #212529 !important;
-}
-
-/* Dark mode code example styles moved to CodeExampleSection.astro component */
-
-/* Code header and body styles moved to CodeExampleSection.astro component */
-
-/* Timeline styles moved to NewsSection.astro component */
-
-/* Plugin showcase styles moved to PluginsSection.astro component */
-
-/* Demo cards */
 .demo-card {
   background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 15px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition:
+    transform 0.45s var(--ease-spring),
+    box-shadow 0.45s ease,
+    border-color 0.45s ease;
   height: 100%;
 }
 
 .demo-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lift);
+  border-color: rgba(47, 107, 255, 0.3);
 }
 
-/* Dark mode demo cards */
 body.dark-mode .demo-card {
   background: var(--dark-card-bg) !important;
   border-color: var(--dark-border) !important;
@@ -700,12 +994,12 @@ body.dark-mode .demo-card {
 }
 
 body.dark-mode .demo-card:hover {
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 24px 60px -12px rgba(47, 107, 255, 0.3) !important;
 }
 
 .demo-thumbnail {
   height: 200px;
-  background: linear-gradient(45deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #2f6bff, #8b5cf6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -713,61 +1007,24 @@ body.dark-mode .demo-card:hover {
   font-size: 3rem;
 }
 
-/* Statistics section styles moved to StatisticsSection.astro component */
+/* ============ Scrollbar ============ */
 
-/* Buttons */
-.btn-primary {
-  background: linear-gradient(
-    45deg,
-    var(--primary-color),
-    var(--secondary-color)
-  );
-  border: none;
-  padding: 12px 30px;
-  border-radius: 25px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
-  background: linear-gradient(45deg, #2980b9, #27ae60);
-}
-
-.btn-outline-primary {
-  border: 2px solid var(--primary-color);
-  color: var(--primary-color);
-  padding: 10px 25px;
-  border-radius: 25px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-outline-primary:hover {
-  background: var(--primary-color);
-  color: white;
-  transform: translateY(-2px);
-}
-
-/* Dark mode toggle styles moved to DarkModeToggle.astro component */
-
-/* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #eef2f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--primary-color);
-  border-radius: 4px;
+  background: linear-gradient(180deg, var(--primary-color), var(--accent-cyan));
+  border-radius: 8px;
+  border: 2px solid #eef2f9;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2980b9;
+  background: var(--primary-color);
 }
 
 body.dark-mode ::-webkit-scrollbar-track {
@@ -775,51 +1032,27 @@ body.dark-mode ::-webkit-scrollbar-track {
 }
 
 body.dark-mode ::-webkit-scrollbar-thumb {
-  background: var(--dark-text-muted);
+  background: linear-gradient(180deg, #2f6bff, #8b5cf6);
+  border-color: var(--dark-bg);
 }
 
-/* Interactive Demo Section styles moved to InteractiveDemoSection.astro component */
+/* ============ Misc ============ */
 
-/* Typography improvements */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-.display-4 {
-  font-weight: 700;
-  color: white;
-}
-
-.lead {
-  font-size: 1.25rem;
-  font-weight: 300;
-  line-height: 1.6;
-}
-
-/* Section spacing */
 .py-5 {
-  padding-top: 4rem !important;
-  padding-bottom: 4rem !important;
+  padding-top: 5.5rem !important;
+  padding-bottom: 5.5rem !important;
 }
 
-/* Background variations */
 .bg-light {
-  background-color: #f8f9fa !important;
+  background-color: var(--surface-alt) !important;
 }
 
 body.dark-mode .bg-light {
-  background-color: var(--dark-card-bg) !important;
+  background-color: #0a101f !important;
 }
 
-/* Text improvements */
 .text-muted {
-  color: #6c757d !important;
+  color: var(--text-muted-color) !important;
 }
 
 body.dark-mode .text-muted {
@@ -842,22 +1075,28 @@ body.dark-mode .text-muted {
   }
 }
 
-.slide-in-left {
-  animation: slideInLeft 0.8s ease-out;
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
 }
 
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
+@keyframes pulseGlow {
+  0%,
+  100% {
+    opacity: 0.55;
   }
-  to {
+  50% {
     opacity: 1;
-    transform: translateX(0);
   }
 }
 
-/* Dark mode styles for Bootstrap list groups */
+/* ============ Bootstrap dark-mode fixes ============ */
+
 body.dark-mode .list-group {
   background-color: var(--dark-card-bg) !important;
   border-color: var(--dark-border) !important;
@@ -884,17 +1123,15 @@ body.dark-mode .list-group-flush .list-group-item {
   border-color: var(--dark-border) !important;
 }
 
-/* Ensure links in list items are properly styled in dark mode */
 body.dark-mode .list-group-item a {
-  color: #007bff !important;
+  color: #7aa7ff !important;
 }
 
 body.dark-mode .list-group-item a:hover {
-  color: #0056b3 !important;
+  color: #a8c4ff !important;
   text-decoration: underline;
 }
 
-/* Dark mode styles for Bootstrap badges */
 body.dark-mode .badge.bg-secondary {
   background-color: #6c757d !important;
   color: var(--dark-text) !important;
@@ -906,12 +1143,12 @@ body.dark-mode .badge.bg-warning {
 }
 
 body.dark-mode .badge.bg-primary {
-  background-color: #0d6efd !important;
+  background-color: #2f6bff !important;
   color: var(--dark-text) !important;
 }
 
 body.dark-mode .badge.bg-success {
-  background-color: #198754 !important;
+  background-color: #10b981 !important;
   color: var(--dark-text) !important;
 }
 

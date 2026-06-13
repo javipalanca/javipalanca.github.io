@@ -27,26 +27,89 @@ const { feature } = Astro.props;
 
 <style>
     .feature-card {
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border-radius: var(--radius-lg, 22px);
+        box-shadow: var(--shadow-sm, 0 5px 15px rgba(0, 0, 0, 0.08));
         transition:
-            transform 0.3s,
-            box-shadow 0.3s;
+            transform 0.5s var(--ease-spring, ease),
+            box-shadow 0.5s ease,
+            border-color 0.5s ease;
         height: 100%;
         overflow: hidden;
-        border: 1px solid #e9ecef;
+        border: 1px solid var(--border-color, #e9ecef);
         position: relative;
     }
 
+    /* Gradient halo that fades in on hover */
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1.5px;
+        background: var(--gradient-brand, linear-gradient(135deg, #2f6bff, #10b981));
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: 0;
+        transition: opacity 0.45s ease;
+        pointer-events: none;
+    }
+
+    .feature-card::after {
+        content: '';
+        position: absolute;
+        top: -60%;
+        right: -40%;
+        width: 70%;
+        height: 120%;
+        background: radial-gradient(circle, rgba(47, 107, 255, 0.1), transparent 70%);
+        opacity: 0;
+        transition: opacity 0.45s ease;
+        pointer-events: none;
+    }
+
     .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-lift, 0 15px 30px rgba(0, 0, 0, 0.2));
+    }
+
+    .feature-card:hover::before,
+    .feature-card:hover::after {
+        opacity: 1;
     }
 
     .feature-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-        color: var(--primary-color);
+        font-size: 1.9rem;
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.25rem;
+        border-radius: 18px;
+        background: linear-gradient(135deg, rgba(47, 107, 255, 0.12), rgba(16, 185, 129, 0.12));
+        border: 1px solid rgba(47, 107, 255, 0.15);
+        transition: transform 0.5s var(--ease-bounce, ease), box-shadow 0.5s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+        transform: scale(1.12) rotate(-6deg);
+        box-shadow: 0 10px 24px -8px rgba(47, 107, 255, 0.45);
+    }
+
+    .feature-card h4 {
+        font-size: 1.25rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .feature-card p {
+        color: var(--text-muted-color, #6c757d);
+        line-height: 1.65;
+    }
+
+    .feature-card li {
+        padding: 0.2rem 0;
+        font-size: 0.95rem;
     }
 
     /* Dark mode support */
@@ -57,7 +120,16 @@ const { feature } = Astro.props;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     }
 
+    :global(body.dark-mode) .feature-card p {
+        color: var(--dark-text-muted);
+    }
+
     :global(body.dark-mode) .feature-card:hover {
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 24px 60px -12px rgba(47, 107, 255, 0.35);
+    }
+
+    :global(body.dark-mode) .feature-icon {
+        background: linear-gradient(135deg, rgba(47, 107, 255, 0.18), rgba(16, 185, 129, 0.15));
+        border-color: rgba(122, 167, 255, 0.25);
     }
 </style>

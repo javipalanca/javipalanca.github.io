@@ -1,20 +1,8 @@
 ---
 // Code Example Section component
-import PythonCodeBlock from './PythonCodeBlock.astro';
----
+import LiveCodeRunner from './LiveCodeRunner.astro';
 
-<section id="examples" class="py-5 bg-light">
-    <div class="container">
-        <div class="text-center mb-5 fade-in-up">
-            <h2 class="fw-bold">See SPADE Agents in Action</h2>
-            <p class="lead text-muted">Creating intelligent SPADE agents and multi-agent systems has never been easier</p>
-        </div>
-        <div class="row align-items-center">
-            <div class="col-lg-6 slide-in-left">
-                <PythonCodeBlock 
-                    filename="agent_example.py"
-                    showCopyButton={true}
-                    code={`import spade
+const agentCode = `import spade
 from spade.agent import Agent
 from spade.behaviour import CyclicBehaviour
 from spade.message import Message
@@ -38,18 +26,57 @@ async def main():
     await agent.start()
 
 if __name__ == "__main__":
-    spade.run(main())`}
+    spade.run(main())`;
+
+// Minimal, faithful replay of exactly what this one agent does:
+// start → receive a message → print it → send a reply. Nothing more.
+const agentTrace = [
+    { kind: 'cmd', text: 'spade run agent_example.py' },
+    { kind: 'ok', text: 'agent@localhost started' },
+    { kind: 'msg', dir: 'in', text: '"Hello SPADE!"' },
+    { kind: 'print', text: 'Message received: Hello SPADE!' },
+    { kind: 'msg', dir: 'out', text: '"I received your message!"' },
+];
+
+// The example defines a single agent; the scene shows it and its network mailbox.
+const agentPreviewAgents = [
+    { id: 'agent', label: 'agent@localhost', icon: 'cpu-fill', color: '#2f6bff' },
+];
+---
+
+<section id="examples" class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5 fade-in-up">
+            <h2 class="fw-bold">See SPADE Agents in Action</h2>
+            <p class="lead text-muted">Write a few lines of Python, press Run, and watch your agent receive and reply to messages</p>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-lg-10 mx-auto fade-in-up">
+                <LiveCodeRunner
+                    filename="agent_example.py"
+                    code={agentCode}
+                    agents={agentPreviewAgents}
+                    trace={agentTrace}
                 />
             </div>
-            <div class="col-lg-6 slide-in-right">
-                <h3 class="mb-4">Simple & Intuitive SPADE Agent API</h3>
-                <p>SPADE provides a clean, object-oriented API that makes it easy to create powerful <strong>spade multiagents</strong> and <strong>multi-agent systems</strong>. Define your <strong>SPADE agents</strong>, their behaviors, and how they communicate with just a few lines of code.</p>
-                <p>This example shows a basic <strong>SPADE agent</strong> that can receive messages and automatically reply to them. SPADE handles all the underlying communication details for your <strong>spade agents</strong> ecosystem.</p>
-                <div class="d-flex gap-2 flex-wrap">
-                    <a href="/spade" class="btn btn-primary">
+        </div>
+
+        <div class="row">
+            <div class="col-lg-10 mx-auto text-center slide-in-right">
+                <p class="text-muted mb-3">
+                    A basic <strong>SPADE agent</strong> that receives messages and automatically replies — SPADE handles
+                    presence, the XMPP connection and message delivery for you. The preview above replays the program's
+                    real output; run it for yourself in a couple of commands.
+                </p>
+                <div class="d-flex gap-2 flex-wrap justify-content-center">
+                    <a href="#get-started" class="btn btn-primary">
+                        <i class="bi bi-rocket-takeoff me-2"></i>Get Started
+                    </a>
+                    <a href="/spade" class="btn btn-outline-primary">
                         <i class="bi bi-cpu me-2"></i>Explore SPADE Framework
                     </a>
-                    <a href="https://spadeagents.eu/docs/spade/usage" class="btn btn-outline-primary">View More Examples</a>
+                    <a href="https://spadeagents.eu/docs/spade/usage" class="btn btn-outline-primary">More Examples</a>
                 </div>
             </div>
         </div>

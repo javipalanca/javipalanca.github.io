@@ -1,0 +1,810 @@
+---
+// Complete AgentSpeak(L) language reference / manual.
+// Covers the full language as implemented by Jason / python-agentspeak (the
+// interpreter embedded in the SPADE BDI plugin): lexical syntax, beliefs,
+// rules, goals, plans, triggering events, the plan body, operators, lists &
+// strings, the standard internal-action library, KQML communication, and how
+// it all maps onto Python through SPADE BDI.
+//
+// A sticky table of contents on the left tracks the section in view; every
+// code sample is escaped (&lt; &gt; &amp;) so AgentSpeak operators render
+// verbatim. Content is intentionally framed as a reference, not a tutorial —
+// the tutorial lives in the hero / reasoning-cycle / playground sections above.
+
+const toc = [
+    { id: 'asr-syntax', label: 'Lexical syntax' },
+    { id: 'asr-beliefs', label: 'Beliefs & annotations' },
+    { id: 'asr-rules', label: 'Rules' },
+    { id: 'asr-goals', label: 'Goals' },
+    { id: 'asr-plans', label: 'Plans' },
+    { id: 'asr-events', label: 'Triggering events' },
+    { id: 'asr-body', label: 'The plan body' },
+    { id: 'asr-operators', label: 'Operators' },
+    { id: 'asr-lists', label: 'Lists & strings' },
+    { id: 'asr-internal', label: 'Internal actions' },
+    { id: 'asr-comm', label: 'Communication' },
+    { id: 'asr-spade', label: 'AgentSpeak in SPADE' },
+];
+---
+
+<section class="asr py-5" id="agentspeak-manual">
+    <div class="container">
+        <div class="text-center mb-5 fade-in-up">
+            <div class="asr-eyebrow">Language reference</div>
+            <h2 class="fw-bold">The Complete AgentSpeak Manual</h2>
+            <p class="lead text-muted">
+                Every construct of the language in one place — syntax, beliefs, rules, goals, plans,
+                operators, lists, the internal-action library and KQML communication — mapped onto
+                how you actually run it with <strong>SPADE&nbsp;BDI</strong>.
+            </p>
+        </div>
+
+        <div class="asr-layout">
+            <!-- Sticky table of contents -->
+            <aside class="asr-toc" aria-label="Manual contents">
+                <div class="asr-toc-title">Contents</div>
+                <nav>
+                    <ul>
+                        {toc.map((t, i) => (
+                            <li>
+                                <a href={`#${t.id}`} data-target={t.id} class={i === 0 ? 'is-active' : ''}>
+                                    <span class="asr-toc-num">{String(i + 1).padStart(2, '0')}</span>
+                                    {t.label}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Reference content -->
+            <div class="asr-content">
+
+                <!-- 1. Lexical syntax -->
+                <article class="asr-block" id="asr-syntax">
+                    <h3><span class="asr-h-num">01</span>Lexical syntax</h3>
+                    <p>
+                        AgentSpeak borrows its term language from Prolog. Everything is built from a few
+                        kinds of token. The single rule that trips up newcomers: <strong>names starting with a
+                        lowercase letter are constants (atoms); names starting with an uppercase letter or
+                        <code>_</code> are logic variables</strong>.
+                    </p>
+                    <div class="asr-table-wrap">
+                        <table class="asr-table">
+                            <thead><tr><th>Element</th><th>Examples</th><th>Notes</th></tr></thead>
+                            <tbody>
+                                <tr><td>Atom / constant</td><td><code>john</code>, <code>red</code>, <code>'New York'</code></td><td>Lowercase start, or quoted for spaces/caps.</td></tr>
+                                <tr><td>Number</td><td><code>42</code>, <code>-3</code>, <code>3.14</code></td><td>Integers and floats.</td></tr>
+                                <tr><td>String</td><td><code>"hello world"</code></td><td>Double-quoted text.</td></tr>
+                                <tr><td>Variable</td><td><code>X</code>, <code>Temp</code>, <code>_Cost</code></td><td>Uppercase / underscore start. Bound by unification.</td></tr>
+                                <tr><td>Anonymous variable</td><td><code>_</code></td><td>"Don't care" — matches anything, never bound.</td></tr>
+                                <tr><td>Structure / predicate</td><td><code>loc(robot, 3, 4)</code></td><td>A functor with arguments — the core data shape.</td></tr>
+                                <tr><td>List</td><td><code>[a, b, c]</code>, <code>[H|T]</code></td><td>See <a href="#asr-lists">Lists &amp; strings</a>.</td></tr>
+                                <tr><td>Comment</td><td><code>// line</code>, <code>/* block */</code></td><td>Ignored by the interpreter.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <pre class="asr-pre"><code class="language-agentspeak">{`// constants vs. variables
+position(robot, 3, 4).   // robot, 3, 4 are constants
++!move(Dir) <- step(Dir).   // Dir is a variable, bound when the goal runs
+
+color('dark green').     // quoted atom keeps the space and case`}</code></pre>
+                </article>
+
+                <!-- 2. Beliefs -->
+                <article class="asr-block" id="asr-beliefs">
+                    <h3><span class="asr-h-num">02</span>Beliefs &amp; annotations</h3>
+                    <p>
+                        The <strong>belief base</strong> is the agent's view of the world: a set of ground predicates,
+                        each ending in a full stop. Beliefs are added and removed as the agent perceives the
+                        environment, receives messages, or updates its own mental notes.
+                    </p>
+                    <pre class="asr-pre"><code class="language-agentspeak">{`temperature(22).
+location(kitchen).
+is_sunny(true).
+friend(alice).
+friend(bob).`}</code></pre>
+                    <p>
+                        <strong>Strong (explicit) negation</strong> uses <code>~</code>. It states that something is
+                        <em>known to be false</em>, which is different from simply not being in the belief base:
+                    </p>
+                    <pre class="asr-pre"><code class="language-agentspeak">{`~raining.          // the agent knows it is NOT raining
+~enemy(alice).     // alice is explicitly known not to be an enemy`}</code></pre>
+                    <p>
+                        Every belief carries <strong>annotations</strong> in square brackets that record
+                        <em>where it came from</em>. The interpreter adds <code>source(...)</code> automatically;
+                        you can read or match on it inside a context.
+                    </p>
+                    <div class="asr-table-wrap">
+                        <table class="asr-table">
+                            <thead><tr><th>Annotation</th><th>Meaning</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>[source(percept)]</code></td><td>Came from sensing the environment.</td></tr>
+                                <tr><td><code>[source(self)]</code></td><td>The agent added it itself (a mental note).</td></tr>
+                                <tr><td><code>[source(alice)]</code></td><td>Received from another agent named <code>alice</code>.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <pre class="asr-pre"><code class="language-agentspeak">{`colour(box1, red)[source(percept)].
+
+// only trust a belief that did not come from bob
++!act : open(door)[source(S)] & S \\== bob <- go_through.`}</code></pre>
+                </article>
+
+                <!-- 3. Rules -->
+                <article class="asr-block" id="asr-rules">
+                    <h3><span class="asr-h-num">03</span>Rules</h3>
+                    <p>
+                        Beyond plain facts, the belief base can hold <strong>Prolog-style rules</strong> that derive
+                        new conclusions on demand. A rule has the form <code>Head :- Body</code> and is used
+                        whenever the head is queried in a plan context.
+                    </p>
+                    <pre class="asr-pre"><code class="language-agentspeak">{`// facts
+parent(tom, bob).
+parent(bob, ann).
+
+// rule: a grandparent is the parent of a parent
+grandparent(X, Z) :- parent(X, Y) & parent(Y, Z).
+
+// querying the rule inside a context
++!check : grandparent(tom, ann) <- .print("tom is ann's grandparent").`}</code></pre>
+                    <p>
+                        Rules never appear as events — they are not added or removed dynamically — they exist
+                        purely to keep the belief base small and let contexts stay declarative.
+                    </p>
+                </article>
+
+                <!-- 4. Goals -->
+                <article class="asr-block" id="asr-goals">
+                    <h3><span class="asr-h-num">04</span>Goals</h3>
+                    <p>There are two kinds of goal, distinguished by their prefix:</p>
+                    <div class="asr-table-wrap">
+                        <table class="asr-table">
+                            <thead><tr><th>Goal</th><th>Prefix</th><th>What it does</th></tr></thead>
+                            <tbody>
+                                <tr><td>Achievement goal</td><td><code>!</code></td><td>"Make this true." Triggers the search for a plan that brings the state about.</td></tr>
+                                <tr><td>Test goal</td><td><code>?</code></td><td>"Find out the value." Queries the belief base and binds variables — no plan needed if the belief exists.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <pre class="asr-pre"><code class="language-agentspeak">{`!greet_everyone.        // initial achievement goal (runs at start-up)
+
++!report <-
+    ?temperature(T);    // test goal: bind T from the belief base
+    .print("Current temperature is", T).`}</code></pre>
+                    <p>
+                        A goal placed at the top level of the file (e.g. <code>!start.</code>) is an
+                        <strong>initial goal</strong>: the agent adopts it as soon as it boots.
+                    </p>
+                </article>
+
+                <!-- 5. Plans -->
+                <article class="asr-block" id="asr-plans">
+                    <h3><span class="asr-h-num">05</span>Plans</h3>
+                    <p>
+                        Plans are the agent's know-how. Each one says: <em>when this event happens, and if this
+                        condition holds, do this</em>. The three parts are separated by <code>:</code> and
+                        <code>&lt;-</code>, and the plan ends in a full stop.
+                    </p>
+                    <pre class="asr-pre asr-pre-anatomy"><code>{`+!stay_cool : temperature(T) & T > 25 <- !find_shade; !drink_water.
+└──┬───┘   └────────────┬─────────────┘   └────────────┬───────────┘
+triggering event       context (guard)               plan body`}</code></pre>
+                    <ul class="asr-list">
+                        <li><strong>Triggering event</strong> — the change that makes this plan <em>relevant</em> (a new goal, a new belief…). See <a href="#asr-events">below</a>.</li>
+                        <li><strong>Context</strong> — a logical condition checked against the belief base with unification. If it fails the plan is skipped. Omit it (with the <code>:</code>) to mean "always applicable".</li>
+                        <li><strong>Body</strong> — a sequence of formulas separated by <code>;</code>, run in order once the plan is selected.</li>
+                    </ul>
+                    <p>
+                        Multiple plans can share a trigger. The interpreter tries them <strong>top to bottom</strong>
+                        and commits to the first whose context holds — so order your plans from most specific to
+                        most general, like a fall-through:
+                    </p>
+                    <pre class="asr-pre"><code class="language-agentspeak">{`+!greet(Who) : friend(Who)      <- .print("Hey", Who, "!").
++!greet(Who) : true             <- .print("Hello", Who).   // fallback`}</code></pre>
+                </article>
+
+                <!-- 6. Triggering events -->
+                <article class="asr-block" id="asr-events">
+                    <h3><span class="asr-h-num">06</span>Triggering events</h3>
+                    <p>
+                        A plan fires on an <strong>event</strong> — a change in the agent's mental state. The sign
+                        (<code>+</code>/<code>-</code>) is addition or deletion; the optional <code>!</code> or
+                        <code>?</code> marks a goal rather than a belief.
+                    </p>
+                    <div class="asr-table-wrap">
+                        <table class="asr-table">
+                            <thead><tr><th>Trigger</th><th>Fires when…</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>+b</code></td><td>Belief <code>b</code> is added (percept, message or mental note).</td></tr>
+                                <tr><td><code>-b</code></td><td>Belief <code>b</code> is removed.</td></tr>
+                                <tr><td><code>+!g</code></td><td>Achievement goal <code>g</code> is adopted — the common case.</td></tr>
+                                <tr><td><code>-!g</code></td><td>Achievement goal <code>g</code> <em>failed</em> — use for recovery/clean-up.</td></tr>
+                                <tr><td><code>+?g</code></td><td>Test goal <code>g</code> is posted.</td></tr>
+                                <tr><td><code>-?g</code></td><td>Test goal <code>g</code> failed to find an answer.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <pre class="asr-pre"><code class="language-agentspeak">{`// react to perceiving a new temperature reading
++temperature(T) : T > 30 <- .print("It's getting hot!"); !cool_down.
+
+// recover when an achievement goal fails
+-!deliver(Pkg) <- .print("Delivery failed, retrying"); !deliver(Pkg).`}</code></pre>
+                </article>
+
+                <!-- 7. Plan body -->
+                <article class="asr-block" id="asr-body">
+                    <h3><span class="asr-h-num">07</span>The plan body</h3>
+                    <p>
+                        The body is a <code>;</code>-separated sequence of <strong>formulas</strong>. Each kind of
+                        formula is marked by its leading symbol:
+                    </p>
+                    <div class="asr-table-wrap">
+                        <table class="asr-table">
+                            <thead><tr><th>Formula</th><th>Symbol</th><th>Effect</th></tr></thead>
+                            <tbody>
+                                <tr><td>Environment action</td><td><code>act</code></td><td>Acts on the world (e.g. <code>move(left)</code>). In SPADE BDI, a Python action.</td></tr>
+                                <tr><td>Achievement subgoal</td><td><code>!g</code></td><td>Pursue <code>g</code> now, in the same intention.</td></tr>
+                                <tr><td>New-focus subgoal</td><td><code>!!g</code></td><td>Pursue <code>g</code> as a separate, concurrent intention.</td></tr>
+                                <tr><td>Test goal</td><td><code>?g</code></td><td>Query the belief base, binding variables.</td></tr>
+                                <tr><td>Add belief (mental note)</td><td><code>+b</code></td><td>Insert <code>b</code> with <code>source(self)</code>.</td></tr>
+                                <tr><td>Remove belief</td><td><code>-b</code></td><td>Delete a matching belief.</td></tr>
+                                <tr><td>Update belief</td><td><code>-+b</code></td><td>Remove the old <code>b</code> then add the new one (atomic replace).</td></tr>
+                                <tr><td>Internal action</td><td><code>.name(…)</code></td><td>Library call that runs inside the agent. See <a href="#asr-internal">below</a>.</td></tr>
+                                <tr><td>Constraint / expression</td><td><code>X = …</code></td><td>Unify or test in-line; fails the plan step if false.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <pre class="asr-pre"><code class="language-agentspeak">{`+!process_order(Item, Qty) : stock(Item, N) & N >= Qty <-
+    Remaining = N - Qty;            // expression: bind Remaining
+    -+stock(Item, Remaining);       // update the stock belief
+    .print("Shipping", Qty, "x", Item);
+    pack(Item, Qty);                // environment action
+    !!notify_warehouse(Item);       // spin off a concurrent intention
+    +shipped(Item).                 // mental note`}</code></pre>
+                </article>
+
+                <!-- 8. Operators -->
+                <article class="asr-block" id="asr-operators">
+                    <h3><span class="asr-h-num">08</span>Operators</h3>
+                    <p>Operators appear in plan contexts and in body expressions.</p>
+                    <div class="asr-table-grid">
+                        <div class="asr-table-wrap">
+                            <table class="asr-table">
+                                <thead><tr><th>Arithmetic</th><th></th></tr></thead>
+                                <tbody>
+                                    <tr><td><code>+</code> <code>-</code> <code>*</code> <code>/</code></td><td>Add, subtract, multiply, divide.</td></tr>
+                                    <tr><td><code>**</code></td><td>Power.</td></tr>
+                                    <tr><td><code>div</code> <code>mod</code></td><td>Integer division, remainder.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="asr-table-wrap">
+                            <table class="asr-table">
+                                <thead><tr><th>Relational</th><th></th></tr></thead>
+                                <tbody>
+                                    <tr><td><code>&gt;</code> <code>&gt;=</code> <code>&lt;</code> <code>&lt;=</code></td><td>Numeric comparison.</td></tr>
+                                    <tr><td><code>==</code></td><td>Term equality (no binding).</td></tr>
+                                    <tr><td><code>\\==</code></td><td>Term inequality.</td></tr>
+                                    <tr><td><code>=</code></td><td>Unification (binds variables).</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="asr-table-wrap">
+                            <table class="asr-table">
+                                <thead><tr><th>Logical (context)</th><th></th></tr></thead>
+                                <tbody>
+                                    <tr><td><code>&amp;</code></td><td>Conjunction — all must hold.</td></tr>
+                                    <tr><td><code>|</code></td><td>Disjunction — any may hold.</td></tr>
+                                    <tr><td><code>not</code></td><td>Negation as failure — true when the goal can't be proven.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <pre class="asr-pre"><code class="language-agentspeak">{`+!buy(Item) : price(Item, P) & funds(F) & F >= P & not blacklisted(Item) <-
+    NewFunds = F - P;
+    -+funds(NewFunds);
+    .print("Bought", Item, "- balance:", NewFunds).`}</code></pre>
+                    <p class="asr-note">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Mind the difference: <code>==</code> compares terms as they are, while <code>=</code>
+                        <em>unifies</em> them and can bind a variable. <code>not p</code> (negation as failure)
+                        succeeds when <code>p</code> is simply absent; <code>~p</code> (strong negation) is a
+                        belief that <code>p</code> is positively false.
+                    </p>
+                </article>
+
+                <!-- 9. Lists & strings -->
+                <article class="asr-block" id="asr-lists">
+                    <h3><span class="asr-h-num">09</span>Lists &amp; strings</h3>
+                    <p>
+                        Lists are ordinary terms written between square brackets. The <strong>head/tail</strong>
+                        pattern <code>[H|T]</code> is the workhorse for recursion: <code>H</code> unifies with the
+                        first element, <code>T</code> with the rest.
+                    </p>
+                    <pre class="asr-pre"><code class="language-agentspeak">{`[]                 // empty list
+[a, b, c]          // three elements
+[H | T]            // H = a, T = [b, c]  (when matched against [a,b,c])
+[a, b | Rest]      // first two fixed, Rest = the tail
+[name(ann), 42, "hi"]   // elements can be any term`}</code></pre>
+                    <p>Recursing over a list with two plans — one for the empty case, one for head/tail:</p>
+                    <pre class="asr-pre"><code class="language-agentspeak">{`+!sum([], 0).
++!sum([H|T], S) <- !sum(T, Rest); S = H + Rest.
+
++!greet_all([]).
++!greet_all([H|T]) <- .print("Hello", H); !greet_all(T).`}</code></pre>
+                    <p>
+                        Practical example combining both: take a list of usernames, build a message string,
+                        and notify each user one by one.
+                    </p>
+                    <pre class="asr-pre"><code class="language-agentspeak">{`// users waiting for a reminder
+pending_users([alice, bob, carol]).
+
++!notify_pending <-
+    ?pending_users(Users);
+    !notify_list(Users, "[SPADE] reminder for ").
+
++!notify_list([], _Prefix) <-
+    .print("All reminders sent").
+
++!notify_list([User|Rest], Prefix) <-
+    .concat(Prefix, User, Msg);      // string concatenation
+    .length(Rest, Left);             // list length helper
+    .print(Msg, "(left:", Left, ")");
+    .send(User, tell, reminder_ready(User));
+    !notify_list(Rest, Prefix).`}</code></pre>
+                    <p>
+                        Common list and string utilities live in the internal-action library — a few of the most
+                        used ones:
+                    </p>
+                    <div class="asr-table-wrap">
+                        <table class="asr-table">
+                            <thead><tr><th>Action</th><th>Purpose</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>.length(L, N)</code></td><td>Bind <code>N</code> to the number of elements (or string length).</td></tr>
+                                <tr><td><code>.member(X, L)</code></td><td>Succeeds if <code>X</code> is in <code>L</code>; can enumerate.</td></tr>
+                                <tr><td><code>.nth(I, L, X)</code></td><td>Bind <code>X</code> to the element at index <code>I</code>.</td></tr>
+                                <tr><td><code>.concat(A, B, C)</code></td><td>Concatenate lists or strings into <code>C</code>.</td></tr>
+                                <tr><td><code>.sort(L, S)</code> · <code>.reverse(L, R)</code></td><td>Order or reverse a list.</td></tr>
+                                <tr><td><code>.max(L, M)</code> · <code>.min(L, M)</code></td><td>Largest / smallest element.</td></tr>
+                                <tr><td><code>.substring(Sub, Str)</code></td><td>Test or locate a substring.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+
+                <!-- 10. Internal actions -->
+                <article class="asr-block" id="asr-internal">
+                    <h3><span class="asr-h-num">10</span>Internal actions</h3>
+                    <p>
+                        <strong>Internal actions</strong> start with a dot and run <em>inside</em> the agent (unlike
+                        environment actions, which affect the world). Standard-library actions use a bare
+                        <code>.name</code>; user-defined ones live in a library namespace like
+                        <code>my_lib.action</code>. They never generate events and can fail, which fails the plan step.
+                    </p>
+                    <div class="asr-table-wrap">
+                        <table class="asr-table">
+                            <thead><tr><th>Category</th><th>Actions</th></tr></thead>
+                            <tbody>
+                                <tr><td>Output</td><td><code>.print</code>, <code>.println</code></td></tr>
+                                <tr><td>Introspection</td><td><code>.my_name(N)</code>, <code>.findall(T, Q, L)</code>, <code>.count(Q, N)</code>, <code>.setof</code></td></tr>
+                                <tr><td>Goals &amp; plans</td><td><code>.desire</code>, <code>.intend</code>, <code>.drop_goal</code>, <code>.drop_intention</code>, <code>.succeed_goal</code>, <code>.fail_goal</code>, <code>.add_plan</code></td></tr>
+                                <tr><td>Lists &amp; strings</td><td><code>.length</code>, <code>.member</code>, <code>.nth</code>, <code>.sort</code>, <code>.concat</code>, <code>.reverse</code>, <code>.max</code>, <code>.min</code></td></tr>
+                                <tr><td>Communication</td><td><code>.send</code>, <code>.broadcast</code></td></tr>
+                                <tr><td>Time &amp; control</td><td><code>.wait</code>, <code>.at</code>, <code>.random(X)</code>, <code>.date</code>, <code>.time</code></td></tr>
+                                <tr><td>Agent lifecycle</td><td><code>.create_agent</code>, <code>.kill_agent</code>, <code>.stopMAS</code></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <pre class="asr-pre"><code class="language-agentspeak">{`+!summarise <-
+    .findall(Name, friend(Name), Friends);   // collect all matches
+    .length(Friends, N);
+    .print("I have", N, "friends:", Friends).`}</code></pre>
+                    <p class="asr-note">
+                        <i class="bi bi-info-circle me-1"></i>
+                        The exact set of available internal actions depends on the interpreter. The
+                        <a href="#agentspeak-playground">browser playground</a> above implements a didactic
+                        subset (<code>.print</code>, <code>.send</code>, beliefs &amp; subgoals); SPADE&nbsp;BDI
+                        ships the fuller <code>python-agentspeak</code> standard library and lets you add your
+                        own in Python (next section).
+                    </p>
+                </article>
+
+                <!-- 11. Communication -->
+                <article class="asr-block" id="asr-comm">
+                    <h3><span class="asr-h-num">11</span>Communication</h3>
+                    <p>
+                        Agents talk by sending each other <strong>speech acts</strong> with
+                        <code>.send(Receiver, Performative, Content)</code>. The KQML-style performative says what
+                        the message <em>means</em> — and the receiver's mind updates automatically. In SPADE BDI
+                        these travel as real XMPP messages between distributed agents.
+                    </p>
+                    <div class="asr-table-wrap">
+                        <table class="asr-table">
+                            <thead><tr><th>Performative</th><th>Effect on the receiver</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>tell</code></td><td>Adds <code>Content</code> to its belief base, tagged <code>source(sender)</code>.</td></tr>
+                                <tr><td><code>untell</code></td><td>Removes that belief.</td></tr>
+                                <tr><td><code>achieve</code></td><td>Adopts <code>Content</code> as a new goal <code>!Content</code>.</td></tr>
+                                <tr><td><code>unachieve</code></td><td>Drops that goal.</td></tr>
+                                <tr><td><code>askOne</code> / <code>askAll</code></td><td>Requests one / every answer that unifies with <code>Content</code>.</td></tr>
+                                <tr><td><code>tellHow</code> / <code>untellHow</code></td><td>Shares / retracts a plan (know-how).</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <pre class="asr-pre"><code class="language-agentspeak">{`// inform another agent of a fact
+.send(robot1, tell, location(kitchen));
+
+// delegate a goal to a coordinator
+.send(coordinator, achieve, patrol_area(zone_a));
+
+// the receiver reacts to the freshly-told belief
++location(Room)[source(Ag)] <-
+    .print(Ag, "reports something is in the", Room).`}</code></pre>
+                </article>
+
+                <!-- 12. AgentSpeak in SPADE -->
+                <article class="asr-block" id="asr-spade">
+                    <h3><span class="asr-h-num">12</span>AgentSpeak in SPADE</h3>
+                    <p>
+                        With the <a href="/plugins/spade-bdi">SPADE BDI</a> plugin you put your program in an
+                        <code>.asl</code> file and hand it to a <code>BDIAgent</code>. From Python you can seed,
+                        read and react to beliefs while the reasoning cycle runs over XMPP.
+                    </p>
+                    <pre class="asr-pre asr-pre-py"><code class="language-python">{`import spade
+from spade_bdi.bdi import BDIAgent
+
+async def main():
+    agent = BDIAgent("agent@server", "password", "agent.asl")
+    await agent.start()
+
+    # seed and query the belief base from Python
+    agent.set_belief("temperature", 30)
+    print(agent.get_belief("temperature"))
+
+if __name__ == "__main__":
+    spade.run(main())`}</code></pre>
+                    <p>
+                        To expose new <strong>internal actions or functions</strong> to AgentSpeak, subclass
+                        <code>BDIAgent</code> and override <code>add_custom_actions</code>:
+                    </p>
+                    <pre class="asr-pre asr-pre-py"><code class="language-python">{`import agentspeak
+from spade_bdi.bdi import BDIAgent
+
+class MyAgent(BDIAgent):
+    def add_custom_actions(self, actions):
+
+        # a function usable in expressions:  X = .square(5)
+        @actions.add_function(".square", (int,))
+        def square(x):
+            return x * x
+
+        # an action usable in a plan body:  .greet("world")
+        @actions.add(".greet", 1)
+        def _greet(agent, term, intention):
+            who = agentspeak.grounded(term.args[0], intention.scope)
+            print("Hello", who)
+            yield`}</code></pre>
+                    <p class="asr-note">
+                        <i class="bi bi-info-circle me-1"></i>
+                        From AgentSpeak these look just like built-ins:
+                        <code>.greet("world")</code> in a plan body, or <code>N = .square(5)</code> in a context.
+                        Custom actions are the bridge between declarative reasoning and the full Python ecosystem.
+                    </p>
+                </article>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .asr {
+        position: relative;
+    }
+
+    .asr-eyebrow {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.74rem;
+        font-weight: 600;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--accent-purple, #8b5cf6);
+        margin-bottom: 0.6rem;
+    }
+
+    .asr-layout {
+        display: grid;
+        grid-template-columns: 230px 1fr;
+        gap: 3rem;
+        align-items: start;
+    }
+
+    /* ---- Sticky TOC ---- */
+    .asr-toc {
+        position: sticky;
+        top: 100px;
+        align-self: start;
+    }
+
+    .asr-toc-title {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--text-muted-color, #6c757d);
+        padding: 0 0.9rem 0.6rem;
+    }
+
+    .asr-toc ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        border-left: 2px solid var(--border-color, rgba(15, 23, 42, 0.08));
+    }
+
+    .asr-toc a {
+        display: flex;
+        align-items: baseline;
+        gap: 0.55rem;
+        padding: 0.4rem 0.9rem;
+        margin-left: -2px;
+        border-left: 2px solid transparent;
+        font-size: 0.88rem;
+        font-weight: 500;
+        color: var(--text-muted-color, #6c757d);
+        text-decoration: none;
+        transition: color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+    }
+
+    .asr-toc a:hover {
+        color: var(--primary-color, #2f6bff);
+        transform: translateX(2px);
+    }
+
+    .asr-toc a.is-active {
+        color: var(--primary-color, #2f6bff);
+        border-left-color: var(--primary-color, #2f6bff);
+        font-weight: 600;
+    }
+
+    .asr-toc-num {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.7rem;
+        color: var(--accent-purple, #8b5cf6);
+        opacity: 0.8;
+    }
+
+    /* ---- Content blocks ---- */
+    .asr-content {
+        min-width: 0; /* let <pre> shrink instead of overflowing the grid */
+    }
+
+    .asr-block {
+        scroll-margin-top: 100px;
+        padding-bottom: 2.6rem;
+        margin-bottom: 2.6rem;
+        border-bottom: 1px solid var(--border-color, rgba(15, 23, 42, 0.08));
+    }
+
+    .asr-block:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
+    .asr-block h3 {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .asr-h-num {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: white;
+        background: var(--gradient-ai, linear-gradient(135deg, #8b5cf6, #d946ef));
+        border-radius: 8px;
+        padding: 0.28rem 0.5rem;
+        line-height: 1;
+    }
+
+    .asr-block p {
+        color: var(--text-muted-color, #5b6b81);
+        line-height: 1.75;
+        margin-bottom: 1rem;
+    }
+
+    .asr-block p strong { color: var(--text-color, #0f172a); }
+
+    .asr-list {
+        color: var(--text-muted-color, #5b6b81);
+        line-height: 1.7;
+        margin-bottom: 1rem;
+        padding-left: 1.2rem;
+    }
+    .asr-list li { margin-bottom: 0.5rem; }
+    .asr-list strong { color: var(--text-color, #0f172a); }
+
+    /* inline code in prose */
+    .asr-block p code,
+    .asr-block li code,
+    .asr-table code {
+        font-family: var(--font-mono, monospace);
+        /* literal operators — no ligatures turning <- into ← or >= into ≥ */
+        font-variant-ligatures: none;
+        font-feature-settings: "liga" 0, "calt" 0;
+        font-size: 0.84em;
+        color: var(--primary-color, #2f6bff);
+        background: rgba(47, 107, 255, 0.08);
+        padding: 0.1rem 0.4rem;
+        border-radius: 6px;
+        white-space: nowrap;
+    }
+
+    .asr-block a {
+        color: var(--primary-color, #2f6bff);
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .asr-block a:hover { text-decoration: underline; }
+
+    /* ---- Code blocks (dark, like the playground) ---- */
+    .asr-pre {
+        background: #0a101f;
+        border: 1px solid rgba(122, 167, 255, 0.18);
+        border-radius: 14px;
+        padding: 1.1rem 1.3rem;
+        overflow-x: auto;
+        margin: 0 0 1.2rem;
+    }
+
+    .asr-pre code {
+        font-family: var(--font-mono, monospace);
+        /* literal operators — no ligatures turning <- into ← or >= into ≥ */
+        font-variant-ligatures: none;
+        font-feature-settings: "liga" 0, "calt" 0;
+        font-size: 0.84rem;
+        line-height: 1.7;
+        color: #cbd5e1;
+        white-space: pre;
+        background: none;
+        padding: 0;
+    }
+
+    .asr-pre-anatomy code { color: #93c5fd; }
+    .asr-pre-py { border-color: rgba(16, 185, 129, 0.25); }
+
+    /* ---- Tables ---- */
+    .asr-table-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .asr-table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--border-color, rgba(15, 23, 42, 0.08));
+        border-radius: 12px;
+        margin-bottom: 1.2rem;
+    }
+
+    .asr-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+    }
+
+    .asr-table thead th {
+        text-align: left;
+        font-family: var(--font-display, inherit);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--text-color, #0f172a);
+        background: var(--surface-alt, #f3f6fc);
+        padding: 0.6rem 0.9rem;
+        border-bottom: 1px solid var(--border-color, rgba(15, 23, 42, 0.08));
+    }
+
+    .asr-table td {
+        padding: 0.6rem 0.9rem;
+        color: var(--text-muted-color, #5b6b81);
+        border-bottom: 1px solid var(--border-color, rgba(15, 23, 42, 0.06));
+        vertical-align: top;
+        line-height: 1.55;
+    }
+
+    .asr-table tbody tr:last-child td { border-bottom: none; }
+    .asr-table tbody tr:hover td { background: rgba(47, 107, 255, 0.03); }
+
+    /* ---- Notes ---- */
+    .asr-note {
+        background: rgba(139, 92, 246, 0.07);
+        border-left: 3px solid var(--accent-purple, #8b5cf6);
+        border-radius: 0 10px 10px 0;
+        padding: 0.85rem 1.1rem !important;
+        font-size: 0.92rem;
+        margin-bottom: 0 !important;
+    }
+
+    /* ---- Dark mode ---- */
+    :global(body.dark-mode) .asr-block p,
+    :global(body.dark-mode) .asr-list,
+    :global(body.dark-mode) .asr-table td { color: var(--dark-text-muted); }
+
+    :global(body.dark-mode) .asr-block p strong,
+    :global(body.dark-mode) .asr-list strong { color: var(--dark-text); }
+
+    :global(body.dark-mode) .asr-toc ul,
+    :global(body.dark-mode) .asr-block,
+    :global(body.dark-mode) .asr-table-wrap { border-color: var(--dark-border); }
+
+    :global(body.dark-mode) .asr-table thead th {
+        color: var(--dark-text);
+        background: rgba(255, 255, 255, 0.04);
+        border-color: var(--dark-border);
+    }
+
+    :global(body.dark-mode) .asr-table td { border-color: var(--dark-border); }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 991px) {
+        .asr-layout { grid-template-columns: 1fr; gap: 1.5rem; }
+        .asr-toc {
+            position: static;
+            border: 1px solid var(--border-color, rgba(15, 23, 42, 0.08));
+            border-radius: 14px;
+            padding: 1rem;
+            background: var(--surface-alt, #f3f6fc);
+        }
+        :global(body.dark-mode) .asr-toc {
+            background: var(--dark-card-bg);
+            border-color: var(--dark-border);
+        }
+        .asr-toc nav ul {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-left: none;
+        }
+        .asr-toc a { border-left: none; margin-left: 0; }
+        .asr-toc a.is-active { border-left: none; }
+        .asr-table-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 575px) {
+        .asr-toc nav ul { grid-template-columns: 1fr; }
+    }
+</style>
+
+<script>
+    // Scrollspy: highlight the TOC entry whose section is in view.
+    (() => {
+        const links = Array.from(document.querySelectorAll('.asr-toc a[data-target]'));
+        if (!links.length) return;
+        const byId = new Map(links.map((a) => [a.getAttribute('data-target'), a]));
+        const blocks = links
+            .map((a) => document.getElementById(a.getAttribute('data-target')))
+            .filter(Boolean);
+
+        const setActive = (id) => {
+            links.forEach((a) => a.classList.toggle('is-active', a.getAttribute('data-target') === id));
+        };
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                // pick the entry nearest the top that is intersecting
+                const visible = entries
+                    .filter((e) => e.isIntersecting)
+                    .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+                if (visible[0]) setActive(visible[0].target.id);
+            },
+            { rootMargin: '-90px 0px -65% 0px', threshold: 0 }
+        );
+
+        blocks.forEach((b) => observer.observe(b));
+    })();
+</script>

@@ -104,25 +104,50 @@
 
 <style>
     .accordion-item {
-        border-radius: 10px !important;
+        border-radius: var(--radius-md, 16px) !important;
         margin-bottom: 1rem;
-        border: none;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--border-color, rgba(15, 23, 42, 0.08)) !important;
+        box-shadow: var(--shadow-sm, 0 2px 10px rgba(0, 0, 0, 0.08));
+        overflow: hidden;
+        transition:
+            transform 0.4s var(--ease-spring, ease),
+            box-shadow 0.4s ease,
+            border-color 0.4s ease;
+    }
+
+    .accordion-item:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-md, 0 8px 24px rgba(0, 0, 0, 0.12));
+        border-color: rgba(47, 107, 255, 0.25) !important;
     }
 
     .accordion-button {
-        border-radius: 10px !important;
+        border-radius: 0 !important;
+        font-family: var(--font-display, inherit);
         font-weight: 600;
+        font-size: 1.05rem;
         border: none;
+        padding: 1.25rem 1.5rem;
+        box-shadow: none !important;
     }
 
     .accordion-button:not(.collapsed) {
-        background-color: var(--primary-color);
-        color: white;
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-cyan, #06b6d4)) !important;
+        color: white !important;
+    }
+
+    .accordion-button:not(.collapsed)::after {
+        filter: brightness(0) invert(1);
     }
 
     .accordion-body {
         padding: 1.5rem;
+        line-height: 1.7;
+        color: var(--text-muted-color, #495057);
+    }
+
+    .accordion-body strong {
+        color: var(--text-color, #0f172a);
     }
 
     /* Dark mode styles */
@@ -142,7 +167,19 @@
     }
 
     :global(body.dark-mode) .accordion-button:not(.collapsed) {
-        background-color: #2d2d2d;
+        background: linear-gradient(135deg, #2f6bff, #06b6d4) !important;
+        color: white !important;
+    }
+
+    :global(body.dark-mode) .accordion-body {
+        color: var(--dark-text-muted);
+    }
+
+    :global(body.dark-mode) .accordion-body strong {
         color: var(--dark-text);
+    }
+
+    :global(body.dark-mode) .accordion-item:hover {
+        box-shadow: 0 16px 40px -10px rgba(47, 107, 255, 0.3);
     }
 </style>

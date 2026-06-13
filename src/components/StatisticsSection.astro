@@ -1,31 +1,83 @@
 ---
-// Statistics Section component
+// Statistics Section component.
+//
+// Live figures, fetched at BUILD TIME so they never need manual updating:
+//   · Downloads → pepy.tech badge for the `spade` package (rounded, e.g. "300k")
+//   · Stars / Forks → GitHub repository API
+// Everything is wrapped in try/catch with sensible fallbacks so the build never
+// fails when offline. Stars & forks are additionally refreshed live in the
+// browser (GitHub allows CORS; the pepy badge does not), so they stay current
+// between deploys too.
+
+const GH_REPO = 'javipalanca/spade';
+const PEPY_PROJECT = 'spade';
+const FALLBACK = { downloads: 0, stars: 0, forks: 0 };
+
+async function fetchGitHub() {
+    try {
+        const res = await fetch(`https://api.github.com/repos/${GH_REPO}`, {
+            headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'spade-site' },
+        });
+        if (!res.ok) throw new Error(`GitHub ${res.status}`);
+        const data = await res.json();
+        return { stars: data.stargazers_count, forks: data.forks_count };
+    } catch {
+        return null;
+    }
+}
+
+// pepy badge shows a compact total like "300k" / "1.2M" — turn it into a number.
+function parseCompact(text) {
+    const m = String(text).trim().match(/([\d.]+)\s*([kKmMgG]?)/);
+    if (!m) return null;
+    const mult = { k: 1e3, m: 1e6, g: 1e9 }[m[2].toLowerCase()] || 1;
+    return Math.round(parseFloat(m[1]) * mult);
+}
+
+async function fetchDownloads() {
+    try {
+        const res = await fetch(`https://static.pepy.tech/badge/${PEPY_PROJECT}`);
+        if (!res.ok) throw new Error(`pepy ${res.status}`);
+        const svg = await res.text();
+        const m = svg.match(/>([\d.]+\s*[kKmMgG]?)<\/text>/);
+        return m ? parseCompact(m[1]) : null;
+    } catch {
+        return null;
+    }
+}
+
+const [gh, dl] = await Promise.all([fetchGitHub(), fetchDownloads()]);
+const stats = {
+    downloads: dl ?? FALLBACK.downloads,
+    stars: gh?.stars ?? FALLBACK.stars,
+    forks: gh?.forks ?? FALLBACK.forks,
+};
 ---
 
-<section class="stats-section py-5" id="statistics">
+<section class="stats-section py-5" id="statistics" data-gh-repo={GH_REPO}>
     <div class="container">
         <div class="row text-center">
             <div class="col-md-3">
                 <div class="stat-item scale-in stagger-1">
-                    <div class="stat-number" data-target="260000" data-suffix="+">0</div>
+                    <div class="stat-number" data-source="downloads" data-target={stats.downloads} data-suffix="+">0</div>
                     <div class="stat-label">Downloads</div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-item scale-in stagger-2">
-                    <div class="stat-number" data-target="300" data-suffix="+">0</div>
+                    <div class="stat-number" data-source="stars" data-target={stats.stars} data-suffix="+">0</div>
                     <div class="stat-label">Stars</div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-item scale-in stagger-3">
-                    <div class="stat-number" data-target="100" data-suffix="+">0</div>
+                    <div class="stat-number" data-source="forks" data-target={stats.forks} data-suffix="+">0</div>
                     <div class="stat-label">Forks</div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-item scale-in stagger-4">
-                    <div class="stat-number" data-target="6" data-suffix="+">0</div>
+                    <div class="stat-number" data-source="plugins" data-target="6" data-suffix="+">0</div>
                     <div class="stat-label">Plugins</div>
                 </div>
             </div>
@@ -35,97 +87,177 @@
 
 <style>
     .stats-section {
-        background: linear-gradient(
-            135deg,
-            var(--primary-color),
-            var(--secondary-color),
-            #8e44ad
-        );
+        background:
+            radial-gradient(ellipse 60% 120% at 15% 0%, rgba(47, 107, 255, 0.35), transparent 60%),
+            radial-gradient(ellipse 50% 120% at 85% 100%, rgba(139, 92, 246, 0.3), transparent 60%),
+            radial-gradient(ellipse 40% 100% at 55% 50%, rgba(16, 185, 129, 0.18), transparent 65%),
+            #0b1228;
         color: white;
-        padding: 4rem 0;
+        padding: 4.5rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stats-section::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+        background-size: 48px 48px;
+        pointer-events: none;
     }
 
     .stat-item {
         text-align: center;
         margin-bottom: 2rem;
+        position: relative;
+        padding: 1.25rem 0.5rem;
+        border-radius: 18px;
+        transition: background 0.4s ease, transform 0.4s var(--ease-spring, ease);
+    }
+
+    .stat-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        transform: translateY(-6px);
     }
 
     .stat-number {
-        font-size: 3rem;
-        font-weight: bold;
-        display: block;
-        margin-bottom: 0.5rem;
-        color: #fff;
+        font-family: var(--font-display, inherit);
+        font-size: clamp(2.6rem, 2rem + 2vw, 3.6rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        /* inline-block + small padding so the element box hugs the whole text;
+           with display:block the box spanned the column and background-clip:text
+           cropped the overflowing trailing "+" */
+        display: inline-block;
+        margin-bottom: 0.4rem;
+        padding: 0 0.12em;
+        background: linear-gradient(180deg, #ffffff, #9bb8ff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
         transition: transform 0.3s ease;
     }
 
     .stat-number.animating {
-        transform: scale(1.1);
+        transform: scale(1.08);
     }
 
     .stat-label {
-        font-size: 1.1rem;
-        opacity: 0.9;
+        font-size: 0.92rem;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.65);
     }
 
     /* Dark mode support */
     :global(body.dark-mode) .stats-section {
-        background: linear-gradient(
-            135deg,
-            #205080,
-            #1a573a,
-            #5d4e75
-        );
+        background:
+            radial-gradient(ellipse 60% 120% at 15% 0%, rgba(47, 107, 255, 0.28), transparent 60%),
+            radial-gradient(ellipse 50% 120% at 85% 100%, rgba(139, 92, 246, 0.24), transparent 60%),
+            #070b16;
     }
 </style>
 
 <script>
+    // Format a target value the way it should be displayed: large numbers
+    // (downloads) are abbreviated as "300K", everything else shown as-is.
+    function formatStat(value) {
+        return value >= 150000 ? Math.floor(value / 1000) + 'K' : String(value);
+    }
+
     // Animated counter function
     function animateCounter(element, target, duration = 2000) {
         const start = 0;
         const startTime = performance.now();
         const suffix = element.getAttribute('data-suffix') || '';
-        
+
         element.classList.add('animating');
-        
+
         function updateCounter(currentTime) {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
-            
+
             // Use easeOutCubic for smooth animation
             const easeProgress = 1 - Math.pow(1 - progress, 3);
             const current = Math.floor(start + (target - start) * easeProgress);
-            
-            // Format the number based on target value
-            let displayValue;
-            if (target >= 150000) {
-                // For large values (downloads), show in thousands as "260K+"
-                displayValue = Math.floor(current / 1000);
-                element.textContent = displayValue + 'K' + suffix;
-            } else {
-                element.textContent = current + suffix;
-            }
-            
+
+            element.textContent = formatStat(current) + suffix;
+
             if (progress < 1) {
                 requestAnimationFrame(updateCounter);
             } else {
                 element.classList.remove('animating');
-                // Ensure final value is correct
-                if (target >= 150000) {
-                    element.textContent = Math.floor(target / 1000) + 'K' + suffix;
-                } else {
-                    element.textContent = target + suffix;
-                }
+                element.textContent = formatStat(target) + suffix; // ensure exact final value
             }
         }
-        
+
         requestAnimationFrame(updateCounter);
+    }
+
+    // "300k" / "1.2M" -> number
+    function parseCompact(text) {
+        const m = String(text).trim().match(/([\d.]+)\s*([kKmMgG]?)/);
+        if (!m) return null;
+        const mult = { k: 1e3, m: 1e6, g: 1e9 }[m[2].toLowerCase()] || 1;
+        return Math.round(parseFloat(m[1]) * mult);
+    }
+
+    // Refresh all live stats in the browser so they stay current on every
+    // reload, without rebuilding the site. GitHub allows CORS directly; pepy's
+    // badge does not, so it is read through a public CORS proxy. Each source
+    // falls back to the value baked at build time if its request fails.
+    async function refreshStats() {
+        const section = document.getElementById('statistics');
+        const repo = section && section.getAttribute('data-gh-repo');
+
+        // GitHub: stars + forks
+        if (repo) {
+            try {
+                const res = await fetch(`https://api.github.com/repos/${repo}`, {
+                    headers: { Accept: 'application/vnd.github+json' },
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    patchStat('stars', data.stargazers_count);
+                    patchStat('forks', data.forks_count);
+                }
+            } catch (_) { /* keep build-time fallback */ }
+        }
+
+        // pepy.tech: total downloads (compact badge, e.g. "300k") via CORS proxy
+        try {
+            const badge = 'https://static.pepy.tech/badge/spade';
+            const res = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(badge));
+            if (res.ok) {
+                const svg = await res.text();
+                const m = svg.match(/>([\d.]+\s*[kKmMgG]?)<\/text>/);
+                const value = m && parseCompact(m[1]);
+                if (value) patchStat('downloads', value);
+            }
+        } catch (_) { /* keep build-time fallback */ }
+    }
+
+    function patchStat(source, value) {
+        if (typeof value !== 'number' || Number.isNaN(value)) return;
+        const el = document.querySelector(`.stat-number[data-source="${source}"]`);
+        if (!el) return;
+        el.setAttribute('data-target', String(value));
+        // If the counter already finished, update the shown value directly;
+        // otherwise the observer will animate to this fresh target.
+        if (el.hasAttribute('data-animated') && !el.classList.contains('animating')) {
+            const suffix = el.getAttribute('data-suffix') || '';
+            el.textContent = formatStat(value) + suffix;
+        }
     }
 
     // Intersection Observer to trigger animation when section comes into view
     function initializeCounters() {
         const statNumbers = document.querySelectorAll('.stat-number[data-target]');
-        
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && !entry.target.hasAttribute('data-animated')) {
@@ -140,12 +272,12 @@
         });
 
         statNumbers.forEach(el => observer.observe(el));
+
+        // Kick off the live refresh (GitHub + pepy) in parallel.
+        refreshStats();
     }
 
     // Initialize when DOM is loaded
-    document.addEventListener('DOMContentLoaded', initializeCounters);
-    
-    // Also initialize if the script loads after DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initializeCounters);
     } else {

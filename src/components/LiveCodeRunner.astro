@@ -1,0 +1,571 @@
+---
+// LiveCodeRunner — a code example with a simulated "live preview".
+// SPADE programs need XMPP + asyncio + networking, so they can't run in the
+// browser. Instead, the preview faithfully *replays* the program's execution:
+// a mini two-agent scene animates the messages while a terminal prints the
+// real stdout. The trace, agents and command are fully configurable via props.
+export interface TraceStep {
+  kind: 'cmd' | 'sys' | 'ok' | 'print' | 'msg' | 'info';
+  text: string;
+  dir?: 'in' | 'out';      // for kind 'msg': in = peer→agent, out = agent→peer
+}
+
+export interface PreviewAgent {
+  id: string;
+  label: string;
+  icon: string;            // bootstrap-icon name without the bi- prefix
+  color: string;
+}
+
+interface Props {
+  filename?: string;
+  code: string;
+  runCommand?: string;
+  agents?: PreviewAgent[]; // exactly two: [main agent, peer]
+  trace?: TraceStep[];
+}
+
+const {
+  filename = 'example.py',
+  code,
+  runCommand = `spade run ${filename}`,
+  agents = [],
+  trace = [],
+} = Astro.props;
+
+const traceJSON = JSON.stringify(trace);
+const agentsJSON = JSON.stringify(agents);
+const cid = 'lcr-' + Math.random().toString(36).slice(2, 9);
+---
+
+<div class="lcr" data-cid={cid}>
+    <div class="lcr-grid">
+        <!-- Code pane -->
+        <div class="lcr-pane lcr-code">
+            <div class="lcr-bar">
+                <span class="lcr-dots"></span>
+                <span class="lcr-file">{filename}</span>
+                <button class="lcr-icon-btn lcr-copy" type="button" title="Copy code" aria-label="Copy code">
+                    <i class="bi bi-clipboard"></i>
+                </button>
+            </div>
+            <pre class="lcr-pre"><code class="language-python">{code}</code></pre>
+        </div>
+
+        <!-- Live preview pane -->
+        <div class="lcr-pane lcr-preview">
+            <div class="lcr-bar">
+                <span class="lcr-preview-title">
+                    <span class="lcr-live-dot"></span>Live preview
+                    <span class="lcr-sim" title="SPADE needs XMPP &amp; networking, so this faithfully replays the program's output">simulated</span>
+                </span>
+                <div class="lcr-actions">
+                    <button class="lcr-run" type="button"><i class="bi bi-play-fill"></i><span>Run</span></button>
+                    <button class="lcr-icon-btn lcr-reset" type="button" title="Reset" aria-label="Reset"><i class="bi bi-arrow-counterclockwise"></i></button>
+                </div>
+            </div>
+
+            {agents.length >= 1 && (
+                <div class="lcr-scene">
+                    <div class="lcr-agent" data-agent={agents[0].id} style={`--c:${agents[0].color}`}>
+                        <span class="lcr-agent-icon"><i class={`bi bi-${agents[0].icon}`}></i></span>
+                        <span class="lcr-agent-label">{agents[0].label}</span>
+                    </div>
+                    <div class="lcr-track">
+                        <span class="lcr-packet" aria-hidden="true"></span>
+                    </div>
+                    {agents.length === 2 ? (
+                        <div class="lcr-agent" data-agent={agents[1].id} style={`--c:${agents[1].color}`}>
+                            <span class="lcr-agent-icon"><i class={`bi bi-${agents[1].icon}`}></i></span>
+                            <span class="lcr-agent-label">{agents[1].label}</span>
+                        </div>
+                    ) : (
+                        <div class="lcr-agent lcr-endpoint" data-agent="net" style="--c:#64748b">
+                            <span class="lcr-agent-icon"><i class="bi bi-envelope-fill"></i></span>
+                            <span class="lcr-agent-label">network</span>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            <div class="lcr-terminal" role="log" aria-live="polite"></div>
+        </div>
+    </div>
+
+    <script type="application/json" class="lcr-trace" set:html={traceJSON}></script>
+    <script type="application/json" class="lcr-agents" set:html={agentsJSON}></script>
+    <script type="application/json" class="lcr-cmd" set:html={JSON.stringify(runCommand)}></script>
+</div>
+
+<style is:global>
+    /* Global because the terminal lines are created dynamically. All .lcr-*.
+       The widget follows the site theme: light surface in light mode, dark in
+       dark mode — driven by these CSS variables. */
+    .lcr {
+        --lcr-surface: #ffffff;
+        --lcr-bar-bg: #eef2f9;
+        --lcr-border: rgba(15, 23, 42, 0.1);
+        --lcr-divider: rgba(15, 23, 42, 0.08);
+        --lcr-muted: #5b6b81;
+        --lcr-icon-hover: #0f172a;
+        --lcr-preview-bg: #f6f9ff;
+        --lcr-term-bg: #f1f5fb;
+        --lcr-term-border: rgba(15, 23, 42, 0.08);
+        --lcr-track: rgba(47, 107, 255, 0.28);
+        --lcr-empty: #94a3b8;
+        --lcr-prompt: #059669;
+        --lcr-cmd: #0f172a;
+        --lcr-sys: #64748b;
+        --lcr-ok: #059669;
+        --lcr-print: #0f172a;
+        --lcr-info: #475569;
+        --lcr-msg-in: #0284c7;
+        --lcr-msg-out: #7c3aed;
+
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid var(--lcr-border);
+        box-shadow: var(--shadow-md, 0 12px 32px rgba(15, 23, 42, 0.1));
+        background: var(--lcr-surface);
+    }
+
+    body.dark-mode .lcr {
+        --lcr-surface: #0a101f;
+        --lcr-bar-bg: #0e1526;
+        --lcr-border: rgba(255, 255, 255, 0.08);
+        --lcr-divider: rgba(255, 255, 255, 0.07);
+        --lcr-muted: #93a1b8;
+        --lcr-icon-hover: #ffffff;
+        --lcr-preview-bg: #070c1c;
+        --lcr-term-bg: #05080f;
+        --lcr-term-border: rgba(255, 255, 255, 0.06);
+        --lcr-track: rgba(122, 167, 255, 0.3);
+        --lcr-empty: #475569;
+        --lcr-prompt: #34d399;
+        --lcr-cmd: #e6ecf7;
+        --lcr-sys: #64748b;
+        --lcr-ok: #34d399;
+        --lcr-print: #e6ecf7;
+        --lcr-info: #93a1b8;
+        --lcr-msg-in: #38bdf8;
+        --lcr-msg-out: #c4b5fd;
+    }
+
+    .lcr-grid {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    @media (max-width: 900px) {
+        .lcr-grid { grid-template-columns: 1fr; }
+    }
+
+    .lcr-pane { display: flex; flex-direction: column; min-width: 0; }
+    .lcr-code { border-right: 1px solid var(--lcr-divider); }
+
+    @media (max-width: 900px) {
+        .lcr-code { border-right: none; border-bottom: 1px solid var(--lcr-divider); }
+    }
+
+    .lcr-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.6rem 0.9rem;
+        background: var(--lcr-bar-bg);
+        border-bottom: 1px solid var(--lcr-divider);
+        min-height: 44px;
+    }
+
+    .lcr-dots {
+        width: 11px; height: 11px; border-radius: 50%;
+        background: #ff5f57;
+        box-shadow: 18px 0 0 #febc2e, 36px 0 0 #28c840;
+        margin-right: 38px;
+        flex-shrink: 0;
+    }
+
+    .lcr-file {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.8rem;
+        color: var(--lcr-muted);
+        flex: 1;
+    }
+
+    .lcr-icon-btn {
+        border: 1px solid var(--lcr-border);
+        background: transparent;
+        color: var(--lcr-muted);
+        border-radius: 8px;
+        padding: 0.2rem 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .lcr-icon-btn:hover { color: var(--lcr-icon-hover); border-color: var(--lcr-muted); }
+    .lcr-copy.copied { color: #10b981; border-color: #10b981; }
+
+    .lcr-pre {
+        margin: 0;
+        padding: 1rem 1.1rem;
+        overflow: auto;
+        flex: 1;
+        max-height: 420px;
+    }
+
+    /* The code itself follows the site theme via the global Prism rules
+       (light background + dark tokens in light mode, dark + bright in dark).
+       We only make the <pre> transparent so it sits on the card surface, and
+       use a more specific selector because Prism adds a `language-*` class to
+       the <pre>, bumping the global rule's specificity. */
+    .lcr pre.lcr-pre,
+    .lcr pre.lcr-pre code {
+        background: transparent !important;
+        border: none !important;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.8rem;
+        line-height: 1.65;
+    }
+
+    /* Generic "network" endpoint (single-agent scene) */
+    .lcr-endpoint { opacity: 0.9; }
+    .lcr-endpoint .lcr-agent-icon {
+        background: color-mix(in srgb, var(--lcr-muted) 16%, transparent);
+        color: var(--lcr-muted);
+        box-shadow: none;
+        border: 1px dashed color-mix(in srgb, var(--lcr-muted) 55%, transparent);
+    }
+
+    /* ---- Preview pane ---- */
+    .lcr-preview { background: var(--lcr-preview-bg); }
+
+    .lcr-preview-title {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--lcr-muted);
+        flex: 1;
+    }
+
+    .lcr-live-dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: var(--lcr-empty);
+        transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .lcr.running .lcr-live-dot {
+        background: #34d399;
+        box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.6);
+        animation: lcrLive 1.6s ease-out infinite;
+    }
+
+    @keyframes lcrLive {
+        0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.6); }
+        70% { box-shadow: 0 0 0 7px rgba(52, 211, 153, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+    }
+
+    .lcr-sim {
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: #fbbf24;
+        background: rgba(251, 191, 36, 0.12);
+        border: 1px solid rgba(251, 191, 36, 0.3);
+        padding: 0.05rem 0.4rem;
+        border-radius: 50rem;
+        cursor: help;
+    }
+
+    .lcr-actions { display: flex; align-items: center; gap: 0.4rem; }
+
+    .lcr-run {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        border: none;
+        border-radius: 50rem;
+        background: linear-gradient(135deg, #10b981, #06b6d4);
+        color: #fff;
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 0.32rem 0.85rem;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    }
+
+    .lcr-run:hover { transform: translateY(-1px); box-shadow: 0 8px 18px -8px rgba(16, 185, 129, 0.6); }
+    .lcr.running .lcr-run { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+
+    /* ---- Mini scene ---- */
+    .lcr-scene {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 1rem 1.1rem 0.4rem;
+    }
+
+    .lcr-agent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        flex-shrink: 0;
+        width: 78px;
+        text-align: center;
+    }
+
+    .lcr-agent-icon {
+        width: 40px; height: 40px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        color: #fff;
+        background: var(--c, #2f6bff);
+        box-shadow: 0 6px 16px -6px var(--c, #2f6bff);
+        transition: transform 0.3s var(--ease-spring, ease), box-shadow 0.3s ease;
+    }
+
+    .lcr-agent.active .lcr-agent-icon {
+        transform: scale(1.12);
+        box-shadow: 0 0 0 6px color-mix(in srgb, var(--c, #2f6bff) 28%, transparent), 0 6px 16px -6px var(--c, #2f6bff);
+    }
+
+    .lcr-agent-label {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.64rem;
+        color: var(--lcr-muted);
+        line-height: 1.2;
+    }
+
+    .lcr-track {
+        position: relative;
+        flex: 1;
+        height: 2px;
+        background: repeating-linear-gradient(90deg, var(--lcr-track) 0 6px, transparent 6px 12px);
+    }
+
+    .lcr-packet {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 12px; height: 12px;
+        margin: -6px 0 0 -6px;
+        border-radius: 50%;
+        background: #7dd3fc;
+        box-shadow: 0 0 12px 2px currentColor;
+        color: #7dd3fc;
+        opacity: 0;
+    }
+
+    .lcr-packet.show { opacity: 1; }
+
+    /* ---- Terminal ---- */
+    .lcr-terminal {
+        margin: 0.5rem 0.4rem 0.6rem;
+        padding: 0.7rem 0.9rem;
+        background: var(--lcr-term-bg);
+        border: 1px solid var(--lcr-term-border);
+        border-radius: 12px;
+        font-family: var(--font-mono, monospace);
+        font-size: 0.76rem;
+        line-height: 1.7;
+        min-height: 150px;
+        max-height: 240px;
+        overflow-y: auto;
+    }
+
+    .lcr-terminal:empty::before {
+        content: "Press Run to execute…";
+        color: var(--lcr-empty);
+    }
+
+    .lcr-line { display: block; animation: lcrIn 0.2s ease both; white-space: pre-wrap; word-break: break-word; }
+    @keyframes lcrIn { from { opacity: 0; transform: translateX(-5px); } to { opacity: 1; transform: translateX(0); } }
+
+    .lcr-line .lcr-prompt { color: var(--lcr-prompt); font-weight: 700; }
+    .lcr-k-cmd { color: var(--lcr-cmd); }
+    .lcr-k-sys { color: var(--lcr-sys); }
+    .lcr-k-ok { color: var(--lcr-ok); }
+    .lcr-k-print { color: var(--lcr-print); font-weight: 600; }
+    .lcr-k-info { color: var(--lcr-info); }
+    .lcr-k-msg-in { color: var(--lcr-msg-in); }
+    .lcr-k-msg-out { color: var(--lcr-msg-out); }
+
+    .lcr-cursor::after {
+        content: "▋";
+        color: var(--lcr-prompt);
+        animation: lcrBlink 1s steps(2) infinite;
+    }
+    @keyframes lcrBlink { 50% { opacity: 0; } }
+
+    @media (prefers-reduced-motion: reduce) {
+        .lcr-line, .lcr-agent.active .lcr-agent-icon { animation: none; }
+    }
+</style>
+
+<script>
+    (() => {
+        function initRunner(root) {
+            if (root.dataset.init) return;
+            root.dataset.init = '1';
+
+            const trace = JSON.parse(root.querySelector('.lcr-trace')?.textContent || '[]');
+            const agents = JSON.parse(root.querySelector('.lcr-agents')?.textContent || '[]');
+            const runCommand = JSON.parse(root.querySelector('.lcr-cmd')?.textContent || '""');
+            const term = root.querySelector('.lcr-terminal');
+            const runBtn = root.querySelector('.lcr-run');
+            const resetBtn = root.querySelector('.lcr-reset');
+            const copyBtn = root.querySelector('.lcr-copy');
+            const codeEl = root.querySelector('code');
+            const packet = root.querySelector('.lcr-packet');
+            const agentEls = {};
+            root.querySelectorAll('.lcr-agent').forEach((el) => { agentEls[el.dataset.agent] = el; });
+            const mainId = agents[0]?.id, peerId = agents[1]?.id || 'net';
+            const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // Highlight code once Prism is available
+            const hl = () => { if (window.Prism && codeEl) window.Prism.highlightElement(codeEl); };
+            if (window.Prism) hl(); else window.addEventListener('load', hl);
+
+            let timers = [];
+            let running = false;
+
+            const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
+            const wait = (ms) => new Promise((r) => timers.push(setTimeout(r, ms)));
+
+            function addLine(html, cls) {
+                const span = document.createElement('span');
+                span.className = 'lcr-line ' + (cls || '');
+                span.innerHTML = html;
+                term.appendChild(span);
+                term.scrollTop = term.scrollHeight;
+                return span;
+            }
+
+            function pulse(id) {
+                const el = agentEls[id];
+                if (!el) return;
+                el.classList.add('active');
+                timers.push(setTimeout(() => el.classList.remove('active'), 450));
+            }
+
+            async function animatePacket(dir) {
+                if (!packet || reduced) return;
+                // out: main(left) → peer(right); in: peer(right) → main(left)
+                const startLeft = dir === 'out' ? '0%' : '100%';
+                const endLeft = dir === 'out' ? '100%' : '0%';
+                const color = dir === 'out' ? '#c4b5fd' : '#38bdf8';
+                packet.style.transition = 'none';
+                packet.style.left = startLeft;
+                packet.style.color = color;
+                packet.style.background = color;
+                packet.classList.add('show');
+                // force reflow then transition
+                void packet.offsetWidth;
+                packet.style.transition = 'left 0.6s ease';
+                packet.style.left = endLeft;
+                pulse(dir === 'out' ? mainId : peerId);
+                await wait(600);
+                pulse(dir === 'out' ? peerId : mainId);
+                packet.classList.remove('show');
+            }
+
+            async function runStep(step) {
+                switch (step.kind) {
+                    case 'cmd':
+                        addLine(`<span class="lcr-prompt">$</span> ${esc(step.text || runCommand)}`, 'lcr-k-cmd');
+                        await wait(450);
+                        break;
+                    case 'sys':
+                        addLine(`<span class="lcr-k-sys">·</span> ${esc(step.text)}`, 'lcr-k-sys');
+                        await wait(420);
+                        break;
+                    case 'ok':
+                        addLine(`<span class="lcr-k-ok">✓</span> ${esc(step.text)}`, 'lcr-k-ok');
+                        await wait(420);
+                        break;
+                    case 'info':
+                        addLine(esc(step.text), 'lcr-k-info');
+                        await wait(360);
+                        break;
+                    case 'print':
+                        addLine(esc(step.text), 'lcr-k-print');
+                        await wait(520);
+                        break;
+                    case 'msg': {
+                        const arrow = step.dir === 'out' ? '→' : '←';
+                        await animatePacket(step.dir);
+                        addLine(`${arrow} ${esc(step.text)}`, step.dir === 'out' ? 'lcr-k-msg-out' : 'lcr-k-msg-in');
+                        await wait(260);
+                        break;
+                    }
+                }
+            }
+
+            async function run() {
+                if (running) { stop(); return; }
+                running = true;
+                root.classList.add('running');
+                runBtn.innerHTML = '<i class="bi bi-stop-fill"></i><span>Stop</span>';
+                term.innerHTML = '';
+                for (const step of trace) {
+                    if (!running) break;
+                    await runStep(step);
+                }
+                if (running) {
+                    const done = addLine('', 'lcr-k-sys lcr-cursor');
+                }
+                stop();
+            }
+
+            function stop() {
+                running = false;
+                clearTimers();
+                root.classList.remove('running');
+                runBtn.innerHTML = '<i class="bi bi-play-fill"></i><span>Run</span>';
+                if (packet) packet.classList.remove('show');
+            }
+
+            function reset() {
+                stop();
+                term.innerHTML = '';
+            }
+
+            function esc(s) {
+                return String(s == null ? '' : s).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+            }
+
+            runBtn.addEventListener('click', run);
+            resetBtn.addEventListener('click', reset);
+            if (copyBtn && codeEl) {
+                copyBtn.addEventListener('click', async () => {
+                    try {
+                        await navigator.clipboard.writeText(codeEl.textContent);
+                        copyBtn.classList.add('copied');
+                        copyBtn.innerHTML = '<i class="bi bi-check-lg"></i>';
+                        timers.push(setTimeout(() => { copyBtn.classList.remove('copied'); copyBtn.innerHTML = '<i class="bi bi-clipboard"></i>'; }, 1600));
+                    } catch (e) {}
+                });
+            }
+
+            // Auto-run once when scrolled into view (nice first impression)
+            let autoRan = false;
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach((e) => {
+                    if (e.isIntersecting && !autoRan) { autoRan = true; timers.push(setTimeout(run, 500)); }
+                    if (!e.isIntersecting && running) stop();
+                });
+            }, { threshold: 0.4 });
+            io.observe(root);
+        }
+
+        document.querySelectorAll('.lcr').forEach(initRunner);
+    })();
+</script>

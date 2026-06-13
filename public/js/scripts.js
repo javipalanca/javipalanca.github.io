@@ -14,8 +14,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const targetElement = document.querySelector(targetId);
       if (targetElement) {
+        // Use document-relative coordinates; offsetTop can be relative to a parent container.
+        const targetTop = targetElement.getBoundingClientRect().top + window.scrollY;
         window.scrollTo({
-          top: targetElement.offsetTop - 70,
+          top: targetTop - 70,
           behavior: "smooth",
         });
       }
@@ -33,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const newsContainer = document.getElementById("news-container");
       console.log(
         `Attempt ${attempts + 1}: newsContainer element:`,
-        newsContainer
+        newsContainer,
       );
 
       if (newsContainer) {
@@ -89,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("View All News card added successfully");
 
             console.log(
-              `Added ${newsToShow.length} news items + View All News card`
+              `Added ${newsToShow.length} news items + View All News card`,
             );
           })
           .catch((error) => {
@@ -102,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(
           "newsContainer not found in DOM after",
           maxAttempts,
-          "attempts"
+          "attempts",
         );
       }
     }
@@ -158,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const days = Math.floor(difference / (1000 * 60 * 60 * 24));
       const hours = Math.floor(
-        (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
       );
       const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((difference % (1000 * 60)) / 1000);
@@ -178,16 +180,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // 6. LOGO UPDATES FOR DARK/LIGHT MODE
   // Update logos based on dark/light mode (excluding hero image)
   window.updateLogos = function (isDarkMode) {
-    // Select only logo images in navbar and footer, NOT the hero image
-    const logoImages = document.querySelectorAll(
-      ".navbar-brand img, .footer img"
-    );
-
-    logoImages.forEach((img) => {
-      img.src = isDarkMode
-        ? "img/spade-darkmode-fixed.svg"
-        : "img/spade-agent-network-fixed.svg";
-    });
+    // The brand wordmark is kept in both themes; dark mode is handled
+    // with a CSS filter on .navbar-brand img / .footer img instead of
+    // swapping to a different asset (see Navbar.astro / Footer.astro).
+    document.body.classList.toggle("logos-dark", !!isDarkMode);
   };
 
   // 7. AGENT DEMO
@@ -285,7 +281,7 @@ function initializeCodeExamplesAndSwitcher() {
       copyButton.addEventListener("click", function () {
         // Find visible code block
         const visibleBlock = Array.from(codeBlocks).find(
-          (block) => !block.classList.contains("d-none")
+          (block) => !block.classList.contains("d-none"),
         );
 
         if (visibleBlock) {
@@ -338,7 +334,7 @@ function initializeCodeExamplesAndSwitcher() {
 
         // Update dropdown text
         const selector = document.querySelector(
-          `.code-example-selector[data-example="${exampleId}"]`
+          `.code-example-selector[data-example="${exampleId}"]`,
         );
         const dropdownButton = document.getElementById("codeExampleDropdown");
         if (selector && dropdownButton) {
@@ -603,7 +599,7 @@ function initializeCodeExamples() {
   if (typeof Prism !== "undefined") {
     // Find all code blocks with language classes
     const codeBlocks = document.querySelectorAll(
-      'pre code[class*="language-"]'
+      'pre code[class*="language-"]',
     );
     codeBlocks.forEach((block) => {
       Prism.highlightElement(block);
