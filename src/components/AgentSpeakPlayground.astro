@@ -44,6 +44,12 @@
                             <option value="greeter">Example: Greeter agent</option>
                             <option value="thermostat">Example: Thermostat</option>
                             <option value="patrol">Example: Patrol robot</option>
+                            <option value="list_walk">Example: Lists (head/tail)</option>
+                            <option value="list_strings">Example: Lists + strings</option>
+                            <option value="rules">Example: Rules</option>
+                            <option value="operators">Example: Operators</option>
+                            <option value="explicit_negation">Example: Explicit negation (~)</option>
+                            <option value="test_goal">Example: Test goal (?g)</option>
                         </select>
                         <button id="asl-run" class="btn btn-sm asl-btn-run" type="button">
                             <i class="bi bi-play-fill me-1"></i>Run
@@ -54,7 +60,10 @@
                     </div>
                 </div>
                 <div class="asl-panes">
-                    <textarea id="asl-editor" class="asl-editor" spellcheck="false" aria-label="AgentSpeak program editor"></textarea>
+                    <div class="asl-editor-wrap">
+                        <pre id="asl-editor-highlight" class="asl-editor-highlight" aria-hidden="true"></pre>
+                        <textarea id="asl-editor" class="asl-editor" spellcheck="false" aria-label="AgentSpeak program editor"></textarea>
+                    </div>
                     <div class="asl-console-wrap">
                         <div class="asl-console-header">Reasoning trace</div>
                         <div id="asl-console" class="asl-console" aria-live="polite"></div>
@@ -236,19 +245,43 @@
         .asl-panes { grid-template-columns: 1fr; }
     }
 
-    .asl-editor {
+    .asl-editor-wrap {
+        position: relative;
         background: #0a101f;
-        color: #d7e2f5;
-        border: none;
         border-right: 1px solid rgba(255, 255, 255, 0.07);
-        resize: vertical;
+        min-height: 430px;
+    }
+
+    .asl-editor,
+    .asl-editor-highlight {
+        position: absolute;
+        inset: 0;
+        margin: 0;
         padding: 1.1rem 1.2rem;
         font-family: var(--font-mono, monospace);
         font-size: 0.84rem;
         line-height: 1.65;
-        min-height: 430px;
-        outline: none;
+        white-space: pre;
         tab-size: 4;
+        overflow: auto;
+    }
+
+    .asl-editor-highlight {
+        color: #d7e2f5;
+        pointer-events: none;
+    }
+
+    .asl-editor {
+        background: transparent;
+        color: transparent;
+        caret-color: #d7e2f5;
+        border: none;
+        resize: vertical;
+        outline: none;
+    }
+
+    .asl-editor::selection {
+        background: rgba(47, 107, 255, 0.35);
     }
 
     .asl-editor:focus {
@@ -339,6 +372,14 @@
         padding: 0.18rem 0.65rem;
         animation: aslIn 0.3s ease both;
     }
+
+    .asl-tk-comment { color: #64748b; }
+    .asl-tk-string { color: #86efac; }
+    .asl-tk-internal { color: #c4b5fd; }
+    .asl-tk-variable { color: #67e8f9; }
+    .asl-tk-number { color: #fbbf24; }
+    .asl-tk-operator { color: #93c5fd; }
+    .asl-tk-keyword { color: #f9a8d4; }
 </style>
 
 <script>
@@ -391,10 +432,10 @@
                 const three = src.slice(i, i + 3);
                 const two = src.slice(i, i + 2);
                 if (three === '\\==') { tokens.push({ t: 'op', v: '\\==' }); i += 3; continue; }
-                if (['<-', '<=', '>=', '=='].includes(two)) {
+                if (['<-', '<=', '>=', '==', ':-'].includes(two)) {
                     tokens.push({ t: two === '<-' ? 'arrow' : 'op', v: two }); i += 2; continue;
                 }
-                if ('()+-!?:;,&|<>=*/'.includes(c)) {
+                if ('()[]+-!~?:;,&|<>=*/'.includes(c)) {
                     const type = '<>='.includes(c) ? 'op' : 'punc';
                     tokens.push({ t: type, v: c }); i++; continue;
                 }
@@ -423,6 +464,27 @@
                 if (x.t === 'num') return { k: 'num', v: x.v };
                 if (x.t === 'str') return { k: 'str', v: x.v };
                 if (x.t === 'var') return { k: 'var', v: x.v };
+                if (x.t === 'punc' && x.v === '~') {
+                    const negTerm = parseTerm();
+                    return { k: 'neg', t: negTerm };
+                }
+                if (x.t === 'punc' && x.v === '[') {
+                    const items = [];
+                    let tail = null;
+                    if (!(peek() && peek().t === 'punc' && peek().v === ']')) {
+                        items.push(parseExpr());
+                        while (peek() && peek().t === 'punc' && peek().v === ',') {
+                            next();
+                            items.push(parseExpr());
+                        }
+                        if (peek() && peek().t === 'punc' && peek().v === '|') {
+                            next();
+                            tail = parseExpr();
+                        }
+                    }
+                    expect('punc', ']');
+                    return { k: 'list', items, tail };
+                }
                 if (x.t === 'atom') {
                     if (peek() && peek().t === 'punc' && peek().v === '(') {
                         next();
@@ -478,6 +540,7 @@
             function parseBodyFormula() {
                 const x = peek();
                 if (x.t === 'punc' && x.v === '!') { next(); return { k: 'achieve', t: parseTerm() }; }
+                if (x.t === 'punc' && x.v === '?') { next(); return { k: 'test', t: parseTerm() }; }
                 if (x.t === 'punc' && x.v === '+') { next(); return { k: 'addB', t: parseTerm() }; }
                 if (x.t === 'punc' && x.v === '-') { next(); return { k: 'delB', t: parseTerm() }; }
                 if (x.t === 'internal') {
@@ -506,7 +569,7 @@
                 return fs;
             }
 
-            const beliefs = [], goals = [], plans = [];
+            const beliefs = [], goals = [], plans = [], rules = [];
             while (p < tk.length) {
                 const x = peek();
                 if (x.t === 'punc' && (x.v === '+' || x.v === '-')) {
@@ -527,12 +590,19 @@
                     expect('dot');
                     goals.push(g);
                 } else {
-                    const b = parseTerm();
-                    expect('dot');
-                    beliefs.push(b);
+                    const h = parseTerm();
+                    if (peek() && peek().t === 'op' && peek().v === ':-') {
+                        next();
+                        const body = parseContext();
+                        expect('dot');
+                        rules.push({ head: h, body });
+                    } else {
+                        expect('dot');
+                        beliefs.push(h);
+                    }
                 }
             }
-            return { beliefs, goals, plans };
+            return { beliefs, goals, plans, rules };
         }
 
         // ---------- Unification ----------
@@ -547,6 +617,34 @@
             if (b.k === 'var') { const s2 = new Map(s); s2.set(b.v, a); return s2; }
             if (a.k === 'num' && b.k === 'num') return a.v === b.v ? s : null;
             if (a.k === 'str' && b.k === 'str') return a.v === b.v ? s : null;
+            if (a.k === 'neg' && b.k === 'neg') return unify(a.t, b.t, s);
+            if (a.k === 'list' && b.k === 'list') {
+                const emptyList = () => ({ k: 'list', items: [], tail: null });
+                const isClosedEmpty = (l) => l.k === 'list' && l.items.length === 0 && !l.tail;
+
+                let cur = s;
+                const aItems = [...(a.items || [])];
+                const bItems = [...(b.items || [])];
+
+                while (aItems.length && bItems.length) {
+                    cur = unify(aItems.shift(), bItems.shift(), cur);
+                    if (!cur) return null;
+                }
+
+                const restA = aItems.length
+                    ? { k: 'list', items: aItems, tail: a.tail || null }
+                    : (a.tail || emptyList());
+                const restB = bItems.length
+                    ? { k: 'list', items: bItems, tail: b.tail || null }
+                    : (b.tail || emptyList());
+
+                // [] cannot unify with a guaranteed non-empty list remainder.
+                if (isClosedEmpty(restA) && restB.k === 'list' && restB.items.length > 0) return null;
+                if (isClosedEmpty(restB) && restA.k === 'list' && restA.items.length > 0) return null;
+
+                if (isClosedEmpty(restA) && isClosedEmpty(restB)) return cur;
+                return unify(restA, restB, cur);
+            }
             if (a.k === 'struct' && b.k === 'struct') {
                 if (a.f !== b.f || a.args.length !== b.args.length) return null;
                 let cur = s;
@@ -581,15 +679,24 @@
             if (t.k === 'num') return String(t.v);
             if (t.k === 'str') return t.v;
             if (t.k === 'var') return t.v;
+            if (t.k === 'neg') return `~${fmt(t.t, s)}`;
             if (t.k === 'arith') { const v = evalArith(t, s || new Map()); return v === null ? '?' : String(v); }
             if (t.k === 'goalref') return '!' + fmt(t.t, s);
+            if (t.k === 'list') {
+                const items = t.items.map((a) => fmt(a, s));
+                if (t.tail) {
+                    const tailFmt = fmt(t.tail, s);
+                    return `[${items.join(', ')}${items.length ? ' | ' : '| '}${tailFmt}]`;
+                }
+                return `[${items.join(', ')}]`;
+            }
             if (t.k === 'struct') return t.args.length ? `${t.f}(${t.args.map((a) => fmt(a, s)).join(', ')})` : t.f;
             return '?';
         }
 
         // ---------- Engine ----------
         function run(src, log) {
-            const { beliefs, goals, plans } = parse(src);
+            const { beliefs, goals, plans, rules } = parse(src);
             const bb = []; // belief base (ground structs)
             let steps = 0;
             const MAX = 600;
@@ -608,6 +715,13 @@
                     for (const b of bb) {
                         const s2 = unify(c.t, b, s);
                         if (s2) yield* solve(conds, idx + 1, s2);
+                    }
+                    for (const r of rules) {
+                        const s2 = unify(r.head, c.t, s);
+                        if (!s2) continue;
+                        for (const sr of solve(r.body, 0, s2)) {
+                            yield* solve(conds, idx + 1, sr);
+                        }
                     }
                 } else if (c.k === 'cmp') {
                     const l = evalArith(c.l, s), r = evalArith(c.r, s);
@@ -641,6 +755,14 @@
             function ground(t, s) {
                 t = walk(t, s);
                 if (t.k === 'arith') { const v = evalArith(t, s); return v === null ? t : { k: 'num', v }; }
+                if (t.k === 'neg') return { k: 'neg', t: ground(t.t, s) };
+                if (t.k === 'list') {
+                    return {
+                        k: 'list',
+                        items: t.items.map((a) => ground(a, s)),
+                        tail: t.tail ? ground(t.tail, s) : null,
+                    };
+                }
                 if (t.k === 'struct') return { k: 'struct', f: t.f, args: t.args.map((a) => ground(a, s)) };
                 return t;
             }
@@ -669,31 +791,45 @@
             }
 
             function execBody(body, s, depth) {
+                let cur = s;
                 for (const f of body) {
                     tick();
                     if (f.k === 'achieve') {
-                        const g = ground(f.t, s);
+                        const g = ground(f.t, cur);
                         log('event', `${'  '.repeat(depth)}! new goal: !${fmt(g)}`);
                         handleEvent({ sign: '+', goal: true, t: g }, depth + 1);
+                    } else if (f.k === 'test') {
+                        let found = null;
+                        for (const s2 of solve([{ k: 'lit', t: f.t }], 0, cur)) {
+                            found = s2;
+                            break;
+                        }
+                        if (!found) {
+                            log('error', `${'  '.repeat(depth)}✗ test goal failed: ?${fmt(f.t, cur)}`);
+                            return false;
+                        }
+                        cur = found;
+                        log('muted', `${'  '.repeat(depth)}· test goal succeeded: ?${fmt(f.t, cur)}`);
                     } else if (f.k === 'addB') {
-                        addBelief(f.t, s, depth);
+                        addBelief(f.t, cur, depth);
                     } else if (f.k === 'delB') {
-                        delBelief(f.t, s, depth);
+                        delBelief(f.t, cur, depth);
                     } else if (f.k === 'internal') {
                         if (f.name === 'print') {
-                            log('print', `${'  '.repeat(depth)}» ${f.args.map((a) => fmt(a, s)).join(' ')}`);
+                            log('print', `${'  '.repeat(depth)}» ${f.args.map((a) => fmt(a, cur)).join(' ')}`);
                         } else if (f.name === 'send') {
                             const [to, perf, ...rest] = f.args;
-                            log('send', `${'  '.repeat(depth)}✉ .send → ${fmt(to, s)} [${fmt(perf, s)}] ${rest.map((a) => fmt(a, s)).join(' ')}`);
+                            log('send', `${'  '.repeat(depth)}✉ .send → ${fmt(to, cur)} [${fmt(perf, cur)}] ${rest.map((a) => fmt(a, cur)).join(' ')}`);
                         } else if (f.name === 'wait') {
                             log('muted', `${'  '.repeat(depth)}… .wait`);
                         } else {
                             log('muted', `${'  '.repeat(depth)}· internal action .${f.name} (no-op here)`);
                         }
                     } else if (f.k === 'action') {
-                        log('action', `${'  '.repeat(depth)}⚙ action executed: ${fmt(f.t, s)}`);
+                        log('action', `${'  '.repeat(depth)}⚙ action executed: ${fmt(f.t, cur)}`);
                     }
                 }
+                return true;
             }
 
             function handleEvent(ev, depth) {
@@ -705,8 +841,7 @@
                     if (!s0) continue;
                     for (const s of solve(pl.context, 0, s0)) {
                         log('plan', `${'  '.repeat(Math.max(0, depth - 1))}▶ plan selected: ${kind}${fmt(pl.head)}${contextStr(pl)}`);
-                        execBody(pl.body, s, depth);
-                        return true;
+                        if (execBody(pl.body, s, depth)) return true;
                     }
                 }
                 if (ev.goal) log('error', `✗ no applicable plan for ${kind}${fmt(ev.t)}`);
@@ -800,21 +935,166 @@ battery(80).
 
 +!visit(P) : not checkpoint(P) <-
     .print("Unknown checkpoint:", P).`,
+
+            list_walk: `// Lists with head/tail decomposition
+friends([alice, bob, carol]).
+
+!greet_all.
+
++!greet_all : friends(L) <-
+    .print("Starting list walk");
+    !walk(L).
+
++!walk([]) <-
+    .print("Done: empty list reached").
+
++!walk([H|T]) <-
+    .print("Hello", H);
+    !walk(T).`,
+
+            list_strings: `// Lists + strings in one program
+pending([alice, bob, carol]).
+prefix("[SPADE] reminder for").
+
+!notify_pending.
+
++!notify_pending : pending(Users) & prefix(P) <-
+    !notify_each(Users, P).
+
++!notify_each([], _P) <-
+    .print("All reminders sent").
+
++!notify_each([User|Rest], P) <-
+    .print(P, User);
+    .send(User, tell, reminder_ready(User));
+    !notify_each(Rest, P).`,
+
+            rules: `// Rules derive facts on demand from beliefs
+parent(tom, bob).
+parent(bob, ann).
+
+grandparent(X, Z) :- parent(X, Y) & parent(Y, Z).
+
+!check_family.
+
++!check_family : grandparent(tom, ann) <-
+    .print("Rule matched:", tom, "is grandparent of", ann).
+
++!check_family : not grandparent(ann, tom) <-
+    .print("As expected:", ann, "is not grandparent of", tom).`,
+
+            operators: `// Operators in context: arithmetic + comparisons
+temperature(31).
+threshold(25).
+funds(120).
+price(sensor, 45).
+
+!evaluate.
+
++!evaluate : temperature(T) & threshold(M) & T > M <-
+    .print("Too hot:", T, ">", M).
+
++!evaluate : funds(F) & price(sensor, P) & F >= P <-
+    .print("Can buy sensor. Remaining:", F - P).
+
++!evaluate : funds(F) & price(sensor, P) & F < P <-
+    .print("Not enough funds").`,
+
+            explicit_negation: `// Explicit negation (~) as a known false fact
+~raining.
+umbrella(alice).
+
+!decide.
+
++!decide : ~raining <-
+    .print("No rain now").
+
++!decide : raining <-
+    .print("Take an umbrella").
+
++!decide : not raining <-
+    .print("raining is not provable").`,
+
+            test_goal: `// Test goals (?g) query beliefs and bind variables
+temperature(22).
+temperature(26).
+room(lab).
+
+!report.
+
++!report <-
+    ?room(R);
+    ?temperature(T);
+    .print("Measurement in", R, "=", T).
+
++!report : not room(storage) <-
+    .print("No data for storage").`,
         };
 
         /* ---------- UI wiring ---------- */
         const editor = document.getElementById('asl-editor');
+        const highlightEl = document.getElementById('asl-editor-highlight');
         const consoleEl = document.getElementById('asl-console');
         const beliefsEl = document.getElementById('asl-beliefs');
         const runBtn = document.getElementById('asl-run');
         const clearBtn = document.getElementById('asl-clear');
         const exampleSel = document.getElementById('asl-example');
-        if (!editor || !consoleEl || !runBtn) return;
+        if (!editor || !highlightEl || !consoleEl || !runBtn) return;
+
+        function escHtml(str) {
+            return str
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;');
+        }
+
+        function tokenClass(token) {
+            if (token.startsWith('//')) return 'asl-tk-comment';
+            if (token.startsWith('"')) return 'asl-tk-string';
+            if (token.startsWith('.')) return 'asl-tk-internal';
+            if (/^[A-Z_]/.test(token)) return 'asl-tk-variable';
+            if (/^-?\d/.test(token)) return 'asl-tk-number';
+            if (/^(not|true)$/.test(token)) return 'asl-tk-keyword';
+            return 'asl-tk-operator';
+        }
+
+        function renderHighlight(src) {
+            const tokenRe = /\/\/[^\n]*|"(?:\\.|[^"\\])*"|\.[a-z][A-Za-z0-9_]*|\b(?:not|true)\b|\b[A-Z_][A-Za-z0-9_]*\b|-?\d+(?:\.\d+)?|\+!|\-!|\+\?|\-\?|<\-|:\-|\\==|==|<=|>=|[()\[\],.;:+\-!~?:&|]/g;
+            let out = '';
+            let last = 0;
+            tokenRe.lastIndex = 0;
+            for (const m of src.matchAll(tokenRe)) {
+                const i = m.index;
+                const token = m[0];
+                out += escHtml(src.slice(last, i));
+                out += `<span class="${tokenClass(token)}">${escHtml(token)}</span>`;
+                last = i + token.length;
+            }
+            out += escHtml(src.slice(last));
+            // Preserve trailing empty line in <pre> rendering.
+            if (src.endsWith('\n')) out += '\n';
+            highlightEl.innerHTML = out;
+        }
+
+        function syncHighlightScroll() {
+            highlightEl.scrollTop = editor.scrollTop;
+            highlightEl.scrollLeft = editor.scrollLeft;
+        }
+
+        function refreshHighlight() {
+            renderHighlight(editor.value);
+            syncHighlightScroll();
+        }
 
         editor.value = EXAMPLES.greeter;
+        refreshHighlight();
+
+        editor.addEventListener('input', refreshHighlight);
+        editor.addEventListener('scroll', syncHighlightScroll);
 
         exampleSel.addEventListener('change', () => {
             editor.value = EXAMPLES[exampleSel.value] || '';
+            refreshHighlight();
             consoleEl.innerHTML = '';
             beliefsEl.innerHTML = '';
         });

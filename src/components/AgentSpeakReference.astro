@@ -333,6 +333,26 @@ triggering event       context (guard)               plan body`}</code></pre>
 +!greet_all([]).
 +!greet_all([H|T]) <- .print("Hello", H); !greet_all(T).`}</code></pre>
                     <p>
+                        Practical example combining both: take a list of usernames, build a message string,
+                        and notify each user one by one.
+                    </p>
+                    <pre class="asr-pre"><code>{`// users waiting for a reminder
+pending_users([alice, bob, carol]).
+
++!notify_pending <-
+    ?pending_users(Users);
+    !notify_list(Users, "[SPADE] reminder for ").
+
++!notify_list([], _Prefix) <-
+    .print("All reminders sent").
+
++!notify_list([User|Rest], Prefix) <-
+    .concat(Prefix, User, Msg);      // string concatenation
+    .length(Rest, Left);             // list length helper
+    .print(Msg, "(left:", Left, ")");
+    .send(User, tell, reminder_ready(User));
+    !notify_list(Rest, Prefix).`}</code></pre>
+                    <p>
                         Common list and string utilities live in the internal-action library — a few of the most
                         used ones:
                     </p>

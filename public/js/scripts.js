@@ -14,8 +14,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const targetElement = document.querySelector(targetId);
       if (targetElement) {
+        // Use document-relative coordinates; offsetTop can be relative to a parent container.
+        const targetTop = targetElement.getBoundingClientRect().top + window.scrollY;
         window.scrollTo({
-          top: targetElement.offsetTop - 70,
+          top: targetTop - 70,
           behavior: "smooth",
         });
       }
