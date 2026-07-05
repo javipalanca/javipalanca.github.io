@@ -1,6 +1,16 @@
 {
   "news": [
     {
+      "id": 6,
+      "title": "\ud83c\udf89 SPADE 4.1.3 Released - MayA 07 2026",
+      "date": "May 07, 2026",
+      "category": "Release",
+      "categoryClass": "bg-primary",
+      "description": "We're thrilled to announce the release of SPADE 4.1.3. This new minor version includes new features, bug fixes, and an important change. We drop the support to Python 3.9. This decision was made based on the requirements of our dependencies and external libraries, and the fact that 3.9 is in an end-of-life state. For more details, please visit the link below",
+      "link": "https://github.com/javipalanca/spade/releases/tag/4.1.3",
+      "image": "img/post-header-4.1.DYgVeTw9_6QGJa.webp"
+    },
+    {
       "id": 5,
       "title": "✨ Introducing the New SPADE Logo",
       "date": "January 8, 2026",
